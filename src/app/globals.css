@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* -------------------------------------------------------------------------- */
+/* Palette (valeurs brutes, bascule clair / sombre)                          */
+/* -------------------------------------------------------------------------- */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  --ds-bg: #ffffff;
+  --ds-surface: #f6f6f7;
+  --ds-surface-strong: #ececee;
+  --ds-fg: #17171a;
+  --ds-muted: #56565f;
+  --ds-border: #e3e3e7;
+
+  /* Rouge « don du sang » — accent principal */
+  --ds-primary: #d21f2c;
+  --ds-primary-strong: #b3161f;
+  --ds-primary-fg: #ffffff;
+  --ds-primary-subtle: #fbeaeb;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --ds-bg: #0b0b0d;
+    --ds-surface: #141417;
+    --ds-surface-strong: #1e1e22;
+    --ds-fg: #ececee;
+    --ds-muted: #a0a0ab;
+    --ds-border: #29292f;
+
+    --ds-primary: #f0434f;
+    --ds-primary-strong: #d81f2a;
+    --ds-primary-fg: #1a0304;
+    --ds-primary-subtle: #2a1113;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* -------------------------------------------------------------------------- */
+/* Tokens de thème Tailwind (génèrent bg-bg, text-fg, border-border, …)      */
+/* -------------------------------------------------------------------------- */
+
+@theme inline {
+  --color-bg: var(--ds-bg);
+  --color-surface: var(--ds-surface);
+  --color-surface-strong: var(--ds-surface-strong);
+  --color-fg: var(--ds-fg);
+  --color-muted: var(--ds-muted);
+  --color-border: var(--ds-border);
+  --color-primary: var(--ds-primary);
+  --color-primary-strong: var(--ds-primary-strong);
+  --color-primary-fg: var(--ds-primary-fg);
+  --color-primary-subtle: var(--ds-primary-subtle);
+
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Base                                                                      */
+/* -------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    background-color: var(--ds-bg);
+    color: var(--ds-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ds-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--ds-primary);
+    color: var(--ds-primary-fg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
