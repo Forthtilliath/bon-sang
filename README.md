@@ -10,7 +10,7 @@ Projet de portfolio. Le plan de développement détaillé est dans [`ROADMAP.md`
 
 - **Next.js 16** (App Router, RSC, Turbopack) + **TypeScript** strict
 - **Tailwind CSS v4**
-- **next-intl** (FR / EN) — _lot 2_
+- **next-intl** v4 (FR par défaut sans préfixe, EN sous `/en`)
 - **MapLibre GL** pour la carte des collectes — _lot 8_
 - **Vitest** + **Playwright** — _lots 5 & 10_
 
