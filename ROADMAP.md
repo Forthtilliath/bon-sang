@@ -140,7 +140,7 @@ messages/                   fr.json, en.json
 | ---- | ----------------------------------------------------------------------- |
 | 1 ✅ | Scaffold Next.js + TS + Tailwind + ESLint/Prettier + structure dossiers |
 | 2 ✅ | i18n next-intl (segment `[locale]`, fr/en, proxy, switcher)             |
-| 3    | Layout global, design tokens, page d'accueil                            |
+| 3 ✅ | Design tokens, header/footer, page d'accueil, pages stub par section    |
 | 4    | Pages contenu : `/comprendre`, `/qui-ca-aide`, `/a-propos` + SEO        |
 | 5    | Quiz éligibilité : moteur de règles + tests + UI multi-étapes           |
 | 6    | `usePersistentState` + `/mon-suivi` (journal, dates, badges, .ics)      |
