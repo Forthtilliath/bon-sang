@@ -1,0 +1,33 @@
+{
+  "Metadata": {
+    "title": "Blood donation",
+    "titleTemplate": "%s · Blood donation",
+    "description": "Understand what a blood donation is used for, check your eligibility and find a blood drive near you."
+  },
+  "Nav": {
+    "home": "Home",
+    "understand": "Understand",
+    "whoItHelps": "Who it helps",
+    "eligibility": "Can I donate?",
+    "collections": "Blood drives",
+    "tracker": "My log",
+    "about": "About"
+  },
+  "LocaleSwitcher": {
+    "label": "Language",
+    "fr": "Français",
+    "en": "English"
+  },
+  "HomePage": {
+    "eyebrow": "Blood donation",
+    "title": "Understand, check, find a blood drive.",
+    "intro": "Site under construction. The development plan lives in ROADMAP.md.",
+    "ctaEligibility": "Can I donate?",
+    "ctaCollections": "Find a blood drive"
+  },
+  "NotFoundPage": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has moved.",
+    "backHome": "Back to home"
+  }
+}

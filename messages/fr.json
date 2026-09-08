@@ -1,0 +1,33 @@
+{
+  "Metadata": {
+    "title": "Don du sang",
+    "titleTemplate": "%s · Don du sang",
+    "description": "Comprendre à quoi sert un don du sang, tester son éligibilité et trouver une collecte près de chez soi."
+  },
+  "Nav": {
+    "home": "Accueil",
+    "understand": "Comprendre",
+    "whoItHelps": "Qui ça aide",
+    "eligibility": "Puis-je donner ?",
+    "collections": "Collectes",
+    "tracker": "Mon suivi",
+    "about": "À propos"
+  },
+  "LocaleSwitcher": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "English"
+  },
+  "HomePage": {
+    "eyebrow": "Don du sang",
+    "title": "Comprendre, se tester, trouver une collecte.",
+    "intro": "Site en cours de construction. Le plan de développement est dans ROADMAP.md.",
+    "ctaEligibility": "Puis-je donner ?",
+    "ctaCollections": "Trouver une collecte"
+  },
+  "NotFoundPage": {
+    "title": "Page introuvable",
+    "description": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "backHome": "Retour à l'accueil"
+  }
+}
