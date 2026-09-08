@@ -1,22 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-import { LocaleSwitcher } from "@/components/locale-switcher";
-import { Link } from "@/i18n/navigation";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import { routing } from "@/i18n/routing";
 
 import "../globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -44,21 +39,27 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
     notFound();
   }
 
+  const t = await getTranslations("A11y");
+
   return (
     <html
       lang={locale}
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
-          <header className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
-            <Link href="/" className="font-semibold tracking-tight">
-              Don du sang
-            </Link>
-            <LocaleSwitcher />
-          </header>
-          {children}
+          <a
+            href="#main-content"
+            className="focus:bg-primary focus:text-primary-fg sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:px-4 focus:py-2"
+          >
+            {t("skipToContent")}
+          </a>
+          <SiteHeader />
+          <main id="main-content" className="flex flex-1 flex-col">
+            {children}
+          </main>
+          <SiteFooter />
         </NextIntlClientProvider>
       </body>
     </html>
