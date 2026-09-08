@@ -22,17 +22,17 @@ produit assumé (pas de compte, pas de RGPD lourd) et un argument à mettre en a
 
 ## 2. Stack technique
 
-| Domaine     | Choix                                                        |
-| ----------- | ------------------------------------------------------------ |
-| Framework   | Next.js 16 (App Router, RSC, Turbopack), TS strict           |
-| Style       | Tailwind CSS v4                                              |
-| i18n        | FR (défaut) + EN — `next-intl` v4, segment `[locale]`        |
-| Carte       | MapLibre GL JS + tuiles vecteur (style clair/sombre)         |
-| Données EFS | ISR (revalidate) sur un fetch de l'open data                 |
-| État perso  | localStorage + petit hook `usePersistentState`               |
-| Tests       | Vitest (logique quiz / dates) + Playwright (parcours)        |
+| Domaine     | Choix                                                           |
+| ----------- | --------------------------------------------------------------- |
+| Framework   | Next.js 16 (App Router, RSC, Turbopack), TS strict              |
+| Style       | Tailwind CSS v4                                                 |
+| i18n        | FR (défaut) + EN — `next-intl` v4, segment `[locale]`           |
+| Carte       | MapLibre GL JS + tuiles vecteur (style clair/sombre)            |
+| Données EFS | ISR (revalidate) sur un fetch de l'open data                    |
+| État perso  | localStorage + petit hook `usePersistentState`                  |
+| Tests       | Vitest (logique quiz / dates) + Playwright (parcours)           |
 | Qualité     | ESLint (flat config) + Prettier + a11y (eslint-plugin-jsx-a11y) |
-| Déploiement | Vercel (ISR natif)                                           |
+| Déploiement | Vercel (ISR natif)                                              |
 
 ---
 
