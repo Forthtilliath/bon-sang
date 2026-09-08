@@ -1,17 +1,20 @@
 import { useTranslations } from "next-intl";
 
+import { buttonClasses } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
 import { Link } from "@/i18n/navigation";
 
 export default function NotFoundPage() {
   const t = useTranslations("NotFoundPage");
 
   return (
-    <main className="mx-auto flex max-w-2xl flex-1 flex-col justify-center gap-4 px-6 py-24">
+    <Container className="flex flex-1 flex-col justify-center gap-4 py-24">
+      <p className="text-primary text-sm font-semibold">404</p>
       <h1 className="text-3xl font-semibold tracking-tight">{t("title")}</h1>
-      <p className="text-zinc-600 dark:text-zinc-400">{t("description")}</p>
-      <Link href="/" className="text-sm font-medium text-red-600 hover:underline">
+      <p className="text-muted">{t("description")}</p>
+      <Link href="/" className={buttonClasses({ variant: "outline", className: "self-start" })}>
         {t("backHome")}
       </Link>
-    </main>
+    </Container>
   );
 }
