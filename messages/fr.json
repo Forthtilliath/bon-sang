@@ -4,8 +4,14 @@
     "titleTemplate": "%s · Don du sang",
     "description": "Comprendre à quoi sert un don du sang, tester son éligibilité et trouver une collecte près de chez soi."
   },
+  "A11y": {
+    "skipToContent": "Aller au contenu principal"
+  },
   "Nav": {
-    "home": "Accueil",
+    "primary": "Navigation principale",
+    "secondary": "Navigation secondaire",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
     "understand": "Comprendre",
     "whoItHelps": "Qui ça aide",
     "eligibility": "Puis-je donner ?",
@@ -18,16 +24,79 @@
     "fr": "Français",
     "en": "English"
   },
+  "Common": {
+    "underConstruction": "En construction"
+  },
   "HomePage": {
-    "eyebrow": "Don du sang",
-    "title": "Comprendre, se tester, trouver une collecte.",
-    "intro": "Site en cours de construction. Le plan de développement est dans ROADMAP.md.",
-    "ctaEligibility": "Puis-je donner ?",
-    "ctaCollections": "Trouver une collecte"
+    "hero": {
+      "eyebrow": "Don du sang",
+      "title": "Comprendre, se tester, trouver une collecte.",
+      "lead": "Un don de sang ne se conserve pas et ne se fabrique pas. Voici de quoi passer à l'acte en confiance.",
+      "ctaPrimary": "Puis-je donner ?",
+      "ctaSecondary": "Trouver une collecte"
+    },
+    "pillars": {
+      "title": "Par où commencer",
+      "link": "Y aller",
+      "understand": {
+        "title": "Comprendre",
+        "body": "À quoi sert un don, le parcours d'une poche et qui elle soigne au quotidien."
+      },
+      "test": {
+        "title": "Se tester",
+        "body": "Un questionnaire rapide d'après les critères de l'EFS pour savoir si vous pouvez donner."
+      },
+      "act": {
+        "title": "Agir",
+        "body": "La carte des collectes autour de vous et un rappel dès que vous êtes à nouveau éligible."
+      }
+    },
+    "how": {
+      "title": "Comment ça se passe",
+      "s1": "Vous vérifiez votre éligibilité en quelques questions.",
+      "s2": "Vous repérez une collecte proche sur la carte.",
+      "s3": "Le jour J : entretien confidentiel, prélèvement, collation.",
+      "s4": "On vous rappelle quand vous pouvez redonner."
+    },
+    "cta": {
+      "title": "Dix minutes suffisent pour aider jusqu'à trois personnes.",
+      "body": "Commencez par vérifier si vous êtes éligible, c'est sans engagement.",
+      "button": "Vérifier mon éligibilité"
+    }
+  },
+  "Footer": {
+    "disclaimer": "Site d'information indépendant, non affilié à l'Établissement français du sang. Les collectes proviennent des données ouvertes de l'EFS.",
+    "privacy": "Aucune donnée personnelle n'est envoyée à un serveur : votre suivi et vos rappels restent dans votre navigateur."
   },
   "NotFoundPage": {
     "title": "Page introuvable",
     "description": "La page que vous cherchez n'existe pas ou a été déplacée.",
     "backHome": "Retour à l'accueil"
+  },
+  "Pages": {
+    "understand": {
+      "title": "Comprendre le don du sang",
+      "lead": "À quoi sert un don, le parcours d'une poche de la collecte au patient, et les chiffres clés."
+    },
+    "whoItHelps": {
+      "title": "Qui ça aide",
+      "lead": "Mucoviscidose, maladie de Steinert, drépanocytose : ces patients pour qui le don change le quotidien."
+    },
+    "eligibility": {
+      "title": "Puis-je donner ?",
+      "lead": "Un questionnaire d'après les critères officiels de l'EFS. Résultat indicatif : l'entretien pré-don fait foi."
+    },
+    "collections": {
+      "title": "Collectes près de chez vous",
+      "lead": "La carte et la liste des collectes à venir, à partir des données ouvertes de l'EFS."
+    },
+    "tracker": {
+      "title": "Mon suivi",
+      "lead": "Votre journal de dons, vos badges et la date à laquelle vous pourrez redonner — stocké dans votre navigateur."
+    },
+    "about": {
+      "title": "À propos",
+      "lead": "Sources, méthodologie et mentions. Ce site n'est pas affilié à l'EFS."
+    }
   }
 }

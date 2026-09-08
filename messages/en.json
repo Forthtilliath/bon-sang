@@ -4,8 +4,14 @@
     "titleTemplate": "%s · Blood donation",
     "description": "Understand what a blood donation is used for, check your eligibility and find a blood drive near you."
   },
+  "A11y": {
+    "skipToContent": "Skip to main content"
+  },
   "Nav": {
-    "home": "Home",
+    "primary": "Primary navigation",
+    "secondary": "Secondary navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "understand": "Understand",
     "whoItHelps": "Who it helps",
     "eligibility": "Can I donate?",
@@ -18,16 +24,79 @@
     "fr": "Français",
     "en": "English"
   },
+  "Common": {
+    "underConstruction": "Under construction"
+  },
   "HomePage": {
-    "eyebrow": "Blood donation",
-    "title": "Understand, check, find a blood drive.",
-    "intro": "Site under construction. The development plan lives in ROADMAP.md.",
-    "ctaEligibility": "Can I donate?",
-    "ctaCollections": "Find a blood drive"
+    "hero": {
+      "eyebrow": "Blood donation",
+      "title": "Understand, check, find a blood drive.",
+      "lead": "Blood cannot be stored for long and cannot be manufactured. Here is what you need to act with confidence.",
+      "ctaPrimary": "Can I donate?",
+      "ctaSecondary": "Find a blood drive"
+    },
+    "pillars": {
+      "title": "Where to start",
+      "link": "Go there",
+      "understand": {
+        "title": "Understand",
+        "body": "What a donation is used for, the journey of a blood bag and who it treats every day."
+      },
+      "test": {
+        "title": "Check",
+        "body": "A quick questionnaire based on EFS criteria to find out whether you can donate."
+      },
+      "act": {
+        "title": "Act",
+        "body": "The map of blood drives around you and a reminder as soon as you are eligible again."
+      }
+    },
+    "how": {
+      "title": "How it works",
+      "s1": "Check your eligibility in a few questions.",
+      "s2": "Spot a nearby blood drive on the map.",
+      "s3": "On the day: confidential interview, donation, snack.",
+      "s4": "We remind you when you can donate again."
+    },
+    "cta": {
+      "title": "Ten minutes are enough to help up to three people.",
+      "body": "Start by checking whether you are eligible — no commitment.",
+      "button": "Check my eligibility"
+    }
+  },
+  "Footer": {
+    "disclaimer": "Independent information site, not affiliated with the Établissement français du sang. Blood drives come from EFS open data.",
+    "privacy": "No personal data is sent to a server: your log and reminders stay in your browser."
   },
   "NotFoundPage": {
     "title": "Page not found",
     "description": "The page you are looking for does not exist or has moved.",
     "backHome": "Back to home"
+  },
+  "Pages": {
+    "understand": {
+      "title": "Understanding blood donation",
+      "lead": "What a donation is used for, the journey of a blood bag from drive to patient, and the key figures."
+    },
+    "whoItHelps": {
+      "title": "Who it helps",
+      "lead": "Cystic fibrosis, Steinert's disease, sickle cell disease: patients for whom donation changes daily life."
+    },
+    "eligibility": {
+      "title": "Can I donate?",
+      "lead": "A questionnaire based on the official EFS criteria. The result is indicative: the pre-donation interview prevails."
+    },
+    "collections": {
+      "title": "Blood drives near you",
+      "lead": "The map and list of upcoming blood drives, based on EFS open data."
+    },
+    "tracker": {
+      "title": "My log",
+      "lead": "Your donation log, your badges and the date you can donate again — stored in your browser."
+    },
+    "about": {
+      "title": "About",
+      "lead": "Sources, methodology and legal notices. This site is not affiliated with the EFS."
+    }
   }
 }
