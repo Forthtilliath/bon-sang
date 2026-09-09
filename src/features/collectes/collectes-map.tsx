@@ -9,7 +9,8 @@ import type { Point } from "./filter";
 import type { Collecte } from "./types";
 
 const STYLE_LIGHT = "https://tiles.openfreemap.org/styles/positron";
-const STYLE_DARK = "https://tiles.openfreemap.org/styles/dark";
+// `fiord` plutôt que `dark` : bien plus lisible (rues visibles) sur fond sombre.
+const STYLE_DARK = "https://tiles.openfreemap.org/styles/fiord";
 const FRANCE_CENTER: [number, number] = [2.35, 46.6];
 const ORIGIN_KEY = "__origin__";
 
