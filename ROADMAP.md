@@ -1,7 +1,7 @@
-# Don du sang — ROADMAP
+# Bon Sang — ROADMAP
 
-Site d'information et d'incitation au don du sang. Projet de portfolio (catégorie `react`,
-prolonge le « fil santé » avec Glucodose).
+**Bon Sang** — site d'information et d'incitation au don du sang. Projet de portfolio
+(catégorie `react`, prolonge le « fil santé » avec Glucodose).
 
 ---
 

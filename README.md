@@ -1,8 +1,8 @@
-# Don du sang
+# Bon Sang
 
-Site d'information et d'incitation au don du sang : comprendre à quoi sert un don et qui il
-aide, tester son éligibilité, trouver une collecte près de chez soi (données ouvertes EFS) et
-être rappelé dès qu'on peut redonner.
+**Bon Sang** est un site d'information et d'incitation au don du sang : comprendre à quoi sert
+un don et qui il aide, tester son éligibilité, trouver une collecte près de chez soi (données
+ouvertes EFS) et être rappelé dès qu'on peut redonner.
 
 Projet de portfolio. Le plan de développement détaillé est dans [`ROADMAP.md`](./ROADMAP.md).
 
