@@ -128,7 +128,8 @@ messages/                   fr.json, en.json
    `/samplingcollection/searchbycityname` et `/searchinsquare` pour les collectes). Pas de
    clé requise. Peu fiable côté serveur EFS → cache ISR + fallback en place.
 2. **Critères d'éligibilité** : figer la liste de règles depuis la page officielle
-   EFS à une date donnée, avec mention « critères au JJ/MM/AAAA ».
+   EFS à une date donnée, avec mention « critères au JJ/MM/AAAA ». _Encore à faire :
+   contenu du quiz volontairement présenté comme indicatif et non exhaustif._
 3. ~~**Tuiles carto**~~ ✅ **Résolu (lot 8)** : **OpenFreeMap** (`tiles.openfreemap.org`),
    styles `positron` (clair) / `dark`. Sans clé, sans variable d'env.
 4. **Contenu témoignages** : rédigé par nos soins, personas illustratifs.
@@ -137,18 +138,18 @@ messages/                   fr.json, en.json
 
 ## 7. Découpage en lots (commits / PR)
 
-| Lot  | Contenu                                                                             |
-| ---- | ----------------------------------------------------------------------------------- |
-| 1 ✅ | Scaffold Next.js + TS + Tailwind + ESLint/Prettier + structure dossiers             |
-| 2 ✅ | i18n next-intl (segment `[locale]`, fr/en, proxy, switcher)                         |
-| 3 ✅ | Design tokens, header/footer, page d'accueil, pages stub par section                |
-| 4 ✅ | Contenu `/comprendre` `/qui-ca-aide` `/a-propos` + sitemap/robots/hreflang/JSON-LD  |
-| 5 ✅ | Quiz éligibilité : moteur de règles + Vitest (24 tests) + UI multi-étapes + FAQ     |
-| 6 ✅ | `usePersistentState` + `/mon-suivi` (journal, prochaine date, badges, .ics, export) |
-| 7 ✅ | Collectes : API Carto EFS v3 + normalisation + tests + recherche par ville          |
-| 8 ✅ | Carte MapLibre (OpenFreeMap) + liste synchro + filtres type/période + géoloc        |
-| 9 ✅ | a11y (clavier/SR, reduced-motion), OG image générée, favicon, manifest, error.tsx   |
-| 10   | Tests Playwright parcours + CI + Lighthouse (déployé) + déploiement Vercel          |
+| Lot   | Contenu                                                                             |
+| ----- | ----------------------------------------------------------------------------------- |
+| 1 ✅  | Scaffold Next.js + TS + Tailwind + ESLint/Prettier + structure dossiers             |
+| 2 ✅  | i18n next-intl (segment `[locale]`, fr/en, proxy, switcher)                         |
+| 3 ✅  | Design tokens, header/footer, page d'accueil, pages stub par section                |
+| 4 ✅  | Contenu `/comprendre` `/qui-ca-aide` `/a-propos` + sitemap/robots/hreflang/JSON-LD  |
+| 5 ✅  | Quiz éligibilité : moteur de règles + Vitest (24 tests) + UI multi-étapes + FAQ     |
+| 6 ✅  | `usePersistentState` + `/mon-suivi` (journal, prochaine date, badges, .ics, export) |
+| 7 ✅  | Collectes : API Carto EFS v3 + normalisation + tests + recherche par ville          |
+| 8 ✅  | Carte MapLibre (OpenFreeMap) + liste synchro + filtres type/période + géoloc        |
+| 9 ✅  | a11y (clavier/SR, reduced-motion), OG image générée, favicon, manifest, error.tsx   |
+| 10 ✅ | Playwright (11 tests E2E) + CI GitHub Actions + README + doc déploiement Vercel     |
 
 ---
 
