@@ -1,17 +1,61 @@
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-import { StubPage } from "@/components/stub-page";
+import { JsonLd } from "@/components/json-ld";
+import { PageHeader } from "@/components/page-header";
+import { Container } from "@/components/ui/container";
+import { Quiz } from "@/features/eligibility";
 import { assertLocale } from "@/lib/locale";
 import { pageMetadata } from "@/lib/seo";
+
+const PATH = "/eligibilite";
+const FAQ_KEYS = ["q1", "q2", "q3"] as const;
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/eligibilite">) {
   const locale = assertLocale((await params).locale);
   const t = await getTranslations({ locale, namespace: "Pages.eligibility" });
-  return pageMetadata({ locale, path: "/eligibilite", title: t("title"), description: t("lead") });
+  return pageMetadata({ locale, path: PATH, title: t("title"), description: t("lead") });
 }
 
 export default function EligibilityPage() {
   const t = useTranslations("Pages.eligibility");
-  return <StubPage title={t("title")} lead={t("lead")} />;
+  const quiz = useTranslations("Quiz");
+
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQ_KEYS.map((key) => ({
+            "@type": "Question",
+            name: quiz(`faq.${key}.q`),
+            acceptedAnswer: { "@type": "Answer", text: quiz(`faq.${key}.a`) },
+          })),
+        }}
+      />
+
+      <PageHeader title={t("title")} lead={t("lead")} />
+
+      <section>
+        <Container className="max-w-2xl py-12">
+          <Quiz />
+        </Container>
+      </section>
+
+      <section className="border-border border-t">
+        <Container className="max-w-2xl py-12">
+          <h2 className="text-xl font-semibold tracking-tight">{quiz("faq.title")}</h2>
+          <dl className="mt-6 flex flex-col gap-5">
+            {FAQ_KEYS.map((key) => (
+              <div key={key} className="flex flex-col gap-1">
+                <dt className="font-medium">{quiz(`faq.${key}.q`)}</dt>
+                <dd className="text-muted text-sm">{quiz(`faq.${key}.a`)}</dd>
+              </div>
+            ))}
+          </dl>
+        </Container>
+      </section>
+    </>
+  );
 }
