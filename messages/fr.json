@@ -74,6 +74,11 @@
     "description": "La page que vous cherchez n'existe pas ou a été déplacée.",
     "backHome": "Retour à l'accueil"
   },
+  "ErrorPage": {
+    "title": "Une erreur est survenue",
+    "description": "Quelque chose s'est mal passé de notre côté. Vous pouvez réessayer.",
+    "retry": "Réessayer"
+  },
   "Quiz": {
     "progress": "Question {current} sur {total}",
     "yes": "Oui",

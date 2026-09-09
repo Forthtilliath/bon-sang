@@ -74,6 +74,11 @@
     "description": "The page you are looking for does not exist or has moved.",
     "backHome": "Back to home"
   },
+  "ErrorPage": {
+    "title": "Something went wrong",
+    "description": "Something failed on our side. You can try again.",
+    "retry": "Try again"
+  },
   "Quiz": {
     "progress": "Question {current} of {total}",
     "yes": "Yes",
