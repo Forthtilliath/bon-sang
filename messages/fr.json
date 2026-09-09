@@ -25,7 +25,8 @@
     "en": "English"
   },
   "Common": {
-    "underConstruction": "En construction"
+    "underConstruction": "En construction",
+    "newWindow": "nouvelle fenêtre"
   },
   "HomePage": {
     "hero": {
@@ -76,11 +77,93 @@
   "Pages": {
     "understand": {
       "title": "Comprendre le don du sang",
-      "lead": "À quoi sert un don, le parcours d'une poche de la collecte au patient, et les chiffres clés."
+      "lead": "À quoi sert un don, le parcours d'une poche de la collecte au patient, et quelques repères chiffrés.",
+      "metaDescription": "À quoi sert un don du sang, le parcours d'une poche de la collecte au patient, et les chiffres clés, expliqués simplement.",
+      "purpose": {
+        "title": "À quoi sert un don",
+        "intro": "Le sang ne se fabrique pas. Chaque poche prélevée est séparée en plusieurs produits qui répondent à des besoins très différents.",
+        "transfusion": {
+          "title": "Urgences et opérations",
+          "body": "Hémorragies après un accident ou un accouchement, chirurgies lourdes, grands brûlés : la transfusion compense une perte de sang rapide."
+        },
+        "chronic": {
+          "title": "Maladies du sang et cancers",
+          "body": "Drépanocytose, thalassémie, leucémies et autres cancers demandent des transfusions régulières, parfois à vie."
+        },
+        "plasma": {
+          "title": "Médicaments dérivés du plasma",
+          "body": "Le plasma sert à fabriquer des traitements contre les maladies immunitaires, l'hémophilie ou certaines maladies rares."
+        }
+      },
+      "journey": {
+        "title": "Le parcours d'une poche",
+        "intro": "Entre votre bras et celui d'un patient, chaque poche suit un circuit contrôlé à toutes les étapes.",
+        "s1": {
+          "title": "Prélèvement",
+          "body": "8 à 10 minutes pour un don de sang total, environ 420 à 480 mL selon votre poids."
+        },
+        "s2": {
+          "title": "Qualification biologique",
+          "body": "Chaque don est analysé (groupe sanguin, recherche d'infections transmissibles) avant toute utilisation."
+        },
+        "s3": {
+          "title": "Préparation",
+          "body": "La poche est séparée en globules rouges, plasma et parfois plaquettes, pour traiter plusieurs patients."
+        },
+        "s4": {
+          "title": "Distribution",
+          "body": "Les produits sont acheminés vers les établissements de santé selon leurs besoins et l'état des stocks."
+        },
+        "s5": {
+          "title": "Transfusion",
+          "body": "Le produit est administré au patient après un dernier contrôle de compatibilité à son chevet."
+        }
+      },
+      "figures": {
+        "title": "Quelques repères",
+        "livesPerDonation": "personnes aidées par un seul don",
+        "donationsPerDay": "dons nécessaires chaque jour en France",
+        "patientsPerYear": "de patients soignés chaque année",
+        "duration": "pour un don, entretien et collation compris",
+        "shelfLifeTitle": "Durée de conservation",
+        "redCells": "Globules rouges",
+        "platelets": "Plaquettes",
+        "plasma": "Plasma congelé",
+        "days": "{count, plural, one {# jour} other {# jours}}",
+        "sourceLabel": "Source :",
+        "sourceNote": "chiffres indicatifs, à jour {year}"
+      }
     },
     "whoItHelps": {
       "title": "Qui ça aide",
-      "lead": "Mucoviscidose, maladie de Steinert, drépanocytose : ces patients pour qui le don change le quotidien."
+      "lead": "Le don profite d'abord à des personnes qu'on ne voit pas : des malades chroniques pour qui la transfusion fait partie de la vie.",
+      "metaDescription": "Drépanocytose, mucoviscidose, maladie de Steinert : trois maladies où le don du sang change le quotidien des patients.",
+      "personaDisclaimer": "Les témoignages ci-dessous illustrent des situations réelles mais sont des personas, pas des personnes identifiables.",
+      "howLabel": "Comment le don aide",
+      "associationLabel": "En savoir plus et soutenir",
+      "conditions": {
+        "sickleCell": {
+          "name": "Drépanocytose",
+          "what": "Maladie génétique du globule rouge, la plus fréquente en France. Les globules se déforment, bouchent les vaisseaux et provoquent des crises douloureuses intenses.",
+          "howBloodHelps": "Des transfusions régulières, parfois des échanges sanguins complets, diluent les globules malades et préviennent les complications graves comme l'AVC.",
+          "quote": "Sans mes transfusions toutes les quatre semaines, je ne pourrais ni travailler ni m'occuper de mes enfants.",
+          "quoteBy": "Aïcha, 34 ans"
+        },
+        "cysticFibrosis": {
+          "name": "Mucoviscidose",
+          "what": "Maladie génétique qui encrasse les poumons et le système digestif. L'espérance de vie a beaucoup progressé, mais la maladie reste lourde.",
+          "howBloodHelps": "Les greffes de poumons et les chirurgies digestives, fréquentes dans les formes avancées, consomment d'importantes quantités de produits sanguins.",
+          "quote": "Ma greffe a duré huit heures. Il a fallu plusieurs donneurs rien que pour moi ce jour-là.",
+          "quoteBy": "Thomas, 29 ans"
+        },
+        "steinert": {
+          "name": "Maladie de Steinert",
+          "what": "Forme la plus fréquente de dystrophie myotonique chez l'adulte : faiblesse musculaire progressive, atteinte du cœur et d'autres organes.",
+          "howBloodHelps": "Les patients subissent des interventions répétées (cœur, cataracte, chirurgie générale) où la transfusion sécurise l'opération.",
+          "quote": "À chaque opération, la question du sang disponible revient. On y pense pour nos proches aussi, la maladie est héréditaire.",
+          "quoteBy": "Claire, 41 ans"
+        }
+      }
     },
     "eligibility": {
       "title": "Puis-je donner ?",
@@ -92,11 +175,39 @@
     },
     "tracker": {
       "title": "Mon suivi",
-      "lead": "Votre journal de dons, vos badges et la date à laquelle vous pourrez redonner — stocké dans votre navigateur."
+      "lead": "Votre journal de dons, vos badges et la date à laquelle vous pourrez redonner, stockés dans votre navigateur."
     },
     "about": {
       "title": "À propos",
-      "lead": "Sources, méthodologie et mentions. Ce site n'est pas affilié à l'EFS."
+      "lead": "Bon Sang est un projet personnel et indépendant. Voici ses sources, sa méthode et ce qu'il fait de vos données.",
+      "metaDescription": "Bon Sang : un site indépendant sur le don du sang. Sources, méthodologie, confidentialité et mentions.",
+      "independence": {
+        "title": "Un site indépendant",
+        "body": "Bon Sang n'est ni affilié, ni sponsorisé, ni validé par l'Établissement français du sang. Pour toute démarche officielle (rendez-vous, don), passez par le site de l'EFS."
+      },
+      "sources": {
+        "title": "Sources",
+        "body": "Les informations médicales et les critères d'éligibilité proviennent de la documentation grand public de l'EFS. Les collectes affichées viennent de ses données ouvertes.",
+        "efs": "Site du don de sang de l'EFS",
+        "associations": "Associations de patients citées : SOS Globi, Vaincre la Mucoviscidose, AFM-Téléthon."
+      },
+      "method": {
+        "title": "Méthodologie du test d'éligibilité",
+        "body": "Le questionnaire « Puis-je donner ? » reprend les grands critères publiés par l'EFS. Son résultat est indicatif : seul l'entretien médical avant le don peut confirmer que vous pouvez donner."
+      },
+      "privacy": {
+        "title": "Vos données",
+        "body": "Aucun compte, aucun serveur. Votre journal de dons, vos rappels et le résultat du test restent dans votre navigateur et ne sont envoyés nulle part. Aucun traceur publicitaire."
+      },
+      "tech": {
+        "title": "Comment c'est fait",
+        "body": "Site statique construit avec Next.js et TypeScript, bilingue français / anglais. Le code est ouvert.",
+        "repo": "Code source sur GitHub"
+      },
+      "author": {
+        "title": "Auteur",
+        "body": "Réalisé par Vincent Lisita, développeur."
+      }
     }
   }
 }

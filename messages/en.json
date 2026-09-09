@@ -25,7 +25,8 @@
     "en": "English"
   },
   "Common": {
-    "underConstruction": "Under construction"
+    "underConstruction": "Under construction",
+    "newWindow": "new window"
   },
   "HomePage": {
     "hero": {
@@ -76,11 +77,93 @@
   "Pages": {
     "understand": {
       "title": "Understanding blood donation",
-      "lead": "What a donation is used for, the journey of a blood bag from drive to patient, and the key figures."
+      "lead": "What a donation is used for, the journey of a blood bag from drive to patient, and a few key figures.",
+      "metaDescription": "What a blood donation is used for, the journey of a blood bag from drive to patient, and the key figures, explained simply.",
+      "purpose": {
+        "title": "What a donation is used for",
+        "intro": "Blood cannot be manufactured. Every bag collected is separated into several products that meet very different needs.",
+        "transfusion": {
+          "title": "Emergencies and surgery",
+          "body": "Bleeding after an accident or childbirth, major surgery, severe burns: transfusion makes up for rapid blood loss."
+        },
+        "chronic": {
+          "title": "Blood diseases and cancers",
+          "body": "Sickle cell disease, thalassaemia, leukaemia and other cancers require regular transfusions, sometimes for life."
+        },
+        "plasma": {
+          "title": "Plasma-derived medicines",
+          "body": "Plasma is used to make treatments for immune disorders, haemophilia and some rare diseases."
+        }
+      },
+      "journey": {
+        "title": "The journey of a blood bag",
+        "intro": "Between your arm and a patient's, every bag follows a process that is checked at each step.",
+        "s1": {
+          "title": "Collection",
+          "body": "8 to 10 minutes for a whole blood donation, roughly 420 to 480 mL depending on your weight."
+        },
+        "s2": {
+          "title": "Biological screening",
+          "body": "Every donation is tested (blood group, screening for transmissible infections) before any use."
+        },
+        "s3": {
+          "title": "Preparation",
+          "body": "The bag is separated into red cells, plasma and sometimes platelets, to treat several patients."
+        },
+        "s4": {
+          "title": "Distribution",
+          "body": "Products are delivered to hospitals according to their needs and current stock levels."
+        },
+        "s5": {
+          "title": "Transfusion",
+          "body": "The product is given to the patient after a final compatibility check at the bedside."
+        }
+      },
+      "figures": {
+        "title": "A few benchmarks",
+        "livesPerDonation": "people helped by a single donation",
+        "donationsPerDay": "donations needed every day in France",
+        "patientsPerYear": "patients treated every year",
+        "duration": "for a donation, interview and snack included",
+        "shelfLifeTitle": "Shelf life",
+        "redCells": "Red cells",
+        "platelets": "Platelets",
+        "plasma": "Frozen plasma",
+        "days": "{count, plural, one {# day} other {# days}}",
+        "sourceLabel": "Source:",
+        "sourceNote": "indicative figures, as of {year}"
+      }
     },
     "whoItHelps": {
       "title": "Who it helps",
-      "lead": "Cystic fibrosis, Steinert's disease, sickle cell disease: patients for whom donation changes daily life."
+      "lead": "Donation mostly helps people you never see: patients with chronic conditions for whom transfusion is part of life.",
+      "metaDescription": "Sickle cell disease, cystic fibrosis, Steinert's disease: three conditions where blood donation changes patients' daily lives.",
+      "personaDisclaimer": "The quotes below reflect real situations but are personas, not identifiable people.",
+      "howLabel": "How donation helps",
+      "associationLabel": "Learn more and support",
+      "conditions": {
+        "sickleCell": {
+          "name": "Sickle cell disease",
+          "what": "A genetic disorder of the red blood cell, the most common in France. Cells become misshapen, block vessels and cause intense pain crises.",
+          "howBloodHelps": "Regular transfusions, sometimes full blood exchanges, dilute the affected cells and prevent serious complications such as stroke.",
+          "quote": "Without my transfusions every four weeks, I could not work or look after my children.",
+          "quoteBy": "Aïcha, 34"
+        },
+        "cysticFibrosis": {
+          "name": "Cystic fibrosis",
+          "what": "A genetic disease that clogs the lungs and digestive system. Life expectancy has improved a lot, but the disease remains heavy.",
+          "howBloodHelps": "Lung transplants and digestive surgery, common in advanced forms, use large amounts of blood products.",
+          "quote": "My transplant lasted eight hours. Several donors were needed just for me that day.",
+          "quoteBy": "Thomas, 29"
+        },
+        "steinert": {
+          "name": "Steinert's disease",
+          "what": "The most common form of myotonic dystrophy in adults: progressive muscle weakness, heart and multi-organ involvement.",
+          "howBloodHelps": "Patients undergo repeated procedures (heart, cataract, general surgery) where transfusion makes the operation safer.",
+          "quote": "With every operation, the question of available blood comes up. We think about it for our relatives too — the disease is hereditary.",
+          "quoteBy": "Claire, 41"
+        }
+      }
     },
     "eligibility": {
       "title": "Can I donate?",
@@ -92,11 +175,39 @@
     },
     "tracker": {
       "title": "My log",
-      "lead": "Your donation log, your badges and the date you can donate again — stored in your browser."
+      "lead": "Your donation log, your badges and the date you can donate again, stored in your browser."
     },
     "about": {
       "title": "About",
-      "lead": "Sources, methodology and legal notices. This site is not affiliated with the EFS."
+      "lead": "Bon Sang is a personal, independent project. Here are its sources, its method and what it does with your data.",
+      "metaDescription": "Bon Sang: an independent site about blood donation. Sources, methodology, privacy and legal notices.",
+      "independence": {
+        "title": "An independent site",
+        "body": "Bon Sang is not affiliated with, sponsored by or endorsed by the Établissement français du sang. For anything official (appointments, donating), use the EFS website."
+      },
+      "sources": {
+        "title": "Sources",
+        "body": "Medical information and eligibility criteria come from the EFS public documentation. The blood drives shown come from its open data.",
+        "efs": "EFS blood donation website",
+        "associations": "Patient associations mentioned: SOS Globi, Vaincre la Mucoviscidose, AFM-Téléthon."
+      },
+      "method": {
+        "title": "Eligibility test methodology",
+        "body": "The \"Can I donate?\" questionnaire follows the main criteria published by the EFS. Its result is indicative: only the medical interview before donating can confirm that you can donate."
+      },
+      "privacy": {
+        "title": "Your data",
+        "body": "No account, no server. Your donation log, your reminders and the test result stay in your browser and are sent nowhere. No advertising trackers."
+      },
+      "tech": {
+        "title": "How it is built",
+        "body": "A static site built with Next.js and TypeScript, bilingual French / English. The code is open source.",
+        "repo": "Source code on GitHub"
+      },
+      "author": {
+        "title": "Author",
+        "body": "Built by Vincent Lisita, developer."
+      }
     }
   }
 }
