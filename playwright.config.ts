@@ -2,6 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 3100;
 const isCI = !!process.env.CI;
+const externalBaseURL = process.env.E2E_BASE_URL || undefined;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -12,16 +13,18 @@ export default defineConfig({
   reporter: isCI ? [["github"], ["html", { open: "never" }]] : "list",
   timeout: 30_000,
   use: {
-    baseURL: `http://localhost:${PORT}`,
+    baseURL: externalBaseURL ?? `http://localhost:${PORT}`,
     trace: "on-first-retry",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
-  webServer: {
-    // Serveur de prod : bien plus stable que `next dev` sous charge parallèle.
-    command: "npm run build && npm run start",
-    port: PORT,
-    env: { PORT: String(PORT) },
-    reuseExistingServer: !isCI,
-    timeout: 180_000,
-  },
+  webServer: externalBaseURL
+    ? undefined
+    : {
+        // Serveur de prod : bien plus stable que `next dev` sous charge parallèle.
+        command: "npm run build && npm run start",
+        port: PORT,
+        env: { PORT: String(PORT) },
+        reuseExistingServer: !isCI,
+        timeout: 180_000,
+      },
 });
