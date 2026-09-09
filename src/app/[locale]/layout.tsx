@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -22,6 +22,13 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0d" },
+  ],
+};
+
 export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Promise<Metadata> {
   const locale = assertLocale((await params).locale);
   const t = await getTranslations({ locale, namespace: "Metadata" });
@@ -42,7 +49,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Pr
       locale,
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: t("title"),
       description: t("description"),
     },
