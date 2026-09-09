@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/page-header";
 import { Container } from "@/components/ui/container";
 import { ExternalLink } from "@/components/ui/external-link";
 import { fetchCollectesByCity } from "@/features/collectes";
-import { CollecteList } from "@/features/collectes/collecte-list";
+import { CollectesExplorer } from "@/features/collectes/collectes-explorer";
 import { assertLocale } from "@/lib/locale";
 import { pageMetadata } from "@/lib/seo";
 
@@ -34,8 +34,8 @@ export default async function CollectionsPage({
       <PageHeader title={page("title")} lead={page("lead")} />
 
       <section>
-        <Container className="max-w-2xl py-12">
-          <form method="get" className="flex flex-wrap gap-2">
+        <Container className="py-12">
+          <form method="get" className="flex max-w-md flex-wrap gap-2">
             <label htmlFor="ville" className="sr-only">
               {t("searchLabel")}
             </label>
@@ -57,7 +57,7 @@ export default async function CollectionsPage({
 
           <div className="mt-8">
             {!result ? (
-              <p className="text-muted text-sm">{t("intro")}</p>
+              <p className="text-muted max-w-2xl text-sm">{t("intro")}</p>
             ) : result.status === "error" ? (
               <Fallback message={t("errorEfs")} label={t("openEfs")} />
             ) : result.collectes.length === 0 ? (
@@ -67,12 +67,14 @@ export default async function CollectionsPage({
                 <p className="text-muted text-sm">
                   {t("resultsCount", { count: result.collectes.length, query: result.query })}
                 </p>
-                <CollecteList collectes={result.collectes} />
+                <CollectesExplorer collectes={result.collectes} />
               </div>
             )}
           </div>
 
-          <p className="border-border text-muted mt-8 border-t pt-4 text-xs">{t("source")}</p>
+          <p className="border-border text-muted mt-8 max-w-2xl border-t pt-4 text-xs">
+            {t("source")}
+          </p>
         </Container>
       </section>
     </>
@@ -81,7 +83,7 @@ export default async function CollectionsPage({
 
 function Fallback({ message, label }: { message: string; label: string }) {
   return (
-    <div className="border-border bg-surface flex flex-col gap-2 rounded-2xl border p-5 text-sm">
+    <div className="border-border bg-surface flex max-w-2xl flex-col gap-2 rounded-2xl border p-5 text-sm">
       <p>{message}</p>
       <ExternalLink href={EFS_URL}>{label}</ExternalLink>
     </div>
