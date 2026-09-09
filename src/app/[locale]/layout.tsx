@@ -4,9 +4,12 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
+import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { routing } from "@/i18n/routing";
+import { assertLocale } from "@/lib/locale";
+import { alternates, SITE_URL } from "@/lib/seo";
 
 import "../globals.css";
 
@@ -15,21 +18,34 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("Metadata");
+export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Promise<Metadata> {
+  const locale = assertLocale((await params).locale);
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
   return {
-    metadataBase: new URL(siteUrl),
+    metadataBase: new URL(SITE_URL),
     title: {
       default: t("title"),
       template: t("titleTemplate"),
     },
     description: t("description"),
+    alternates: alternates(locale, "/"),
+    openGraph: {
+      type: "website",
+      siteName: t("title"),
+      title: t("title"),
+      description: t("description"),
+      locale,
+    },
+    twitter: {
+      card: "summary",
+      title: t("title"),
+      description: t("description"),
+    },
   };
 }
 
@@ -40,6 +56,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   }
 
   const t = await getTranslations("A11y");
+  const meta = await getTranslations("Metadata");
 
   return (
     <html
@@ -48,6 +65,16 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       className={`${geistSans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: meta("title"),
+            description: meta("description"),
+            url: SITE_URL,
+            inLanguage: locale,
+          }}
+        />
         <NextIntlClientProvider>
           <a
             href="#main-content"
