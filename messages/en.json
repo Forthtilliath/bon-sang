@@ -278,6 +278,25 @@
       "resetConfirm": "Erase your entire log? This cannot be undone."
     }
   },
+  "Collectes": {
+    "searchLabel": "City or postcode",
+    "searchPlaceholder": "City or postcode",
+    "searchSubmit": "Search",
+    "intro": "Enter a city or postcode to see upcoming blood drives and permanent sites nearby.",
+    "resultsCount": "{count, plural, one {# blood drive} other {# blood drives}} around {query}",
+    "noResults": "No blood drive found for “{query}” in the coming weeks.",
+    "errorEfs": "The EFS service is temporarily unavailable. Please try again later.",
+    "openEfs": "Check on the EFS website",
+    "source": "Data: Carto API of the Établissement français du sang. Times are indicative, check before travelling.",
+    "permanent": "Permanent site",
+    "book": "Book an appointment",
+    "spotsLeft": "{count, plural, one {# spot left} other {# spots left}}",
+    "kinds": {
+      "blood": "Blood",
+      "plasma": "Plasma",
+      "platelets": "Platelets"
+    }
+  },
   "Pages": {
     "understand": {
       "title": "Understanding blood donation",
