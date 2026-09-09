@@ -291,6 +291,19 @@
     "permanent": "Permanent site",
     "book": "Book an appointment",
     "spotsLeft": "{count, plural, one {# spot left} other {# spots left}}",
+    "filterKinds": "Filter by donation type",
+    "visibleCount": "{count, plural, one {# blood drive shown} other {# blood drives shown}}",
+    "noneMatchFilters": "No blood drive matches these filters.",
+    "distance": "{km} km away",
+    "locate": "Near me",
+    "locating": "Locating…",
+    "locateDenied": "Location denied.",
+    "locateUnsupported": "Location unavailable on this device.",
+    "periods": {
+      "all": "All",
+      "week": "7 days",
+      "month": "1 month"
+    },
     "kinds": {
       "blood": "Blood",
       "plasma": "Plasma",

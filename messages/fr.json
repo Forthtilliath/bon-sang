@@ -294,6 +294,19 @@
     "permanent": "Site permanent",
     "book": "Prendre rendez-vous",
     "spotsLeft": "{count, plural, one {# place restante} other {# places restantes}}",
+    "filterKinds": "Filtrer par type de don",
+    "visibleCount": "{count, plural, one {# collecte affichée} other {# collectes affichées}}",
+    "noneMatchFilters": "Aucune collecte ne correspond à ces filtres.",
+    "distance": "à {km} km",
+    "locate": "Autour de moi",
+    "locating": "Localisation…",
+    "locateDenied": "Localisation refusée.",
+    "locateUnsupported": "Localisation indisponible sur cet appareil.",
+    "periods": {
+      "all": "Toutes",
+      "week": "7 jours",
+      "month": "1 mois"
+    },
     "kinds": {
       "blood": "Sang",
       "plasma": "Plasma",
