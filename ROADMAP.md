@@ -136,18 +136,18 @@ messages/                   fr.json, en.json
 
 ## 7. Découpage en lots (commits / PR)
 
-| Lot  | Contenu                                                                 |
-| ---- | ----------------------------------------------------------------------- |
-| 1 ✅ | Scaffold Next.js + TS + Tailwind + ESLint/Prettier + structure dossiers |
-| 2 ✅ | i18n next-intl (segment `[locale]`, fr/en, proxy, switcher)             |
-| 3 ✅ | Design tokens, header/footer, page d'accueil, pages stub par section    |
-| 4    | Pages contenu : `/comprendre`, `/qui-ca-aide`, `/a-propos` + SEO        |
-| 5    | Quiz éligibilité : moteur de règles + tests + UI multi-étapes           |
-| 6    | `usePersistentState` + `/mon-suivi` (journal, dates, badges, .ics)      |
-| 7    | Collectes : fetch EFS + normalisation + tests (mock)                    |
-| 8    | Carte MapLibre + liste + filtres + géoloc                               |
-| 9    | a11y pass, sitemap/robots/OG, Lighthouse                                |
-| 10   | Tests Playwright parcours + CI + README + déploiement Vercel            |
+| Lot  | Contenu                                                                            |
+| ---- | ---------------------------------------------------------------------------------- |
+| 1 ✅ | Scaffold Next.js + TS + Tailwind + ESLint/Prettier + structure dossiers            |
+| 2 ✅ | i18n next-intl (segment `[locale]`, fr/en, proxy, switcher)                        |
+| 3 ✅ | Design tokens, header/footer, page d'accueil, pages stub par section               |
+| 4 ✅ | Contenu `/comprendre` `/qui-ca-aide` `/a-propos` + sitemap/robots/hreflang/JSON-LD |
+| 5    | Quiz éligibilité : moteur de règles + tests + UI multi-étapes                      |
+| 6    | `usePersistentState` + `/mon-suivi` (journal, dates, badges, .ics)                 |
+| 7    | Collectes : fetch EFS + normalisation + tests (mock)                               |
+| 8    | Carte MapLibre + liste + filtres + géoloc                                          |
+| 9    | a11y pass, sitemap/robots/OG, Lighthouse                                           |
+| 10   | Tests Playwright parcours + CI + README + déploiement Vercel                       |
 
 ---
 
