@@ -1,10 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { buttonClasses } from "@/components/ui/button";
+import { EMPTY_TRACKER, TRACKER_STORAGE_KEY, type TrackerState } from "@/features/tracker";
+import { usePersistentState } from "@/hooks/use-persistent-state";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
+import { formatIsoDate } from "@/lib/dates";
 
 import type { EligibilityResult, Verdict } from "./types";
 
@@ -27,11 +31,23 @@ export function QuizResult({
 }) {
   const t = useTranslations("Quiz") as unknown as QuizT;
   const format = useFormatter();
+  const tracker = usePersistentState<TrackerState>(TRACKER_STORAGE_KEY, EMPTY_TRACKER);
+  const [remembered, setRemembered] = useState(false);
 
   const verdictKey =
     result.verdict === "wait" ? (result.until ? "waitWithDate" : "waitNoDate") : result.verdict;
 
   const formattedUntil = result.until ? format.dateTime(result.until, { dateStyle: "long" }) : null;
+  const canRemember = result.verdict === "wait" && result.until !== null;
+
+  const remember = () => {
+    if (!result.until) return;
+    tracker.setValue((prev) => ({
+      ...prev,
+      reminder: { date: formatIsoDate(result.until as Date) },
+    }));
+    setRemembered(true);
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -69,11 +85,24 @@ export function QuizResult({
         </div>
       ) : null}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         {result.verdict === "eligible" ? (
           <Link href="/collectes" className={buttonClasses()}>
             {t("findDrive")}
           </Link>
+        ) : null}
+        {canRemember && !remembered ? (
+          <button type="button" onClick={remember} className={buttonClasses()}>
+            {t("remember")}
+          </button>
+        ) : null}
+        {remembered ? (
+          <span className="flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-300">
+            {t("remembered")}
+            <Link href="/mon-suivi" className="text-primary font-medium hover:underline">
+              {t("openTracker")}
+            </Link>
+          </span>
         ) : null}
         <button
           type="button"
