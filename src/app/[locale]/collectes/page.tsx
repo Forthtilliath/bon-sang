@@ -1,17 +1,95 @@
-import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-import { StubPage } from "@/components/stub-page";
+import { PageHeader } from "@/components/page-header";
+import { Container } from "@/components/ui/container";
+import { ExternalLink } from "@/components/ui/external-link";
+import { fetchCollectesByCity } from "@/features/collectes";
+import { CollecteList } from "@/features/collectes/collecte-list";
 import { assertLocale } from "@/lib/locale";
 import { pageMetadata } from "@/lib/seo";
+
+const PATH = "/collectes";
+const EFS_URL = "https://dondesang.efs.sante.fr/trouver-une-collecte";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/collectes">) {
   const locale = assertLocale((await params).locale);
   const t = await getTranslations({ locale, namespace: "Pages.collections" });
-  return pageMetadata({ locale, path: "/collectes", title: t("title"), description: t("lead") });
+  return pageMetadata({ locale, path: PATH, title: t("title"), description: t("lead") });
 }
 
-export default function CollectionsPage() {
-  const t = useTranslations("Pages.collections");
-  return <StubPage title={t("title")} lead={t("lead")} />;
+export default async function CollectionsPage({
+  params,
+  searchParams,
+}: PageProps<"/[locale]/collectes">) {
+  assertLocale((await params).locale);
+  const query = normalizeQuery((await searchParams).ville);
+
+  const page = await getTranslations("Pages.collections");
+  const t = await getTranslations("Collectes");
+
+  const result = query ? await fetchCollectesByCity(query) : null;
+
+  return (
+    <>
+      <PageHeader title={page("title")} lead={page("lead")} />
+
+      <section>
+        <Container className="max-w-2xl py-12">
+          <form method="get" className="flex flex-wrap gap-2">
+            <label htmlFor="ville" className="sr-only">
+              {t("searchLabel")}
+            </label>
+            <input
+              id="ville"
+              name="ville"
+              type="search"
+              defaultValue={query ?? ""}
+              placeholder={t("searchPlaceholder")}
+              className="border-border bg-bg min-w-0 flex-1 rounded-xl border px-3 py-2 text-sm"
+            />
+            <button
+              type="submit"
+              className="bg-primary text-primary-fg hover:bg-primary-strong rounded-xl px-4 py-2 text-sm font-medium"
+            >
+              {t("searchSubmit")}
+            </button>
+          </form>
+
+          <div className="mt-8">
+            {!result ? (
+              <p className="text-muted text-sm">{t("intro")}</p>
+            ) : result.status === "error" ? (
+              <Fallback message={t("errorEfs")} label={t("openEfs")} />
+            ) : result.collectes.length === 0 ? (
+              <Fallback message={t("noResults", { query: result.query })} label={t("openEfs")} />
+            ) : (
+              <div className="flex flex-col gap-4">
+                <p className="text-muted text-sm">
+                  {t("resultsCount", { count: result.collectes.length, query: result.query })}
+                </p>
+                <CollecteList collectes={result.collectes} />
+              </div>
+            )}
+          </div>
+
+          <p className="border-border text-muted mt-8 border-t pt-4 text-xs">{t("source")}</p>
+        </Container>
+      </section>
+    </>
+  );
+}
+
+function Fallback({ message, label }: { message: string; label: string }) {
+  return (
+    <div className="border-border bg-surface flex flex-col gap-2 rounded-2xl border p-5 text-sm">
+      <p>{message}</p>
+      <ExternalLink href={EFS_URL}>{label}</ExternalLink>
+    </div>
+  );
+}
+
+function normalizeQuery(value: string | string[] | undefined): string | null {
+  const raw = Array.isArray(value) ? value[0] : value;
+  const trimmed = raw?.trim();
+  return trimmed && trimmed.length >= 2 ? trimmed : null;
 }
