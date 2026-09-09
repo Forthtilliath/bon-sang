@@ -281,6 +281,25 @@
       "resetConfirm": "Effacer tout votre suivi ? Cette action est irréversible."
     }
   },
+  "Collectes": {
+    "searchLabel": "Ville ou code postal",
+    "searchPlaceholder": "Ville ou code postal",
+    "searchSubmit": "Rechercher",
+    "intro": "Saisissez une ville ou un code postal pour voir les collectes à venir et les sites permanents à proximité.",
+    "resultsCount": "{count, plural, one {# collecte} other {# collectes}} autour de {query}",
+    "noResults": "Aucune collecte trouvée pour « {query} » dans les prochaines semaines.",
+    "errorEfs": "Le service de l'EFS est momentanément indisponible. Réessayez plus tard.",
+    "openEfs": "Voir sur le site de l'EFS",
+    "source": "Données : API Carto de l'Établissement français du sang. Horaires indicatifs, vérifiez avant de vous déplacer.",
+    "permanent": "Site permanent",
+    "book": "Prendre rendez-vous",
+    "spotsLeft": "{count, plural, one {# place restante} other {# places restantes}}",
+    "kinds": {
+      "blood": "Sang",
+      "plasma": "Plasma",
+      "platelets": "Plaquettes"
+    }
+  },
   "Pages": {
     "understand": {
       "title": "Comprendre le don du sang",
