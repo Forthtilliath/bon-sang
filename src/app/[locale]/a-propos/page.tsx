@@ -1,14 +1,77 @@
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-import { StubPage } from "@/components/stub-page";
+import { PageHeader } from "@/components/page-header";
+import { Container } from "@/components/ui/container";
+import { ExternalLink } from "@/components/ui/external-link";
+import { FACTS_SOURCE } from "@/data/facts";
+import { assertLocale } from "@/lib/locale";
+import { pageMetadata } from "@/lib/seo";
 
-export async function generateMetadata() {
-  const t = await getTranslations("Pages.about");
-  return { title: t("title") };
+const PATH = "/a-propos";
+const REPO_URL = "https://github.com/Forthtilliath/bon-sang";
+
+export async function generateMetadata({ params }: PageProps<"/[locale]/a-propos">) {
+  const locale = assertLocale((await params).locale);
+  const t = await getTranslations({ locale, namespace: "Pages.about" });
+  return pageMetadata({
+    locale,
+    path: PATH,
+    title: t("title"),
+    description: t("metaDescription"),
+  });
 }
 
 export default function AboutPage() {
   const t = useTranslations("Pages.about");
-  return <StubPage title={t("title")} lead={t("lead")} />;
+
+  return (
+    <>
+      <PageHeader title={t("title")} lead={t("lead")} />
+
+      <section>
+        <Container className="flex max-w-2xl flex-col gap-10 py-14">
+          <Block title={t("independence.title")}>
+            <p>{t("independence.body")}</p>
+          </Block>
+
+          <Block title={t("sources.title")}>
+            <p>{t("sources.body")}</p>
+            <p>
+              <ExternalLink href={FACTS_SOURCE.url}>{t("sources.efs")}</ExternalLink>
+            </p>
+            <p className="text-sm">{t("sources.associations")}</p>
+          </Block>
+
+          <Block title={t("method.title")}>
+            <p>{t("method.body")}</p>
+          </Block>
+
+          <Block title={t("privacy.title")}>
+            <p>{t("privacy.body")}</p>
+          </Block>
+
+          <Block title={t("tech.title")}>
+            <p>{t("tech.body")}</p>
+            <p>
+              <ExternalLink href={REPO_URL}>{t("tech.repo")}</ExternalLink>
+            </p>
+          </Block>
+
+          <Block title={t("author.title")}>
+            <p>{t("author.body")}</p>
+          </Block>
+        </Container>
+      </section>
+    </>
+  );
+}
+
+function Block({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      <div className="text-muted flex flex-col gap-2">{children}</div>
+    </div>
+  );
 }
