@@ -93,3 +93,107 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Carte des collectes (MapLibre)                                            */
+/* -------------------------------------------------------------------------- */
+
+.ofm-marker {
+  width: 15px;
+  height: 15px;
+  border-radius: 9999px;
+  border: 2px solid #fff;
+  background: var(--ds-primary);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.ofm-marker:hover {
+  transform: scale(1.15);
+}
+
+.ofm-marker--active {
+  transform: scale(1.35);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-primary) 35%, transparent);
+}
+
+.ofm-marker--origin {
+  width: 16px;
+  height: 16px;
+  background: #2563eb;
+  cursor: default;
+}
+
+.ofm-popup-shell .maplibregl-popup-content {
+  background: var(--ds-bg);
+  color: var(--ds-fg);
+  border: 1px solid var(--ds-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.ofm-popup-shell .maplibregl-popup-tip {
+  border-top-color: var(--ds-bg);
+  border-bottom-color: var(--ds-bg);
+}
+
+.ofm-popup-shell .maplibregl-popup-close-button {
+  color: var(--ds-muted);
+  font-size: 18px;
+  padding: 0 6px;
+}
+
+.ofm-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  line-height: 1.4;
+  padding-right: 8px;
+}
+
+.ofm-popup__title {
+  font-size: 14px;
+}
+
+.ofm-popup__muted {
+  color: var(--ds-muted);
+}
+
+.ofm-popup__pre {
+  white-space: pre-line;
+}
+
+.ofm-popup__accent {
+  color: var(--ds-primary);
+  font-weight: 500;
+}
+
+.ofm-popup__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.ofm-popup__tag {
+  border: 1px solid var(--ds-border);
+  border-radius: 9999px;
+  padding: 1px 8px;
+  font-size: 11px;
+  color: var(--ds-muted);
+}
+
+.ofm-popup__link {
+  margin-top: 4px;
+  color: var(--ds-primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
