@@ -147,8 +147,8 @@ messages/                   fr.json, en.json
 | 6 ✅ | `usePersistentState` + `/mon-suivi` (journal, prochaine date, badges, .ics, export) |
 | 7 ✅ | Collectes : API Carto EFS v3 + normalisation + tests + recherche par ville          |
 | 8 ✅ | Carte MapLibre (OpenFreeMap) + liste synchro + filtres type/période + géoloc        |
-| 9    | a11y pass, sitemap/robots/OG, Lighthouse                                            |
-| 10   | Tests Playwright parcours + CI + README + déploiement Vercel                        |
+| 9 ✅ | a11y (clavier/SR, reduced-motion), OG image générée, favicon, manifest, error.tsx   |
+| 10   | Tests Playwright parcours + CI + Lighthouse (déployé) + déploiement Vercel          |
 
 ---
 
