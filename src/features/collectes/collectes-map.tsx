@@ -17,6 +17,10 @@ function styleUrl(): string {
   return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? STYLE_DARK : STYLE_LIGHT;
 }
 
+function motionDuration(ms: number): number {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? 0 : ms;
+}
+
 type Props = {
   collectes: Collecte[];
   activeId: string | null;
@@ -88,7 +92,9 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
       count += 1;
     }
 
-    if (count > 0) map.fitBounds(bounds, { padding: 48, maxZoom: 12, duration: 400 });
+    if (count > 0) {
+      map.fitBounds(bounds, { padding: 48, maxZoom: 12, duration: motionDuration(400) });
+    }
   }, [collectes, onSelect]);
 
   // Marqueur de position (géolocalisation).
@@ -121,7 +127,7 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
     if (!activeId) return;
     const collecte = collectes.find((c) => c.id === activeId);
     if (collecte && collecte.lat !== null && collecte.lng !== null) {
-      map.flyTo({ center: [collecte.lng, collecte.lat], zoom: 13, duration: 600 });
+      map.flyTo({ center: [collecte.lng, collecte.lat], zoom: 13, duration: motionDuration(600) });
     }
   }, [activeId, collectes]);
 

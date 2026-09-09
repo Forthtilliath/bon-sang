@@ -50,7 +50,7 @@ export function QuizResult({
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" role="status" aria-live="polite">
       <div
         className={cn("flex flex-col gap-2 rounded-2xl border p-6", CARD_STYLES[result.verdict])}
       >
