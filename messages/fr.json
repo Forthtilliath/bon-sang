@@ -74,6 +74,138 @@
     "description": "La page que vous cherchez n'existe pas ou a été déplacée.",
     "backHome": "Retour à l'accueil"
   },
+  "Quiz": {
+    "progress": "Question {current} sur {total}",
+    "yes": "Oui",
+    "no": "Non",
+    "dontKnow": "Je ne sais pas",
+    "back": "Précédent",
+    "next": "Suivant",
+    "see": "Voir le résultat",
+    "restart": "Recommencer le test",
+    "findDrive": "Trouver une collecte",
+    "futureDate": "La date ne peut pas être dans le futur.",
+    "untilDate": "Possible à partir du {date}",
+    "reasonsTitle": "Points relevés",
+    "disclaimer": "Ce test est indicatif et non exhaustif. Seul l'entretien médical confidentiel avant le don détermine si vous pouvez donner.",
+    "units": {
+      "years": "ans",
+      "kg": "kg"
+    },
+    "questions": {
+      "age": { "label": "Quel âge avez-vous ?" },
+      "weight": { "label": "Combien pesez-vous ?" },
+      "healthy": {
+        "label": "Vous sentez-vous en bonne santé aujourd'hui ?",
+        "help": "Pas de fièvre, pas d'infection en cours, pas de symptôme inhabituel."
+      },
+      "infection": {
+        "label": "Avez-vous eu une infection ou une fièvre supérieure à 38 °C au cours des 2 dernières semaines ?"
+      },
+      "dentalCare": {
+        "label": "Avez-vous eu des soins dentaires récemment ?",
+        "options": {
+          "none": "Non, aucun",
+          "minor": "Détartrage ou soin d'une carie",
+          "major": "Extraction ou chirurgie dentaire"
+        }
+      },
+      "tattoo": {
+        "label": "Tatouage, piercing, maquillage permanent ou acupuncture au cours des 4 derniers mois ?"
+      },
+      "tattooDate": { "label": "À quelle date ?" },
+      "surgery": {
+        "label": "Intervention chirurgicale ou endoscopie au cours des 4 derniers mois ?"
+      },
+      "surgeryDate": { "label": "À quelle date ?" },
+      "travel": {
+        "label": "Avez-vous séjourné hors d'Europe continentale au cours des 4 derniers mois ?"
+      },
+      "pregnancy": {
+        "label": "Êtes-vous concernée par une grossesse ?",
+        "options": {
+          "no": "Non",
+          "current": "Grossesse en cours",
+          "recent": "Accouchement il y a moins de 6 mois"
+        }
+      },
+      "pregnancyEnd": { "label": "Date de fin de grossesse ?" },
+      "transfusion": {
+        "label": "Avez-vous déjà reçu une transfusion ou un produit sanguin ?"
+      },
+      "riskExposure": {
+        "label": "Pensez-vous avoir été exposé·e à un risque d'infection transmissible par le sang au cours des 4 derniers mois ?",
+        "help": "L'entretien confidentiel avant le don permet d'en parler en toute discrétion."
+      },
+      "chronic": {
+        "label": "Avez-vous une maladie chronique ou suivez-vous un traitement au long cours ?"
+      },
+      "lastDonation": {
+        "label": "Quand avez-vous donné votre sang pour la dernière fois ?",
+        "options": {
+          "never": "Jamais",
+          "recent": "Il y a moins de 8 semaines",
+          "old": "Il y a plus de 8 semaines"
+        }
+      },
+      "lastDonationDate": { "label": "Date de votre dernier don ?" }
+    },
+    "verdicts": {
+      "eligible": {
+        "title": "Vous semblez pouvoir donner",
+        "body": "D'après vos réponses, rien ne s'oppose au don. L'entretien médical avant le prélèvement le confirmera."
+      },
+      "waitWithDate": {
+        "title": "Vous pourrez donner à partir du {date}",
+        "body": "En attendant, voici les délais qui s'appliquent."
+      },
+      "waitNoDate": {
+        "title": "Vous devez patienter avant de donner",
+        "body": "Respectez les délais indiqués ci-dessous."
+      },
+      "check": {
+        "title": "À vérifier avec le médecin de collecte",
+        "body": "Un ou plusieurs points demandent l'avis du médecin lors de l'entretien pré-don."
+      },
+      "ineligible": {
+        "title": "Le don n'est pas possible",
+        "body": "D'après vos réponses, une contre-indication s'applique."
+      }
+    },
+    "reasons": {
+      "ageMinor": "Le don est possible à partir de 18 ans.",
+      "ageMax": "Le don n'est plus possible au-delà de 70 ans.",
+      "weightMin": "Un poids d'au moins 50 kg est nécessaire pour donner.",
+      "healthNow": "Attendez d'être complètement rétabli·e avant de donner.",
+      "infection": "Attendez 2 semaines après la fin d'une infection ou d'une fièvre.",
+      "dentalMinor": "Attendez 24 h après un soin dentaire (détartrage, carie).",
+      "dentalMajor": "Attendez 1 semaine après une extraction ou une chirurgie dentaire.",
+      "tattoo": "Attendez 4 mois après un tatouage, un piercing ou une effraction cutanée.",
+      "surgery": "Attendez 4 mois après une intervention chirurgicale ou une endoscopie.",
+      "travel": "Un séjour hors d'Europe demande une évaluation au cas par cas (paludisme, autres infections).",
+      "pregnancyCurrent": "Le don n'est pas possible pendant la grossesse ni dans les 6 mois qui suivent l'accouchement.",
+      "pregnancyRecent": "Attendez 6 mois après la fin de la grossesse.",
+      "transfusion": "Avoir reçu une transfusion ou un produit sanguin est une contre-indication définitive au don.",
+      "riskExposure": "Après une exposition à un risque d'infection transmissible, un délai de 4 mois s'applique.",
+      "chronic": "Une maladie chronique ou un traitement au long cours doit être évalué avec le médecin de collecte.",
+      "interval": "Respectez un délai de 8 semaines entre deux dons de sang total."
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "q1": {
+        "q": "Ce test remplace-t-il l'entretien médical ?",
+        "a": "Non. Il est indicatif et non exhaustif. L'entretien confidentiel avec un médecin ou un infirmier avant chaque don reste obligatoire et prime sur ce résultat."
+      },
+      "q2": {
+        "q": "Mes réponses sont-elles enregistrées ?",
+        "a": "Non. Le questionnaire s'exécute entièrement dans votre navigateur et rien n'est envoyé sur un serveur."
+      },
+      "q3": {
+        "q": "Quels critères sont pris en compte ?",
+        "a": "Âge, poids, état de santé du jour, délais après soins ou voyages, grossesse, traitements, dernier don : les principaux critères publiés par l'EFS."
+      }
+    }
+  },
   "Pages": {
     "understand": {
       "title": "Comprendre le don du sang",

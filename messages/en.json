@@ -74,6 +74,138 @@
     "description": "The page you are looking for does not exist or has moved.",
     "backHome": "Back to home"
   },
+  "Quiz": {
+    "progress": "Question {current} of {total}",
+    "yes": "Yes",
+    "no": "No",
+    "dontKnow": "I don't know",
+    "back": "Back",
+    "next": "Next",
+    "see": "See the result",
+    "restart": "Start over",
+    "findDrive": "Find a blood drive",
+    "futureDate": "The date cannot be in the future.",
+    "untilDate": "Possible from {date}",
+    "reasonsTitle": "Points flagged",
+    "disclaimer": "This test is indicative and not exhaustive. Only the confidential medical interview before donating decides whether you can donate.",
+    "units": {
+      "years": "years",
+      "kg": "kg"
+    },
+    "questions": {
+      "age": { "label": "How old are you?" },
+      "weight": { "label": "How much do you weigh?" },
+      "healthy": {
+        "label": "Do you feel well today?",
+        "help": "No fever, no ongoing infection, no unusual symptom."
+      },
+      "infection": {
+        "label": "Have you had an infection or a fever above 38 °C in the last 2 weeks?"
+      },
+      "dentalCare": {
+        "label": "Have you had dental care recently?",
+        "options": {
+          "none": "No, none",
+          "minor": "Scaling or a filling",
+          "major": "Extraction or dental surgery"
+        }
+      },
+      "tattoo": {
+        "label": "Tattoo, piercing, permanent make-up or acupuncture in the last 4 months?"
+      },
+      "tattooDate": { "label": "On what date?" },
+      "surgery": {
+        "label": "Surgery or an endoscopy in the last 4 months?"
+      },
+      "surgeryDate": { "label": "On what date?" },
+      "travel": {
+        "label": "Have you stayed outside continental Europe in the last 4 months?"
+      },
+      "pregnancy": {
+        "label": "Does a pregnancy concern you?",
+        "options": {
+          "no": "No",
+          "current": "Currently pregnant",
+          "recent": "Gave birth less than 6 months ago"
+        }
+      },
+      "pregnancyEnd": { "label": "End-of-pregnancy date?" },
+      "transfusion": {
+        "label": "Have you ever received a transfusion or a blood product?"
+      },
+      "riskExposure": {
+        "label": "Do you think you have been exposed to a risk of a blood-transmissible infection in the last 4 months?",
+        "help": "The confidential interview before donating lets you talk about it privately."
+      },
+      "chronic": {
+        "label": "Do you have a chronic illness or are you on long-term treatment?"
+      },
+      "lastDonation": {
+        "label": "When did you last give blood?",
+        "options": {
+          "never": "Never",
+          "recent": "Less than 8 weeks ago",
+          "old": "More than 8 weeks ago"
+        }
+      },
+      "lastDonationDate": { "label": "Date of your last donation?" }
+    },
+    "verdicts": {
+      "eligible": {
+        "title": "You seem able to donate",
+        "body": "Based on your answers, nothing stands in the way. The medical interview before the donation will confirm it."
+      },
+      "waitWithDate": {
+        "title": "You will be able to donate from {date}",
+        "body": "In the meantime, here are the deferral periods that apply."
+      },
+      "waitNoDate": {
+        "title": "You need to wait before donating",
+        "body": "Respect the deferral periods listed below."
+      },
+      "check": {
+        "title": "To check with the collection doctor",
+        "body": "One or more points need the doctor's opinion during the pre-donation interview."
+      },
+      "ineligible": {
+        "title": "Donation is not possible",
+        "body": "Based on your answers, a contraindication applies."
+      }
+    },
+    "reasons": {
+      "ageMinor": "Donation is possible from the age of 18.",
+      "ageMax": "Donation is no longer possible past the age of 70.",
+      "weightMin": "A weight of at least 50 kg is required to donate.",
+      "healthNow": "Wait until you have fully recovered before donating.",
+      "infection": "Wait 2 weeks after an infection or a fever has cleared.",
+      "dentalMinor": "Wait 24 h after dental care (scaling, filling).",
+      "dentalMajor": "Wait 1 week after a dental extraction or surgery.",
+      "tattoo": "Wait 4 months after a tattoo, a piercing or any break in the skin.",
+      "surgery": "Wait 4 months after surgery or an endoscopy.",
+      "travel": "A stay outside Europe requires a case-by-case assessment (malaria, other infections).",
+      "pregnancyCurrent": "Donation is not possible during pregnancy or in the 6 months after childbirth.",
+      "pregnancyRecent": "Wait 6 months after the end of the pregnancy.",
+      "transfusion": "Having received a transfusion or a blood product is a permanent contraindication to donating.",
+      "riskExposure": "After exposure to a risk of a transmissible infection, a 4-month deferral applies.",
+      "chronic": "A chronic illness or long-term treatment must be assessed with the collection doctor.",
+      "interval": "Respect an 8-week interval between two whole blood donations."
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "q1": {
+        "q": "Does this test replace the medical interview?",
+        "a": "No. It is indicative and not exhaustive. The confidential interview with a doctor or nurse before every donation remains mandatory and prevails over this result."
+      },
+      "q2": {
+        "q": "Are my answers saved?",
+        "a": "No. The questionnaire runs entirely in your browser and nothing is sent to a server."
+      },
+      "q3": {
+        "q": "Which criteria are taken into account?",
+        "a": "Age, weight, health on the day, deferrals after care or travel, pregnancy, treatments, last donation: the main criteria published by the EFS."
+      }
+    }
+  },
   "Pages": {
     "understand": {
       "title": "Understanding blood donation",
