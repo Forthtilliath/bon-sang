@@ -6,7 +6,7 @@ test("la page collectes affiche le formulaire de recherche", async ({ page }) =>
   await expect(page.getByText(/Saisissez une ville/)).toBeVisible();
 });
 
-test("une recherche affiche des collectes et une carte qui charge ses tuiles", async ({ page }) => {
+test("une recherche affiche la liste et une carte qui charge ses tuiles", async ({ page }) => {
   test.slow(); // dépend de l'API EFS et des tuiles OpenFreeMap
 
   let vectorTiles = 0;
@@ -20,9 +20,22 @@ test("une recherche affiche des collectes et une carte qui charge ses tuiles", a
     timeout: 20_000,
   });
 
-  // La carte MapLibre monte et rend son canvas.
+  await expect(page.locator(".maplibregl-canvas")).toBeVisible({ timeout: 15_000 });
+  await expect.poll(() => vectorTiles, { timeout: 15_000 }).toBeGreaterThan(0);
+});
+
+test("cliquer un marqueur ouvre une bulle d'info", async ({ page }) => {
+  test.slow();
+
+  await page.goto("/collectes?ville=Paris");
   await expect(page.locator(".maplibregl-canvas")).toBeVisible({ timeout: 15_000 });
 
-  // Et elle charge bien des tuiles vectorielles (régression maplibre v6 / worker).
-  await expect.poll(() => vectorTiles, { timeout: 15_000 }).toBeGreaterThan(0);
+  const marker = page.locator(".ofm-marker").first();
+  await expect(marker).toBeVisible({ timeout: 10_000 });
+  await marker.click({ force: true });
+
+  const popup = page.locator(".ofm-popup");
+  await expect(popup).toBeVisible();
+  // Un type de don et le lien de RDV sont attendus dans la bulle.
+  await expect(popup.locator(".ofm-popup__title")).not.toBeEmpty();
 });
