@@ -102,6 +102,18 @@ export function normalizeCollectes(raw: EfsSearchResponse): Collecte[] {
   return [...fixed, ...mobile];
 }
 
+/** Adresse lisible : évite de répéter « CP ville » si l'adresse le contient déjà. */
+export function collecteAddress(
+  collecte: Pick<Collecte, "adresse" | "codePostal" | "ville">,
+): string {
+  const cityLine = [collecte.codePostal, collecte.ville].filter(Boolean).join(" ");
+  if (!collecte.adresse) return cityLine;
+  if (collecte.codePostal && collecte.adresse.includes(collecte.codePostal)) {
+    return collecte.adresse;
+  }
+  return [collecte.adresse, cityLine].filter(Boolean).join(" · ");
+}
+
 /** Garde les sites fixes et les collectes mobiles encore à venir, triées par date. */
 export function upcomingCollectes(collectes: Collecte[], today: string): Collecte[] {
   return collectes
