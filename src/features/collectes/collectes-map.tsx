@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { LngLatBounds, Map as MlMap, Marker, NavigationControl } from "maplibre-gl";
+import { useCallback, useEffect, useRef } from "react";
+import { LngLatBounds, Map as MlMap, Marker, NavigationControl, Popup } from "maplibre-gl";
+import { useFormatter, useTranslations } from "next-intl";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import type { Point } from "./filter";
+import { collecteAddress } from "./normalize";
 import type { Collecte } from "./types";
 
 const STYLE_LIGHT = "https://tiles.openfreemap.org/styles/positron";
@@ -26,13 +28,88 @@ type Props = {
   collectes: Collecte[];
   activeId: string | null;
   origin: Point | null;
-  onSelect: (id: string) => void;
+  onSelect: (id: string | null) => void;
 };
+
+type PopupHelpers = {
+  t: ReturnType<typeof useTranslations<"Collectes">>;
+  format: ReturnType<typeof useFormatter>;
+};
+
+function el(tag: string, className: string, text?: string): HTMLElement {
+  const node = document.createElement(tag);
+  node.className = className;
+  if (text) node.textContent = text;
+  return node;
+}
+
+/** Contenu DOM d'une bulle d'info de collecte (jamais de HTML brut : `textContent`). */
+function popupContent(collecte: Collecte, { t, format }: PopupHelpers): HTMLElement {
+  const root = el("div", "ofm-popup");
+  root.append(el("strong", "ofm-popup__title", collecte.nom || collecte.ville));
+
+  const place = collecteAddress(collecte);
+  if (place) root.append(el("span", "ofm-popup__muted", place));
+
+  if (collecte.fixe) {
+    root.append(el("span", "ofm-popup__accent", t("permanent")));
+    if (collecte.horaires)
+      root.append(el("span", "ofm-popup__muted ofm-popup__pre", collecte.horaires));
+  } else if (collecte.date) {
+    const when = format.dateTime(new Date(`${collecte.date}T12:00:00`), { dateStyle: "full" });
+    const hours = collecte.heureDebut
+      ? ` · ${collecte.heureDebut}${collecte.heureFin ? `–${collecte.heureFin}` : ""}`
+      : "";
+    root.append(el("span", "ofm-popup__accent", `${when}${hours}`));
+  }
+
+  if (collecte.typesDon.length > 0) {
+    const tags = el("span", "ofm-popup__tags");
+    for (const kind of collecte.typesDon) {
+      tags.append(el("span", "ofm-popup__tag", t(`kinds.${kind}`)));
+    }
+    root.append(tags);
+  }
+
+  if (typeof collecte.placesRestantes === "number") {
+    root.append(
+      el("span", "ofm-popup__muted", t("spotsLeft", { count: collecte.placesRestantes })),
+    );
+  }
+
+  if (collecte.rdvUrl) {
+    const link = el("a", "ofm-popup__link", t("book"));
+    (link as HTMLAnchorElement).href = collecte.rdvUrl;
+    (link as HTMLAnchorElement).target = "_blank";
+    (link as HTMLAnchorElement).rel = "noopener noreferrer";
+    root.append(link);
+  }
+
+  return root;
+}
 
 export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MlMap | null>(null);
   const markersRef = useRef(new globalThis.Map<string, Marker>());
+  const popupRef = useRef<Popup | null>(null);
+  // Vrai quand on retire la bulle par code (évite de déclencher `onSelect(null)`).
+  const closingPopupRef = useRef(false);
+
+  const removePopup = useCallback(() => {
+    if (!popupRef.current) return;
+    closingPopupRef.current = true;
+    popupRef.current.remove();
+    closingPopupRef.current = false;
+    popupRef.current = null;
+  }, []);
+
+  const t = useTranslations("Collectes");
+  const format = useFormatter();
+  const helpersRef = useRef<PopupHelpers>({ t, format });
+  useEffect(() => {
+    helpersRef.current = { t, format };
+  }, [t, format]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -55,11 +132,12 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
 
     return () => {
       media.removeEventListener("change", onThemeChange);
+      removePopup();
       map.remove();
       mapRef.current = null;
       markers.clear();
     };
-  }, []);
+  }, [removePopup]);
 
   // (Re)pose les marqueurs des collectes quand la liste filtrée change.
   useEffect(() => {
@@ -78,16 +156,15 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
 
     for (const collecte of collectes) {
       if (collecte.lat === null || collecte.lng === null) continue;
-      const el = document.createElement("button");
-      el.type = "button";
-      el.setAttribute("aria-label", collecte.nom || collecte.ville);
-      el.className =
-        "size-3.5 cursor-pointer rounded-full border-2 border-white bg-[#d21f2c] shadow-sm";
-      el.addEventListener("click", () => onSelect(collecte.id));
+      const marker = document.createElement("button");
+      marker.type = "button";
+      marker.setAttribute("aria-label", collecte.nom || collecte.ville);
+      marker.className = "ofm-marker";
+      marker.addEventListener("click", () => onSelect(collecte.id));
 
       markersRef.current.set(
         collecte.id,
-        new Marker({ element: el }).setLngLat([collecte.lng, collecte.lat]).addTo(map),
+        new Marker({ element: marker }).setLngLat([collecte.lng, collecte.lat]).addTo(map),
       );
       bounds.extend([collecte.lng, collecte.lat]);
       count += 1;
@@ -106,31 +183,48 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
     markersRef.current.delete(ORIGIN_KEY);
     if (!origin) return;
 
-    const el = document.createElement("div");
-    el.className = "size-4 rounded-full border-2 border-white bg-blue-600 shadow";
+    const dot = document.createElement("div");
+    dot.className = "ofm-marker ofm-marker--origin";
     markersRef.current.set(
       ORIGIN_KEY,
-      new Marker({ element: el }).setLngLat([origin.lng, origin.lat]).addTo(map),
+      new Marker({ element: dot }).setLngLat([origin.lng, origin.lat]).addTo(map),
     );
   }, [origin]);
 
-  // Centre sur la collecte sélectionnée et la met en évidence.
+  // Centre sur la collecte sélectionnée, la met en évidence et ouvre sa bulle d'info.
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
     for (const [id, marker] of markersRef.current) {
       if (id === ORIGIN_KEY) continue;
-      marker.getElement().classList.toggle("ring-3", id === activeId);
-      marker.getElement().classList.toggle("ring-[#d21f2c]/50", id === activeId);
+      marker.getElement().classList.toggle("ofm-marker--active", id === activeId);
     }
 
-    if (!activeId) return;
-    const collecte = collectes.find((c) => c.id === activeId);
-    if (collecte && collecte.lat !== null && collecte.lng !== null) {
-      map.flyTo({ center: [collecte.lng, collecte.lat], zoom: 13, duration: motionDuration(600) });
+    const collecte = activeId ? collectes.find((c) => c.id === activeId) : null;
+
+    if (!collecte || collecte.lat === null || collecte.lng === null) {
+      removePopup();
+      return;
     }
-  }, [activeId, collectes]);
+
+    map.flyTo({ center: [collecte.lng, collecte.lat], zoom: 13, duration: motionDuration(600) });
+
+    removePopup();
+    const popup = new Popup({
+      offset: 16,
+      maxWidth: "280px",
+      className: "ofm-popup-shell",
+      closeOnClick: false,
+    })
+      .setLngLat([collecte.lng, collecte.lat])
+      .setDOMContent(popupContent(collecte, helpersRef.current))
+      .addTo(map);
+    popup.on("close", () => {
+      if (!closingPopupRef.current) onSelect(null);
+    });
+    popupRef.current = popup;
+  }, [activeId, collectes, onSelect, removePopup]);
 
   return (
     <div
