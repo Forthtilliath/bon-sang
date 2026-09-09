@@ -70,9 +70,9 @@ produit assumé (pas de compte, pas de RGPD lourd) et un argument à mettre en a
 
 ### 4.2 Carte des collectes `/collectes`
 
-- Source : open data EFS / data.gouv.fr (**dataset à confirmer** — voir §6).
-- Fetch côté serveur avec `revalidate` (ex. 6 h), normalisation dans un type
-  `Collecte { id, nom, adresse, ville, cp, lat, lng, debut, fin, typesDon[] }`.
+- Source : **API Carto EFS v3** (cf. §6). Fetch côté serveur avec `revalidate` 1 h,
+  normalisation vers `Collecte { id, nom, adresse, ville, codePostal, lat, lng, date,
+heureDebut, heureFin, horaires, typesDon[], fixe, rdvUrl, placesRestantes }`.
 - Carte MapLibre (clusters), panneau latéral liste synchronisée, filtres :
   ville / code postal, plage de dates, type de don (sang / plasma / plaquettes).
 - Géoloc navigateur optionnelle (« près de chez moi ») — jamais bloquante.
@@ -123,9 +123,10 @@ messages/                   fr.json, en.json
 
 ## 6. Points à confirmer avant / pendant le dev
 
-1. **Dataset EFS** : identifier la source open data exacte des collectes
-   (data.gouv.fr « collectes de sang » / API `mapoint.efs.sante.fr`) — format,
-   fréquence de mise à jour, licence, champs géo. _Bloquant pour §4.2._
+1. ~~**Dataset EFS**~~ ✅ **Résolu (lot 7)** : API Carto EFS v3
+   `https://oudonner.api.efs.sante.fr/carto-api/v3` (`/city/searchbyinput` pour géocoder,
+   `/samplingcollection/searchbycityname` et `/searchinsquare` pour les collectes). Pas de
+   clé requise. Peu fiable côté serveur EFS → cache ISR + fallback en place.
 2. **Critères d'éligibilité** : figer la liste de règles depuis la page officielle
    EFS à une date donnée, avec mention « critères au JJ/MM/AAAA ».
 3. **Tuiles carto** : fournisseur de tuiles vecteur gratuit (MapTiler free tier,
@@ -144,7 +145,7 @@ messages/                   fr.json, en.json
 | 4 ✅ | Contenu `/comprendre` `/qui-ca-aide` `/a-propos` + sitemap/robots/hreflang/JSON-LD  |
 | 5 ✅ | Quiz éligibilité : moteur de règles + Vitest (24 tests) + UI multi-étapes + FAQ     |
 | 6 ✅ | `usePersistentState` + `/mon-suivi` (journal, prochaine date, badges, .ics, export) |
-| 7    | Collectes : fetch EFS + normalisation + tests (mock)                                |
+| 7 ✅ | Collectes : API Carto EFS v3 + normalisation + tests + recherche par ville          |
 | 8    | Carte MapLibre + liste + filtres + géoloc                                           |
 | 9    | a11y pass, sitemap/robots/OG, Lighthouse                                            |
 | 10   | Tests Playwright parcours + CI + README + déploiement Vercel                        |
