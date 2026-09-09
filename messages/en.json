@@ -84,6 +84,9 @@
     "see": "See the result",
     "restart": "Start over",
     "findDrive": "Find a blood drive",
+    "remember": "Remind me",
+    "remembered": "Reminder added to your log.",
+    "openTracker": "Open my log",
     "futureDate": "The date cannot be in the future.",
     "untilDate": "Possible from {date}",
     "reasonsTitle": "Points flagged",
@@ -204,6 +207,75 @@
         "q": "Which criteria are taken into account?",
         "a": "Age, weight, health on the day, deferrals after care or travel, pregnancy, treatments, last donation: the main criteria published by the EFS."
       }
+    }
+  },
+  "Tracker": {
+    "loading": "Loading your log…",
+    "privacyNote": "Everything stays in this browser: nothing is sent to a server.",
+    "ics": {
+      "title": "Blood donation possible",
+      "description": "According to your Bon Sang log, you can donate again from today."
+    },
+    "next": {
+      "title": "Next donation",
+      "now": "According to your log, you can donate right now.",
+      "unknown": "Add your last donation below to estimate your next date.",
+      "inDays": "{days, plural, =0 {It's today} one {In # day} other {In # days}}",
+      "addToCalendar": "Add to my calendar (.ics)",
+      "findDrive": "Find a blood drive",
+      "clearReminder": "Remove the reminder",
+      "reason": {
+        "interval": "interval between two donations",
+        "annualCap": "maximum number of donations over 12 months reached",
+        "reminder": "reminder saved from the eligibility test"
+      }
+    },
+    "journal": {
+      "title": "Donation log",
+      "empty": "No donation recorded yet.",
+      "date": "Date",
+      "type": "Type",
+      "place": "Place",
+      "placePlaceholder": "Optional",
+      "submit": "Add",
+      "delete": "Delete",
+      "types": {
+        "blood": "Whole blood",
+        "plasma": "Plasma",
+        "platelets": "Platelets"
+      }
+    },
+    "profile": {
+      "title": "Profile",
+      "hint": "Used to compute the annual cap and some badges. Stays on your device.",
+      "sex": "Sex",
+      "bloodGroup": "Blood group",
+      "groupUnknown": "I don't know",
+      "sexes": {
+        "unspecified": "Not specified",
+        "female": "Female",
+        "male": "Male"
+      }
+    },
+    "badges": {
+      "title": "Badges",
+      "locked": "Locked",
+      "items": {
+        "first": { "name": "First donation", "hint": "You logged your first donation." },
+        "three": { "name": "Three donations", "hint": "Three donations to your name." },
+        "ten": { "name": "Ten donations", "hint": "Ten donations logged, well done." },
+        "regular": { "name": "Regularity", "hint": "Donations spread over more than a year." },
+        "universal": { "name": "Universal donor", "hint": "Your O- group suits every recipient." },
+        "plasma": { "name": "Plasma donation", "hint": "You have donated plasma." }
+      }
+    },
+    "data": {
+      "title": "Your data",
+      "export": "Export (JSON)",
+      "import": "Import (JSON)",
+      "importError": "Invalid file: nothing was imported.",
+      "reset": "Erase everything",
+      "resetConfirm": "Erase your entire log? This cannot be undone."
     }
   },
   "Pages": {

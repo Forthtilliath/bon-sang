@@ -84,6 +84,9 @@
     "see": "Voir le résultat",
     "restart": "Recommencer le test",
     "findDrive": "Trouver une collecte",
+    "remember": "M'en souvenir",
+    "remembered": "Rappel ajouté à votre suivi.",
+    "openTracker": "Voir mon suivi",
     "futureDate": "La date ne peut pas être dans le futur.",
     "untilDate": "Possible à partir du {date}",
     "reasonsTitle": "Points relevés",
@@ -204,6 +207,78 @@
         "q": "Quels critères sont pris en compte ?",
         "a": "Âge, poids, état de santé du jour, délais après soins ou voyages, grossesse, traitements, dernier don : les principaux critères publiés par l'EFS."
       }
+    }
+  },
+  "Tracker": {
+    "loading": "Chargement de votre suivi…",
+    "privacyNote": "Tout reste dans ce navigateur : rien n'est envoyé sur un serveur.",
+    "ics": {
+      "title": "Don du sang possible",
+      "description": "D'après votre suivi Bon Sang, vous pouvez à nouveau donner à partir d'aujourd'hui."
+    },
+    "next": {
+      "title": "Prochain don",
+      "now": "D'après votre suivi, vous pouvez donner dès maintenant.",
+      "unknown": "Ajoutez votre dernier don ci-dessous pour estimer votre prochaine date.",
+      "inDays": "{days, plural, =0 {C'est aujourd'hui} one {Dans # jour} other {Dans # jours}}",
+      "addToCalendar": "Ajouter à mon agenda (.ics)",
+      "findDrive": "Trouver une collecte",
+      "clearReminder": "Supprimer le rappel",
+      "reason": {
+        "interval": "délai entre deux dons",
+        "annualCap": "nombre maximal de dons sur 12 mois atteint",
+        "reminder": "rappel enregistré depuis le test d'éligibilité"
+      }
+    },
+    "journal": {
+      "title": "Journal de dons",
+      "empty": "Aucun don enregistré pour l'instant.",
+      "date": "Date",
+      "type": "Type",
+      "place": "Lieu",
+      "placePlaceholder": "Optionnel",
+      "submit": "Ajouter",
+      "delete": "Supprimer",
+      "types": {
+        "blood": "Sang total",
+        "plasma": "Plasma",
+        "platelets": "Plaquettes"
+      }
+    },
+    "profile": {
+      "title": "Profil",
+      "hint": "Utilisé pour le calcul du plafond annuel et certains badges. Reste sur votre appareil.",
+      "sex": "Sexe",
+      "bloodGroup": "Groupe sanguin",
+      "groupUnknown": "Je ne sais pas",
+      "sexes": {
+        "unspecified": "Non précisé",
+        "female": "Femme",
+        "male": "Homme"
+      }
+    },
+    "badges": {
+      "title": "Badges",
+      "locked": "À débloquer",
+      "items": {
+        "first": { "name": "Premier don", "hint": "Vous avez enregistré votre premier don." },
+        "three": { "name": "Trois dons", "hint": "Trois dons à votre actif." },
+        "ten": { "name": "Dix dons", "hint": "Dix dons enregistrés, bravo." },
+        "regular": { "name": "Régularité", "hint": "Des dons répartis sur plus d'un an." },
+        "universal": {
+          "name": "Donneur universel",
+          "hint": "Votre groupe O- convient à tous les receveurs."
+        },
+        "plasma": { "name": "Don de plasma", "hint": "Vous avez donné du plasma." }
+      }
+    },
+    "data": {
+      "title": "Vos données",
+      "export": "Exporter (JSON)",
+      "import": "Importer (JSON)",
+      "importError": "Fichier invalide : rien n'a été importé.",
+      "reset": "Tout effacer",
+      "resetConfirm": "Effacer tout votre suivi ? Cette action est irréversible."
     }
   },
   "Pages": {
