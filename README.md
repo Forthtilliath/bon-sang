@@ -33,6 +33,7 @@ Le site tourne sur [http://localhost:3000](http://localhost:3000).
 | `npm run start`        | Sert le build de production          |
 | `npm run lint`         | ESLint (flat config + jsx-a11y)      |
 | `npm run typecheck`    | Vérification TypeScript              |
+| `npm test`             | Tests unitaires (Vitest)             |
 | `npm run format`       | Formate le code avec Prettier        |
 | `npm run format:check` | Vérifie le formatage sans écrire     |
 
