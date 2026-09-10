@@ -10,9 +10,10 @@ import type { Point } from "./filter";
 import { collecteAddress } from "./normalize";
 import type { Collecte } from "./types";
 
-const STYLE_LIGHT = "https://tiles.openfreemap.org/styles/positron";
-// `fiord` plutôt que `dark` : bien plus lisible (rues visibles) sur fond sombre.
-const STYLE_DARK = "https://tiles.openfreemap.org/styles/fiord";
+// Fonds CARTO (vectoriels, gratuits, sans clé) : `voyager` et `dark-matter` sont
+// assortis, donc la bascule clair/sombre reste homogène.
+const STYLE_LIGHT = "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json";
+const STYLE_DARK = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 const FRANCE_CENTER: [number, number] = [2.35, 46.6];
 const ORIGIN_KEY = "__origin__";
 
