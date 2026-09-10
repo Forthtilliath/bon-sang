@@ -80,6 +80,11 @@ describe("nextEligibleDate", () => {
     expect(result.reason).toBe("interval");
   });
 
+  it("ignore un rappel déjà échu", () => {
+    const result = nextEligibleDate(state({ reminder: { date: "2026-03-01" } }), TODAY);
+    expect(result).toEqual({ date: null, reason: null });
+  });
+
   it("retient la contrainte la plus tardive entre intervalle et rappel", () => {
     const result = nextEligibleDate(
       state({
