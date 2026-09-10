@@ -24,6 +24,12 @@
     "fr": "Français",
     "en": "English"
   },
+  "Theme": {
+    "label": "Thème",
+    "system": "Système",
+    "light": "Clair",
+    "dark": "Sombre"
+  },
   "Common": {
     "newWindow": "nouvelle fenêtre"
   },
@@ -80,6 +86,8 @@
   },
   "Quiz": {
     "progress": "Question {current} sur {total}",
+    "progressLabel": "Progression du questionnaire",
+    "dontKnowActive": "Vous avez indiqué ne pas connaître cette date.",
     "yes": "Oui",
     "no": "Non",
     "dontKnow": "Je ne sais pas",
@@ -289,6 +297,9 @@
     "searchLabel": "Ville ou code postal",
     "searchPlaceholder": "Ville ou code postal",
     "searchSubmit": "Rechercher",
+    "resultsRegion": "Résultats de la recherche de collectes",
+    "mapLabel": "Carte des collectes",
+    "mapPopupClose": "Fermer les informations de la collecte",
     "intro": "Saisissez une ville ou un code postal pour voir les collectes à venir et les sites permanents à proximité.",
     "resultsCount": "{count, plural, one {# collecte} other {# collectes}} autour de {query}",
     "noResults": "Aucune collecte trouvée pour « {query} » dans les prochaines semaines.",
