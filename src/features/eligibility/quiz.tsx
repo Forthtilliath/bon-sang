@@ -198,8 +198,11 @@ function NumberField({
         inputMode="numeric"
         min={question.min}
         max={question.max}
-        value={typeof value === "number" ? value : ""}
-        onChange={(e) => onChange(e.target.value === "" ? undefined : e.target.valueAsNumber)}
+        value={typeof value === "number" && Number.isFinite(value) ? value : ""}
+        onChange={(e) => {
+          const next = e.target.valueAsNumber;
+          onChange(Number.isFinite(next) ? next : undefined);
+        }}
         className="border-border bg-bg w-28 rounded-xl border px-3 py-2 text-sm"
       />
       <span className="text-muted text-sm">{t(`units.${question.unit}`)}</span>
