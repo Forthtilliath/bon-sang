@@ -19,10 +19,18 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # Non bloquant : `maplibre-gl` <= 6.4.0 a une faille XSS critique dont le seul
+      # correctif (6.9.0) est une refonte ESM/WebGL2. Le code n'appelle jamais
+      # `setHTML`/`setText` (bulles construites via `setDOMContent`), donc non
+      # exploitable ici. Migration maplibre 6 suivie à part.
+      - run: npm audit --audit-level=high
+        continue-on-error: true
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://example.com' }}
 
   e2e:
     runs-on: ubuntu-latest
