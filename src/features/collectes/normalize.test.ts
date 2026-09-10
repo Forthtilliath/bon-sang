@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import { EFS_SAMPLE_RESPONSE } from "./fixtures";
-import { normalizeCollectes, parseEfsDate, parseEfsTime, upcomingCollectes } from "./normalize";
+import {
+  collecteAddress,
+  normalizeCollectes,
+  parseEfsDate,
+  parseEfsTime,
+  upcomingCollectes,
+} from "./normalize";
 
 describe("parseEfsDate", () => {
   it("accepte le format ISO", () => {
@@ -69,6 +75,26 @@ describe("normalizeCollectes", () => {
   it("combine matin et après-midi", () => {
     const span = collectes.find((c) => c.id === "1130245");
     expect(span).toMatchObject({ heureDebut: "09:00", heureFin: "18:00" });
+  });
+});
+
+describe("collecteAddress", () => {
+  it("combine adresse et ligne ville quand l'adresse ne contient pas le code postal", () => {
+    expect(
+      collecteAddress({ adresse: "12 rue des Lilas", codePostal: "31000", ville: "Toulouse" }),
+    ).toBe("12 rue des Lilas · 31000 Toulouse");
+  });
+
+  it("ne répète pas la ligne ville si l'adresse contient déjà le code postal", () => {
+    expect(
+      collecteAddress({ adresse: "12 rue des Lilas, 31000 Toulouse", codePostal: "31000", ville: "Toulouse" }),
+    ).toBe("12 rue des Lilas, 31000 Toulouse");
+  });
+
+  it("se rabat sur la ligne ville quand l'adresse est vide", () => {
+    expect(collecteAddress({ adresse: "", codePostal: "31000", ville: "Toulouse" })).toBe(
+      "31000 Toulouse",
+    );
   });
 });
 
