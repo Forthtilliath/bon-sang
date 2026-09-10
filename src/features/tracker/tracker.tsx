@@ -92,12 +92,23 @@ function NextDonation({ tracker }: { tracker: TrackerApi }) {
         ) : (
           <>
             <p className="text-sm">{hasDonations ? t("next.now") : t("next.unknown")}</p>
-            <Link
-              href="/collectes"
-              className={buttonClasses({ variant: "outline", size: "sm", className: "self-start" })}
-            >
-              {t("next.findDrive")}
-            </Link>
+            <div className="mt-1 flex flex-wrap gap-3">
+              <Link
+                href="/collectes"
+                className={buttonClasses({ variant: "outline", size: "sm" })}
+              >
+                {t("next.findDrive")}
+              </Link>
+              {tracker.state.reminder ? (
+                <button
+                  type="button"
+                  onClick={tracker.clearReminder}
+                  className={buttonClasses({ variant: "ghost", size: "sm" })}
+                >
+                  {t("next.clearReminder")}
+                </button>
+              ) : null}
+            </div>
           </>
         )}
       </div>
