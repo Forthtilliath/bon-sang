@@ -2,7 +2,17 @@ import type { Metadata } from "next";
 
 import { routing, type Locale } from "@/i18n/routing";
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrlFromEnv = process.env.NEXT_PUBLIC_SITE_URL;
+
+// En production, l'URL du site est indispensable (canonical, sitemap, OpenGraph).
+// On échoue le build plutôt que de laisser filer un fallback `localhost`.
+if (!siteUrlFromEnv && process.env.NODE_ENV === "production") {
+  throw new Error(
+    "NEXT_PUBLIC_SITE_URL est requis en production. Définissez-le avant `next build`.",
+  );
+}
+
+export const SITE_URL = siteUrlFromEnv ?? "http://localhost:3000";
 
 /** Chemin localisé pour une route donnée (FR = pas de préfixe, cf. localePrefix "as-needed"). */
 export function localizedPath(locale: Locale, path: string): string {
