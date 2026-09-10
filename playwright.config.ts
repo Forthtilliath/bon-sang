@@ -23,7 +23,10 @@ export default defineConfig({
         // Serveur de prod : bien plus stable que `next dev` sous charge parallèle.
         command: "npm run build && npm run start",
         port: PORT,
-        env: { PORT: String(PORT) },
+        env: {
+          PORT: String(PORT),
+          NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? `http://localhost:${PORT}`,
+        },
         reuseExistingServer: !isCI,
         timeout: 180_000,
       },
