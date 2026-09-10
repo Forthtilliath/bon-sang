@@ -43,12 +43,12 @@ export function useQuiz() {
   const isLast = clampedIndex === questions.length - 1;
 
   const next = useCallback(() => {
-    setIndex((i) => {
-      if (i < questions.length - 1) return i + 1;
+    if (isLast) {
       setSubmitted(true);
-      return i;
-    });
-  }, [questions.length]);
+    } else {
+      setIndex((i) => Math.min(i + 1, questions.length - 1));
+    }
+  }, [isLast, questions.length]);
 
   const back = useCallback(() => {
     setSubmitted(false);
