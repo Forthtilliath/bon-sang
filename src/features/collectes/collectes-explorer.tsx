@@ -121,7 +121,9 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
         </div>
       </div>
 
-      <p className="text-muted text-sm">{t("visibleCount", { count: visible.length })}</p>
+      <p className="text-muted text-sm" role="status" aria-live="polite">
+        {t("visibleCount", { count: visible.length })}
+      </p>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <ul className="flex max-h-[70vh] flex-col gap-2 overflow-y-auto pr-1">

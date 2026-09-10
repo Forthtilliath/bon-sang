@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
+import { FocusOnMount } from "@/components/focus-on-mount";
 import { PageHeader } from "@/components/page-header";
 import { Container } from "@/components/ui/container";
 import { ExternalLink } from "@/components/ui/external-link";
@@ -58,17 +59,24 @@ export default async function CollectionsPage({
           <div className="mt-8">
             {!result ? (
               <p className="text-muted max-w-2xl text-sm">{t("intro")}</p>
-            ) : result.status === "error" ? (
-              <Fallback message={t("errorEfs")} label={t("openEfs")} />
-            ) : result.collectes.length === 0 ? (
-              <Fallback message={t("noResults", { query: result.query })} label={t("openEfs")} />
             ) : (
-              <div className="flex flex-col gap-4">
-                <p className="text-muted text-sm">
-                  {t("resultsCount", { count: result.collectes.length, query: result.query })}
-                </p>
-                <CollectesExplorer collectes={result.collectes} />
-              </div>
+              <FocusOnMount label={t("resultsRegion")} className="scroll-mt-24 focus:outline-none">
+                {result.status === "error" ? (
+                  <Fallback message={t("errorEfs")} label={t("openEfs")} />
+                ) : result.collectes.length === 0 ? (
+                  <Fallback
+                    message={t("noResults", { query: result.query })}
+                    label={t("openEfs")}
+                  />
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    <p className="text-muted text-sm">
+                      {t("resultsCount", { count: result.collectes.length, query: result.query })}
+                    </p>
+                    <CollectesExplorer collectes={result.collectes} />
+                  </div>
+                )}
+              </FocusOnMount>
             )}
           </div>
 
