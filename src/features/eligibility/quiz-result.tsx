@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { buttonClasses } from "@/components/ui/button";
@@ -34,6 +34,12 @@ export function QuizResult({
   const tracker = usePersistentState<TrackerState>(TRACKER_STORAGE_KEY, EMPTY_TRACKER);
   const [remembered, setRemembered] = useState(false);
 
+  // À la soumission, le focus arrive sur le résultat (annoncé par `role="status"`).
+  const headingRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
   const verdictKey =
     result.verdict === "wait" ? (result.until ? "waitWithDate" : "waitNoDate") : result.verdict;
 
@@ -50,7 +56,13 @@ export function QuizResult({
   };
 
   return (
-    <div className="flex flex-col gap-6" role="status" aria-live="polite">
+    <div
+      ref={headingRef}
+      tabIndex={-1}
+      className="flex flex-col gap-6 focus:outline-none"
+      role="status"
+      aria-live="polite"
+    >
       <div
         className={cn("flex flex-col gap-2 rounded-2xl border p-6", CARD_STYLES[result.verdict])}
       >
