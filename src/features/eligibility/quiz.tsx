@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
 import { useTranslations } from "next-intl";
 
 import { buttonClasses } from "@/components/ui/button";
@@ -27,6 +27,18 @@ export function Quiz() {
   const t = useQuizT();
   const quiz = useQuiz();
 
+  // Le focus suit le changement d'étape : sur la question (sa `<legend>`), et sur
+  // le résultat à la soumission (géré dans `QuizResult`). On ne le déplace qu'à un
+  // vrai changement, jamais au premier rendu (arrivée sur la page).
+  const legendRef = useRef<HTMLLegendElement>(null);
+  const focusKey = quiz.submitted ? "result" : `step-${quiz.stepNumber}`;
+  const prevFocusKey = useRef(focusKey);
+  useEffect(() => {
+    if (prevFocusKey.current === focusKey) return;
+    prevFocusKey.current = focusKey;
+    if (!quiz.submitted) legendRef.current?.focus();
+  }, [focusKey, quiz.submitted]);
+
   if (quiz.submitted && quiz.result) {
     return <QuizResult result={quiz.result} onRestart={quiz.restart} />;
   }
@@ -45,6 +57,7 @@ export function Quiz() {
         <div
           className="bg-surface-strong h-1.5 overflow-hidden rounded-full"
           role="progressbar"
+          aria-label={t("progressLabel")}
           aria-valuenow={quiz.stepNumber}
           aria-valuemin={1}
           aria-valuemax={quiz.total}
@@ -61,6 +74,7 @@ export function Quiz() {
         question={current}
         value={quiz.answers[current.id]}
         onChange={(value) => quiz.setAnswer(current.id, value)}
+        legendRef={legendRef}
       />
 
       <div className="flex items-center justify-between gap-3">
@@ -89,19 +103,26 @@ function QuestionField({
   question,
   value,
   onChange,
+  legendRef,
 }: {
   question: Question;
   value: AnswerValue;
   onChange: (value: AnswerValue) => void;
+  legendRef: React.Ref<HTMLLegendElement>;
 }) {
   const t = useQuizT();
   const groupId = useId();
+  const label = t(`questions.${question.id}.label`);
   const help = t.has(`questions.${question.id}.help`) ? t(`questions.${question.id}.help`) : null;
 
   return (
     <fieldset className="flex flex-col gap-4">
-      <legend className="text-xl font-medium tracking-tight text-balance">
-        {t(`questions.${question.id}.label`)}
+      <legend
+        ref={legendRef}
+        tabIndex={-1}
+        className="text-xl font-medium tracking-tight text-balance focus:outline-none"
+      >
+        {label}
       </legend>
       {help ? <p className="text-muted -mt-2 text-sm">{help}</p> : null}
 
@@ -138,11 +159,11 @@ function QuestionField({
       ) : null}
 
       {question.kind === "number" ? (
-        <NumberField question={question} value={value} onChange={onChange} />
+        <NumberField question={question} label={label} value={value} onChange={onChange} />
       ) : null}
 
       {question.kind === "date" ? (
-        <DateField question={question} value={value} onChange={onChange} />
+        <DateField question={question} label={label} value={value} onChange={onChange} />
       ) : null}
     </fieldset>
   );
@@ -181,10 +202,12 @@ function OptionList({
 
 function NumberField({
   question,
+  label,
   value,
   onChange,
 }: {
   question: Extract<Question, { kind: "number" }>;
+  label: string;
   value: AnswerValue;
   onChange: (value: AnswerValue) => void;
 }) {
@@ -192,6 +215,9 @@ function NumberField({
   const id = useId();
   return (
     <div className="flex items-center gap-2">
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
       <input
         id={id}
         type="number"
@@ -212,19 +238,26 @@ function NumberField({
 
 function DateField({
   question,
+  label,
   value,
   onChange,
 }: {
   question: Extract<Question, { kind: "date" }>;
+  label: string;
   value: AnswerValue;
   onChange: (value: AnswerValue) => void;
 }) {
   const t = useQuizT();
   const id = useId();
   const invalid = question.notFuture && isFutureDate(value);
+  // `""` = « je ne sais pas » : une réponse valable, distincte de « pas encore répondu ».
+  const dontKnow = value === "";
 
   return (
     <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
       <div className="flex flex-wrap items-center gap-2">
         <input
           id={id}
@@ -237,12 +270,17 @@ function DateField({
         />
         <button
           type="button"
-          onClick={() => onChange("")}
-          className={buttonClasses({ variant: "ghost", size: "sm" })}
+          aria-pressed={dontKnow}
+          onClick={() => onChange(dontKnow ? undefined : "")}
+          className={cn(
+            buttonClasses({ variant: "ghost", size: "sm" }),
+            dontKnow && "border-primary bg-primary-subtle text-primary border",
+          )}
         >
           {t("dontKnow")}
         </button>
       </div>
+      {dontKnow ? <p className="text-muted text-sm">{t("dontKnowActive")}</p> : null}
       {invalid ? <p className="text-primary text-sm">{t("futureDate")}</p> : null}
     </div>
   );

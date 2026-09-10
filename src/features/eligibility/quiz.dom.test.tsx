@@ -96,6 +96,34 @@ describe("<Quiz>", () => {
     expect(screen.getByRole("status")).toHaveTextContent("Vous semblez pouvoir donner");
   });
 
+  it("déplace le focus sur la question à chaque changement d'étape", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<Quiz />);
+    await advance(user, "30");
+    expect(screen.getByText("Combien pesez-vous ?", { selector: "legend" })).toHaveFocus();
+  });
+
+  it("déplace le focus sur le résultat à la soumission", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<Quiz />);
+    await run(user, HEALTHY);
+    expect(screen.getByRole("status")).toHaveFocus();
+  });
+
+  it("signale l'état « je ne sais pas » sur un champ date", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<Quiz />);
+    for (const label of ["30", "70", "Oui", "Non", "Non, aucun"]) await advance(user, label);
+    await user.click(screen.getByRole("radio", { name: "Oui" }));
+    await user.click(screen.getByRole("button", { name: "Suivant" }));
+
+    const dontKnow = screen.getByRole("button", { name: "Je ne sais pas" });
+    expect(dontKnow).toHaveAttribute("aria-pressed", "false");
+    await user.click(dontKnow);
+    expect(dontKnow).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Vous avez indiqué ne pas connaître cette date.")).toBeInTheDocument();
+  });
+
   it("signale une contre-indication définitive après une transfusion", async () => {
     const user = userEvent.setup();
     renderWithIntl(<Quiz />);
