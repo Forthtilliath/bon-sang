@@ -13,6 +13,7 @@ import { buildIcs } from "@/lib/ics";
 import { BADGES } from "./badges";
 import { BLOOD_GROUPS, DONATION_TYPES, SEXES, type DonationType, type Sex } from "./types";
 import { useTracker } from "./use-tracker";
+import { MAX_IMPORT_BYTES } from "./validate";
 
 export function Tracker() {
   const t = useTranslations("Tracker");
@@ -93,10 +94,7 @@ function NextDonation({ tracker }: { tracker: TrackerApi }) {
           <>
             <p className="text-sm">{hasDonations ? t("next.now") : t("next.unknown")}</p>
             <div className="mt-1 flex flex-wrap gap-3">
-              <Link
-                href="/collectes"
-                className={buttonClasses({ variant: "outline", size: "sm" })}
-              >
+              <Link href="/collectes" className={buttonClasses({ variant: "outline", size: "sm" })}>
                 {t("next.findDrive")}
               </Link>
               {tracker.state.reminder ? (
@@ -302,7 +300,7 @@ function DataControls({ tracker }: { tracker: TrackerApi }) {
 
   const importJson = async (file: File | undefined) => {
     if (!file) return;
-    const ok = tracker.importState(await file.text());
+    const ok = file.size <= MAX_IMPORT_BYTES && tracker.importState(await file.text());
     setError(!ok);
     if (fileInput.current) fileInput.current.value = "";
   };
