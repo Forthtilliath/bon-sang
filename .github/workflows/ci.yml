@@ -25,9 +25,10 @@ jobs:
       # exploitable ici. Migration maplibre 6 suivie à part.
       - run: npm audit --audit-level=high
         continue-on-error: true
+      - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm test
+      - run: npm run test:coverage
       - run: npm run build
         env:
           NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://example.com' }}
