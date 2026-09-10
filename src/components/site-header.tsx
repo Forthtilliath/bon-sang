@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { LocaleSwitcher } from "@/components/locale-switcher";
@@ -14,17 +14,70 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuId = useId();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   const closeMenu = () => setOpen(false);
 
+  // Menu ouvert : focus sur le premier lien, piège de focus, fermeture sur Escape
+  // et sur clic extérieur.
   useEffect(() => {
     if (!open) return;
+    const panel = menuRef.current;
+    if (!panel) return;
+
+    const focusables = () =>
+      Array.from(panel.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"));
+
+    focusables()[0]?.focus();
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !panel.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (!panel.contains(target) && !toggleRef.current?.contains(target)) {
+        setOpen(false);
+      }
+    };
+
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [open]);
+
+  // À la fermeture, si le focus est retombé sur le `body` (Escape, clic sur un
+  // lien), on le ramène sur le bouton qui a ouvert le menu.
+  useEffect(() => {
+    if (wasOpen.current && !open) {
+      const active = document.activeElement;
+      if (!active || active === document.body || menuRef.current?.contains(active)) {
+        toggleRef.current?.focus();
+      }
+    }
+    wasOpen.current = open;
   }, [open]);
 
   return (
@@ -59,6 +112,7 @@ export function SiteHeader() {
           <ThemeToggle />
           <LocaleSwitcher />
           <button
+            ref={toggleRef}
             type="button"
             className="text-muted hover:bg-surface hover:text-fg rounded-full p-2 md:hidden"
             aria-expanded={open}
@@ -71,7 +125,7 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div id={menuId} hidden={!open} className="border-border border-t md:hidden">
+      <div ref={menuRef} id={menuId} hidden={!open} className="border-border border-t md:hidden">
         <nav aria-label={t("primary")} className="mx-auto max-w-5xl px-4 py-2 sm:px-6">
           <ul className="flex flex-col">
             {NAV_ITEMS.map((item) => (
