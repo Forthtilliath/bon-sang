@@ -18,15 +18,15 @@ export default function Icon() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#d21f2c",
-        color: "#ffffff",
-        fontSize: 22,
-        fontWeight: 700,
-        borderRadius: 7,
-        fontFamily: "sans-serif",
       }}
     >
-      B
+      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M16 2s10 12.2 10 18a10 10 0 0 1-20 0C6 14.2 16 2 16 2Z"
+          fill="#d21f2c"
+        />
+        <ellipse cx="12.5" cy="17" rx="2.4" ry="3.4" fill="#ffffff" fillOpacity="0.35" />
+      </svg>
     </div>,
     size,
   );
