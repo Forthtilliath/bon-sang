@@ -1,16 +1,14 @@
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 
-import { FocusOnMount } from "@/components/focus-on-mount";
 import { PageHeader } from "@/components/page-header";
 import { Container } from "@/components/ui/container";
-import { ExternalLink } from "@/components/ui/external-link";
-import { fetchCollectesByCity } from "@/features/collectes";
-import { CollectesExplorer } from "@/features/collectes/collectes-explorer";
+import { CollectesResults } from "@/features/collectes/collectes-results";
+import { ResultsSkeleton } from "@/features/collectes/results-skeleton";
 import { assertLocale } from "@/lib/locale";
 import { pageMetadata } from "@/lib/seo";
 
 const PATH = "/collectes";
-const EFS_URL = "https://dondesang.efs.sante.fr/trouver-une-collecte";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/collectes">) {
   const locale = assertLocale((await params).locale);
@@ -27,8 +25,6 @@ export default async function CollectionsPage({
 
   const page = await getTranslations("Pages.collections");
   const t = await getTranslations("Collectes");
-
-  const result = query ? await fetchCollectesByCity(query) : null;
 
   return (
     <>
@@ -57,26 +53,12 @@ export default async function CollectionsPage({
           </form>
 
           <div className="mt-8">
-            {!result ? (
+            {!query ? (
               <p className="text-muted max-w-2xl text-sm">{t("intro")}</p>
             ) : (
-              <FocusOnMount label={t("resultsRegion")} className="scroll-mt-24 focus:outline-none">
-                {result.status === "error" ? (
-                  <Fallback message={t("errorEfs")} label={t("openEfs")} />
-                ) : result.collectes.length === 0 ? (
-                  <Fallback
-                    message={t("noResults", { query: result.query })}
-                    label={t("openEfs")}
-                  />
-                ) : (
-                  <div className="flex flex-col gap-4">
-                    <p className="text-muted text-sm">
-                      {t("resultsCount", { count: result.collectes.length, query: result.query })}
-                    </p>
-                    <CollectesExplorer collectes={result.collectes} />
-                  </div>
-                )}
-              </FocusOnMount>
+              <Suspense key={query} fallback={<ResultsSkeleton />}>
+                <CollectesResults query={query} />
+              </Suspense>
             )}
           </div>
 
@@ -86,15 +68,6 @@ export default async function CollectionsPage({
         </Container>
       </section>
     </>
-  );
-}
-
-function Fallback({ message, label }: { message: string; label: string }) {
-  return (
-    <div className="border-border bg-surface flex max-w-2xl flex-col gap-2 rounded-2xl border p-5 text-sm">
-      <p>{message}</p>
-      <ExternalLink href={EFS_URL}>{label}</ExternalLink>
-    </div>
   );
 }
 
