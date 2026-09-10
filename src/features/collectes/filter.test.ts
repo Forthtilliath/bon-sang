@@ -45,6 +45,12 @@ describe("filterCollectes", () => {
     const result = filterCollectes(list, { kinds: [], period: "week" }, TODAY);
     expect(result.map((x) => x.date)).toEqual(["2026-06-05", null]);
   });
+
+  it("la période « mois » garde ~31 jours d'horizon", () => {
+    const list = [c({ date: "2026-06-25" }), c({ date: "2026-07-10" })];
+    const result = filterCollectes(list, { kinds: [], period: "month" }, TODAY);
+    expect(result.map((x) => x.date)).toEqual(["2026-06-25"]);
+  });
 });
 
 describe("haversineKm", () => {
