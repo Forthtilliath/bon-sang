@@ -270,7 +270,7 @@ function Badges({ tracker }: { tracker: TrackerApi }) {
               key={badge.id}
               className={cn(
                 "flex flex-col gap-1 rounded-xl border p-4 text-sm",
-                earned ? "border-primary/30 bg-primary-subtle" : "border-border opacity-60",
+                earned ? "border-primary/30 bg-primary-subtle" : "border-border bg-surface",
               )}
             >
               <span className="font-medium">{t(`badges.items.${badge.id}.name`)}</span>
