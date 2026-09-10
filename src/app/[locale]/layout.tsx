@@ -71,6 +71,15 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       data-scroll-behavior="smooth"
       className={`${geistSans.variable} h-full antialiased`}
     >
+      <head>
+        {/* Applique le thème choisi avant le premier rendu pour éviter un flash. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}',
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col">
         <JsonLd
           data={{
