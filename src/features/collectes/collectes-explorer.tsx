@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useFormatter, useTranslations } from "next-intl";
 
@@ -166,9 +166,16 @@ function ExplorerCard({
 }) {
   const t = useTranslations("Collectes");
   const format = useFormatter();
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Sélection depuis la carte : ramène la fiche correspondante dans la liste.
+  useEffect(() => {
+    if (active) ref.current?.scrollIntoView({ block: "nearest" });
+  }, [active]);
 
   return (
     <div
+      ref={ref}
       className={cn(
         "flex flex-col gap-1.5 rounded-2xl border p-4 text-sm transition-colors",
         active ? "border-primary bg-primary-subtle" : "border-border",
