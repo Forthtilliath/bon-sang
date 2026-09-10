@@ -24,7 +24,7 @@ Projet de portfolio. Plan de développement : [`ROADMAP.md`](./ROADMAP.md).
 - **Next.js 16** (App Router, RSC, Turbopack) + **TypeScript** strict
 - **Tailwind CSS v4**
 - **next-intl** v4 — FR par défaut sans préfixe, EN sous `/en`
-- **MapLibre GL** + tuiles **OpenFreeMap** (sans clé)
+- **MapLibre GL** + fonds **CARTO** (`voyager` / `dark-matter`, sans clé)
 - **Vitest** (logique pure) + **Playwright** (parcours E2E)
 
 ## Démarrage

@@ -7,11 +7,11 @@ test("la page collectes affiche le formulaire de recherche", async ({ page }) =>
 });
 
 test("une recherche affiche la liste et une carte qui charge ses tuiles", async ({ page }) => {
-  test.slow(); // dépend de l'API EFS et des tuiles OpenFreeMap
+  test.slow(); // dépend de l'API EFS et des tuiles vectorielles CARTO
 
   let vectorTiles = 0;
   page.on("requestfinished", (r) => {
-    if (r.url().includes(".pbf")) vectorTiles += 1;
+    if (/\.(pbf|mvt)(\?|$)/.test(r.url())) vectorTiles += 1;
   });
 
   await page.goto("/collectes?ville=Paris");
