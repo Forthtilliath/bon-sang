@@ -17,8 +17,15 @@ const STYLE_DARK = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.
 const FRANCE_CENTER: [number, number] = [2.35, 46.6];
 const ORIGIN_KEY = "__origin__";
 
+function prefersDark(): boolean {
+  const explicit = document.documentElement.dataset.theme;
+  if (explicit === "dark") return true;
+  if (explicit === "light") return false;
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
+}
+
 function styleUrl(): string {
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? STYLE_DARK : STYLE_LIGHT;
+  return prefersDark() ? STYLE_DARK : STYLE_LIGHT;
 }
 
 function motionDuration(ms: number): number {
@@ -96,6 +103,8 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
   const popupRef = useRef<Popup | null>(null);
   // Vrai quand on retire la bulle par code (évite de déclencher `onSelect(null)`).
   const closingPopupRef = useRef(false);
+  // Dernière collecte active : sert à rendre le focus au bon marqueur à la fermeture.
+  const lastActiveRef = useRef<string | null>(null);
 
   const removePopup = useCallback(() => {
     if (!popupRef.current) return;
@@ -130,9 +139,12 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const onThemeChange = () => map.setStyle(styleUrl());
     media.addEventListener("change", onThemeChange);
+    // Bascule de thème manuelle (émise par le sélecteur de thème de l'en-tête).
+    window.addEventListener("bonsang:themechange", onThemeChange);
 
     return () => {
       media.removeEventListener("change", onThemeChange);
+      window.removeEventListener("bonsang:themechange", onThemeChange);
       removePopup();
       map.remove();
       mapRef.current = null;
@@ -197,6 +209,9 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
     const map = mapRef.current;
     if (!map) return;
 
+    const previousActive = lastActiveRef.current;
+    lastActiveRef.current = activeId;
+
     for (const [id, marker] of markersRef.current) {
       if (id === ORIGIN_KEY) continue;
       marker.getElement().classList.toggle("ofm-marker--active", id === activeId);
@@ -206,6 +221,10 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
 
     if (!collecte || collecte.lat === null || collecte.lng === null) {
       removePopup();
+      // Bulle fermée : le focus revient sur le marqueur qui l'avait ouverte.
+      if (previousActive && previousActive !== activeId) {
+        markersRef.current.get(previousActive)?.getElement().focus();
+      }
       return;
     }
 
@@ -225,13 +244,36 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
       if (!closingPopupRef.current) onSelect(null);
     });
     popupRef.current = popup;
+
+    // Accessibilité clavier : la bulle devient un dialogue focusable, Escape la
+    // ferme, le bouton de fermeture reçoit un libellé traduit.
+    const popupEl = popup.getElement();
+    popupEl.setAttribute("role", "dialog");
+    popupEl.setAttribute("aria-label", collecte.nom || collecte.ville);
+    popupEl.tabIndex = -1;
+    popupEl
+      .querySelector(".maplibregl-popup-close-button")
+      ?.setAttribute("aria-label", helpersRef.current.t("mapPopupClose"));
+    popupEl.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        onSelect(null);
+      }
+    };
+    popupEl.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      popupEl.removeEventListener("keydown", onKeyDown);
+    };
   }, [activeId, collectes, onSelect, removePopup]);
 
   return (
     <div
       ref={containerRef}
       role="region"
-      aria-label="Carte des collectes"
+      aria-label={t("mapLabel")}
       className="border-border h-80 w-full overflow-hidden rounded-2xl border lg:h-full"
     />
   );
