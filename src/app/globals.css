@@ -19,8 +19,9 @@
   --ds-primary-subtle: #fbeaeb;
 }
 
+/* Palette sombre : par préférence système sauf choix « clair » explicite… */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --ds-bg: #0b0b0d;
     --ds-surface: #141417;
     --ds-surface-strong: #1e1e22;
@@ -33,6 +34,29 @@
     --ds-primary-fg: #1a0304;
     --ds-primary-subtle: #2a1113;
   }
+}
+
+/* …ou par choix « sombre » explicite (bascule de thème manuelle). */
+:root[data-theme="dark"] {
+  --ds-bg: #0b0b0d;
+  --ds-surface: #141417;
+  --ds-surface-strong: #1e1e22;
+  --ds-fg: #ececee;
+  --ds-muted: #a0a0ab;
+  --ds-border: #29292f;
+
+  --ds-primary: #f0434f;
+  --ds-primary-strong: #d81f2a;
+  --ds-primary-fg: #1a0304;
+  --ds-primary-subtle: #2a1113;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -125,6 +149,12 @@
   height: 16px;
   background: #2563eb;
   cursor: default;
+}
+
+.ofm-popup-shell .maplibregl-popup:focus-visible .maplibregl-popup-content,
+.ofm-popup-shell .maplibregl-popup:focus .maplibregl-popup-content {
+  outline: 2px solid var(--ds-primary);
+  outline-offset: 2px;
 }
 
 .ofm-popup-shell .maplibregl-popup-content {
