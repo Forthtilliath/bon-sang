@@ -6,6 +6,7 @@ import {
   normalizeCollectes,
   parseEfsDate,
   parseEfsTime,
+  rdvUrl,
   upcomingCollectes,
 } from "./normalize";
 
@@ -78,6 +79,37 @@ describe("normalizeCollectes", () => {
   });
 });
 
+describe("rdvUrl", () => {
+  it("préfixe une URL de domaine EFS sans schéma", () => {
+    expect(rdvUrl("efs.link/dcjkW")).toBe("https://efs.link/dcjkW");
+  });
+
+  it("accepte un sous-domaine efs.sante.fr", () => {
+    expect(rdvUrl("https://mon-rdv-dondesang.efs.sante.fr/rdv")).toBe(
+      "https://mon-rdv-dondesang.efs.sante.fr/rdv",
+    );
+  });
+
+  it("rejette un domaine tiers", () => {
+    expect(rdvUrl("https://evil.example.com/phishing")).toBeNull();
+    expect(rdvUrl("efs.link.evil.com/x")).toBeNull();
+  });
+
+  it("rejette les schémas dangereux", () => {
+    expect(rdvUrl("javascript:alert(1)")).toBeNull();
+    expect(rdvUrl("data:text/html,<script>alert(1)</script>")).toBeNull();
+    expect(rdvUrl("http://efs.link/insecure")).toBeNull();
+  });
+
+  it("se rabat sur le premier candidat valide", () => {
+    expect(rdvUrl(null, "javascript:void(0)", "efs.link/ok")).toBe("https://efs.link/ok");
+  });
+
+  it("renvoie null sans candidat", () => {
+    expect(rdvUrl(null, undefined, "  ")).toBeNull();
+  });
+});
+
 describe("collecteAddress", () => {
   it("combine adresse et ligne ville quand l'adresse ne contient pas le code postal", () => {
     expect(
@@ -87,7 +119,11 @@ describe("collecteAddress", () => {
 
   it("ne répète pas la ligne ville si l'adresse contient déjà le code postal", () => {
     expect(
-      collecteAddress({ adresse: "12 rue des Lilas, 31000 Toulouse", codePostal: "31000", ville: "Toulouse" }),
+      collecteAddress({
+        adresse: "12 rue des Lilas, 31000 Toulouse",
+        codePostal: "31000",
+        ville: "Toulouse",
+      }),
     ).toBe("12 rue des Lilas, 31000 Toulouse");
   });
 
