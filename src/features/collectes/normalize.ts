@@ -38,10 +38,37 @@ function address(location: EfsLocation): string {
   );
 }
 
-function rdvUrl(...candidates: Array<string | null | undefined>): string | null {
-  const raw = candidates.find((c) => c && c.trim().length > 0)?.trim();
-  if (!raw) return null;
-  return raw.startsWith("http") ? raw : `https://${raw}`;
+/** Domaines EFS autorisés pour un lien de prise de rendez-vous. */
+const RDV_ALLOWED_HOSTS = ["efs.link", "efs.sante.fr"];
+
+function isAllowedRdvHost(hostname: string): boolean {
+  const host = hostname.toLowerCase();
+  return RDV_ALLOWED_HOSTS.some((allowed) => host === allowed || host.endsWith(`.${allowed}`));
+}
+
+/**
+ * Transforme une chaîne brute de l'API EFS en lien de RDV sûr, ou `null`.
+ * Seul `https` est accepté, et uniquement vers un domaine EFS connu : cela
+ * neutralise `javascript:`, `data:` et tout domaine tiers injecté dans la réponse.
+ */
+export function rdvUrl(...candidates: Array<string | null | undefined>): string | null {
+  for (const candidate of candidates) {
+    const raw = candidate?.trim();
+    if (!raw) continue;
+
+    const withScheme = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+    let url: URL;
+    try {
+      url = new URL(withScheme);
+    } catch {
+      continue;
+    }
+
+    if (url.protocol !== "https:") continue;
+    if (!isAllowedRdvHost(url.hostname)) continue;
+    return url.toString();
+  }
+  return null;
 }
 
 function normalizeMobile(location: EfsLocation, collection: EfsCollection): Collecte | null {
