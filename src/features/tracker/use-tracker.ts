@@ -4,22 +4,12 @@ import { useCallback, useMemo } from "react";
 
 import { usePersistentState } from "@/hooks/use-persistent-state";
 import { parseIsoDate } from "@/lib/dates";
+import { randomId } from "@/lib/uuid";
 
 import { earnedBadges } from "./badges";
 import { nextEligibleDate } from "./eligibility-date";
-import {
-  EMPTY_TRACKER,
-  TRACKER_STORAGE_KEY,
-  type Donation,
-  type Profile,
-  type TrackerState,
-} from "./types";
-
-function isTrackerState(value: unknown): value is TrackerState {
-  if (!value || typeof value !== "object") return false;
-  const v = value as Record<string, unknown>;
-  return Array.isArray(v.donations) && typeof v.profile === "object" && v.profile !== null;
-}
+import { EMPTY_TRACKER, TRACKER_STORAGE_KEY, type Donation, type Profile } from "./types";
+import { parseTrackerState } from "./validate";
 
 export function useTracker() {
   const {
@@ -44,7 +34,7 @@ export function useTracker() {
     (donation: Omit<Donation, "id">) => {
       setValue((prev) => ({
         ...prev,
-        donations: [...prev.donations, { ...donation, id: crypto.randomUUID() }],
+        donations: [...prev.donations, { ...donation, id: randomId() }],
       }));
     },
     [setValue],
@@ -70,14 +60,10 @@ export function useTracker() {
 
   const importState = useCallback(
     (raw: string): boolean => {
-      try {
-        const parsed = JSON.parse(raw);
-        if (!isTrackerState(parsed)) return false;
-        setValue({ ...EMPTY_TRACKER, ...parsed });
-        return true;
-      } catch {
-        return false;
-      }
+      const parsed = parseTrackerState(raw);
+      if (!parsed) return false;
+      setValue(parsed);
+      return true;
     },
     [setValue],
   );
