@@ -4,16 +4,10 @@ import { expect, type Page, test } from "@playwright/test";
 /**
  * Règles connues comme non respectées, suivies dans AMELIORATIONS.md (section
  * « Accessibilité / UX »). À retirer de cette liste au fur et à mesure des
- * correctifs pour que la régression soit détectée.
+ * correctifs pour que la régression soit détectée. Vide : toutes les règles
+ * WCAG A/AA scannées sont désormais respectées.
  */
-const KNOWN_ISSUES: string[] = [
-  // Contraste AA insuffisant sur `text-muted text-xs` / badges `opacity-60`.
-  "color-contrast",
-  // `role="progressbar"` du quiz sans nom accessible.
-  "aria-progressbar-name",
-  // Champs nombre / date du quiz sans <label> associé (seule la <legend> décrit).
-  "label",
-];
+const KNOWN_ISSUES: string[] = [];
 
 async function scan(page: Page) {
   return new AxeBuilder({ page })
