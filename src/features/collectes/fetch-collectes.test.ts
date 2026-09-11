@@ -5,7 +5,7 @@ import { fetchCollectesByCity } from "./fetch-collectes";
 type Handler = (url: string) => { ok: boolean; body: unknown } | "throw" | "bad-json";
 
 function mockFetch(handler: Handler) {
-  const fetchMock = vi.fn(async (input: string | URL) => {
+  const fetchMock = vi.fn(async (input: string | URL, _init?: RequestInit) => {
     const url = String(input);
     const result = handler(url);
     if (result === "throw") throw new Error("network down");
@@ -93,6 +93,21 @@ describe("fetchCollectesByCity", () => {
   it("renvoie 'not-found' quand le géocodage jette (réseau indisponible)", async () => {
     mockFetch((url) => (isGeocode(url) ? "throw" : { ok: true, body: {} }));
     expect(await fetchCollectesByCity("Toulouse")).toMatchObject({ status: "not-found" });
+  });
+
+  it("met le géocodage en cache bien plus longtemps que la recherche de collectes", async () => {
+    const fetchMock = mockFetch((url) =>
+      isGeocode(url) ? { ok: true, body: [CITY] } : { ok: true, body: FIXED_SITE },
+    );
+    await fetchCollectesByCity("Toulouse");
+
+    const revalidateFor = (matches: (url: string) => boolean) =>
+      fetchMock.mock.calls.find(([u]) => matches(String(u)))?.[1]?.next?.revalidate;
+
+    const geocodeRevalidate = revalidateFor(isGeocode);
+    const searchRevalidate = revalidateFor(isSearch);
+    expect(geocodeRevalidate).toBeGreaterThan(searchRevalidate as number);
+    expect(geocodeRevalidate).toBe(60 * 60 * 24 * 7);
   });
 
   it("renvoie 'not-found' quand aucune collecte n'est encore à venir", async () => {

@@ -6,12 +6,18 @@ import { formatIsoDate } from "@/lib/dates";
 import type { CollectesResult } from "./types";
 
 const REVALIDATE_SECONDS = 3600;
+// Les coordonnées d'une ville ne changent (quasiment) jamais : un cache bien plus
+// long que celui des collectes évite de re-géocoder à chaque recherche répétée.
+const GEOCODE_REVALIDATE_SECONDS = 60 * 60 * 24 * 7; // 7 jours
 const TIMEOUT_MS = 7000;
 
-async function efsFetch<T>(path: string): Promise<T | null> {
+async function efsFetch<T>(
+  path: string,
+  revalidate: number = REVALIDATE_SECONDS,
+): Promise<T | null> {
   try {
     const response = await fetch(`${EFS_API_BASE}${path}`, {
-      next: { revalidate: REVALIDATE_SECONDS },
+      next: { revalidate },
       signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: { accept: "application/json" },
     });
@@ -25,12 +31,19 @@ async function efsFetch<T>(path: string): Promise<T | null> {
 async function geocodeCity(query: string): Promise<EfsCity | null> {
   const cities = await efsFetch<EfsCity[]>(
     `/city/searchbyinput?searchString=${encodeURIComponent(query)}`,
+    GEOCODE_REVALIDATE_SECONDS,
   );
   const first = cities?.find((c) => typeof c.lat === "number" && typeof c.lon === "number");
   return first ?? null;
 }
 
-/** Recherche les collectes autour d'une ville (nom ou code postal). */
+/**
+ * Recherche les collectes autour d'une ville (nom ou code postal).
+ *
+ * Deux appels réseau séquentiels et non parallélisables : la recherche de
+ * collectes a besoin des coordonnées renvoyées par le géocodage. Le géocodage,
+ * lui, est mis en cache bien plus longtemps (cf. `GEOCODE_REVALIDATE_SECONDS`).
+ */
 export async function fetchCollectesByCity(rawQuery: string): Promise<CollectesResult> {
   const query = rawQuery.trim();
   if (query.length < 2) return { status: "empty", query, collectes: [] };
