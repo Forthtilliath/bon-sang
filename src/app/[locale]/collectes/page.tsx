@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { PageHeader } from "@/components/page-header";
 import { Container } from "@/components/ui/container";
 import { CollectesResults } from "@/features/collectes/collectes-results";
+import { normalizeCityQuery } from "@/features/collectes/fetch-collectes";
 import { ResultsSkeleton } from "@/features/collectes/results-skeleton";
 import { assertLocale } from "@/lib/locale";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
@@ -87,6 +88,5 @@ export default async function CollectionsPage({
 
 function normalizeQuery(value: string | string[] | undefined): string | null {
   const raw = Array.isArray(value) ? value[0] : value;
-  const trimmed = raw?.trim();
-  return trimmed && trimmed.length >= 2 ? trimmed : null;
+  return normalizeCityQuery(raw);
 }
