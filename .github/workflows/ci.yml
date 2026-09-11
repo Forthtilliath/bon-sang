@@ -52,3 +52,31 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://example.com' }}
+      - run: nohup npm run start > /tmp/next-start.log 2>&1 &
+      - run: npx wait-on http://localhost:3000
+      # Informatif pour l'instant : les temps de chargement varient trop sur les
+      # runners GitHub partagés pour bloquer la CI dessus. À rendre bloquant une
+      # fois une base de référence stable établie (cf. AMELIORATIONS.md).
+      - uses: treosh/lighthouse-ci-action@v12
+        continue-on-error: true
+        with:
+          urls: |
+            http://localhost:3000/
+            http://localhost:3000/eligibilite
+            http://localhost:3000/collectes
+          budgetPath: ./lighthouse-budget.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
