@@ -7,6 +7,9 @@ export function SiteFooter() {
   const nav = useTranslations("Nav");
   const t = useTranslations("Footer");
   const year = new Date().getFullYear();
+  // Nom de l'auteur : mention légale, jamais traduite. Un gabarit hors JSX plutôt
+  // qu'un texte en dur entre balises (cf. règle `i18next/no-literal-string`).
+  const copyright = `© ${year} · Vincent Lisita`;
 
   return (
     <footer className="border-border bg-surface mt-auto border-t">
@@ -26,7 +29,7 @@ export function SiteFooter() {
         <div className="text-muted space-y-2 text-xs">
           <p>{t("disclaimer")}</p>
           <p>{t("privacy")}</p>
-          <p>© {year} · Vincent Lisita</p>
+          <p>{copyright}</p>
         </div>
       </div>
     </footer>
