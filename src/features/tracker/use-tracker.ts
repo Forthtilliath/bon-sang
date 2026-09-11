@@ -47,6 +47,16 @@ export function useTracker() {
     [setValue],
   );
 
+  const updateDonation = useCallback(
+    (id: string, patch: Partial<Omit<Donation, "id">>) => {
+      setValue((prev) => ({
+        ...prev,
+        donations: prev.donations.map((d) => (d.id === id ? { ...d, ...patch } : d)),
+      }));
+    },
+    [setValue],
+  );
+
   const setProfile = useCallback(
     (profile: Partial<Profile>) => {
       setValue((prev) => ({ ...prev, profile: { ...prev.profile, ...profile } }));
@@ -76,6 +86,7 @@ export function useTracker() {
     badges,
     addDonation,
     removeDonation,
+    updateDonation,
     setProfile,
     clearReminder,
     importState,

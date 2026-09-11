@@ -26,6 +26,17 @@ describe("buildIcs", () => {
     expect(ics).toContain("DTSTART;VALUE=DATE:20260901");
   });
 
+  it("pose DTEND le lendemain (borne exclusive RFC 5545)", () => {
+    expect(ics).toContain("DTEND;VALUE=DATE:20260902");
+  });
+
+  it("ajoute un rappel VALARM la veille", () => {
+    expect(ics).toContain("BEGIN:VALARM");
+    expect(ics).toContain("ACTION:DISPLAY");
+    expect(ics).toContain("TRIGGER:-P1D");
+    expect(ics).toContain("END:VALARM");
+  });
+
   it("reprend le titre et l'UID", () => {
     expect(ics).toContain("SUMMARY:Don du sang possible");
     expect(ics).toContain("UID:reminder-1@bon-sang");

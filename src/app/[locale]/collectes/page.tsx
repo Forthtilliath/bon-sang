@@ -1,33 +1,47 @@
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 
+import { JsonLd } from "@/components/json-ld";
 import { PageHeader } from "@/components/page-header";
 import { Container } from "@/components/ui/container";
 import { CollectesResults } from "@/features/collectes/collectes-results";
 import { ResultsSkeleton } from "@/features/collectes/results-skeleton";
 import { assertLocale } from "@/lib/locale";
-import { pageMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 const PATH = "/collectes";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/collectes">) {
+export async function generateMetadata({ params, searchParams }: PageProps<"/[locale]/collectes">) {
   const locale = assertLocale((await params).locale);
   const t = await getTranslations({ locale, namespace: "Pages.collections" });
-  return pageMetadata({ locale, path: PATH, title: t("title"), description: t("lead") });
+  const query = normalizeQuery((await searchParams).ville);
+  const meta = pageMetadata({ locale, path: PATH, title: t("title"), description: t("lead") });
+
+  // Variantes paramétrées (`?ville=…`) : contenu dupliqué d'une ville à l'autre,
+  // on garde la page mère indexable mais on retire ces variantes des résultats.
+  return query ? { ...meta, robots: { index: false, follow: true } } : meta;
 }
 
 export default async function CollectionsPage({
   params,
   searchParams,
 }: PageProps<"/[locale]/collectes">) {
-  assertLocale((await params).locale);
+  const locale = assertLocale((await params).locale);
   const query = normalizeQuery((await searchParams).ville);
 
   const page = await getTranslations("Pages.collections");
   const t = await getTranslations("Collectes");
+  const meta = await getTranslations("Metadata");
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd(locale, [
+          { name: meta("title"), path: "/" },
+          { name: page("title"), path: PATH },
+        ])}
+      />
+
       <PageHeader title={page("title")} lead={page("lead")} />
 
       <section>

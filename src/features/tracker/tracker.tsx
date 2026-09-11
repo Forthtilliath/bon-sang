@@ -10,8 +10,15 @@ import { daysBetween, formatIsoDate, parseIsoDate } from "@/lib/dates";
 import { downloadTextFile } from "@/lib/download";
 import { buildIcs } from "@/lib/ics";
 
-import { BADGES } from "./badges";
-import { BLOOD_GROUPS, DONATION_TYPES, SEXES, type DonationType, type Sex } from "./types";
+import { BADGES, type BadgeId } from "./badges";
+import {
+  BLOOD_GROUPS,
+  DONATION_TYPES,
+  SEXES,
+  type Donation,
+  type DonationType,
+  type Sex,
+} from "./types";
 import { useTracker } from "./use-tracker";
 import { MAX_IMPORT_BYTES } from "./validate";
 
@@ -27,6 +34,7 @@ export function Tracker() {
     <div className="flex flex-col gap-12">
       <NextDonation tracker={tracker} />
       <Journal tracker={tracker} />
+      <Stats tracker={tracker} />
       <ProfileCard tracker={tracker} />
       <Badges tracker={tracker} />
       <DataControls tracker={tracker} />
@@ -114,14 +122,30 @@ function Journal({ tracker }: { tracker: TrackerApi }) {
   const [date, setDate] = useState("");
   const [type, setType] = useState<DonationType>("blood");
   const [place, setPlace] = useState("");
+  // `null` = ajout d'un nouveau don ; sinon, id du don en cours de modification.
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const resetForm = () => {
+    setEditingId(null);
+    setDate("");
+    setType("blood");
+    setPlace("");
+  };
+
+  const startEdit = (donation: Donation) => {
+    setEditingId(donation.id);
+    setDate(donation.date);
+    setType(donation.type);
+    setPlace(donation.place ?? "");
+  };
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
     if (!parseIsoDate(date)) return;
-    tracker.addDonation({ date, type, place: place.trim() || undefined });
-    setDate("");
-    setType("blood");
-    setPlace("");
+    const payload = { date, type, place: place.trim() || undefined };
+    if (editingId) tracker.updateDonation(editingId, payload);
+    else tracker.addDonation(payload);
+    resetForm();
   };
 
   return (
@@ -166,8 +190,17 @@ function Journal({ tracker }: { tracker: TrackerApi }) {
           />
         </Field>
         <button type="submit" className={buttonClasses({ size: "sm" })}>
-          {t("journal.submit")}
+          {editingId ? t("journal.save") : t("journal.submit")}
         </button>
+        {editingId ? (
+          <button
+            type="button"
+            onClick={resetForm}
+            className={buttonClasses({ variant: "ghost", size: "sm" })}
+          >
+            {t("journal.cancel")}
+          </button>
+        ) : null}
       </form>
 
       {tracker.donations.length === 0 ? (
@@ -179,7 +212,10 @@ function Journal({ tracker }: { tracker: TrackerApi }) {
             return (
               <li
                 key={donation.id}
-                className="border-border flex items-center justify-between gap-3 rounded-xl border p-3 text-sm"
+                className={cn(
+                  "flex items-center justify-between gap-3 rounded-xl border p-3 text-sm",
+                  donation.id === editingId ? "border-primary bg-primary-subtle" : "border-border",
+                )}
               >
                 <span>
                   <span className="font-medium">
@@ -188,19 +224,75 @@ function Journal({ tracker }: { tracker: TrackerApi }) {
                   · {t(`journal.types.${donation.type}`)}
                   {donation.place ? <span className="text-muted"> · {donation.place}</span> : null}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => tracker.removeDonation(donation.id)}
-                  className="text-muted hover:text-primary"
-                >
-                  {t("journal.delete")}
-                </button>
+                <span className="flex shrink-0 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => startEdit(donation)}
+                    className="text-muted hover:text-primary"
+                  >
+                    {t("journal.edit")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      tracker.removeDonation(donation.id);
+                      if (editingId === donation.id) resetForm();
+                    }}
+                    className="text-muted hover:text-primary"
+                  >
+                    {t("journal.delete")}
+                  </button>
+                </span>
               </li>
             );
           })}
         </ul>
       )}
     </Section>
+  );
+}
+
+const COUNT_BADGES: readonly { id: BadgeId; threshold: number }[] = [
+  { id: "first", threshold: 1 },
+  { id: "three", threshold: 3 },
+  { id: "ten", threshold: 10 },
+];
+
+function Stats({ tracker }: { tracker: TrackerApi }) {
+  const t = useTranslations("Tracker");
+  const total = tracker.state.donations.length;
+  const nextBadge = COUNT_BADGES.find((badge) => total < badge.threshold);
+
+  return (
+    <Section title={t("stats.title")}>
+      <div className="grid gap-3 sm:grid-cols-4">
+        <StatCard label={t("stats.total")} value={total} />
+        {DONATION_TYPES.map((type) => (
+          <StatCard
+            key={type}
+            label={t(`journal.types.${type}`)}
+            value={tracker.state.donations.filter((d) => d.type === type).length}
+          />
+        ))}
+      </div>
+      <p className="text-muted text-sm">
+        {nextBadge
+          ? t("stats.nextBadge", {
+              remaining: nextBadge.threshold - total,
+              badge: t(`badges.items.${nextBadge.id}.name`),
+            })
+          : t("stats.allBadges")}
+      </p>
+    </Section>
+  );
+}
+
+function StatCard({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="border-border bg-surface flex flex-col gap-1 rounded-xl border p-4">
+      <span className="text-2xl font-semibold tracking-tight">{value}</span>
+      <span className="text-muted text-xs">{label}</span>
+    </div>
   );
 }
 

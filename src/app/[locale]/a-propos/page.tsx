@@ -1,12 +1,16 @@
-import { useTranslations } from "next-intl";
+import { use } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
+import { JsonLd } from "@/components/json-ld";
 import { PageHeader } from "@/components/page-header";
 import { Container } from "@/components/ui/container";
 import { ExternalLink } from "@/components/ui/external-link";
 import { FACTS_SOURCE } from "@/data/facts";
+import { CRITERIA_UPDATED_AT } from "@/features/eligibility";
+import { parseIsoDate } from "@/lib/dates";
 import { assertLocale } from "@/lib/locale";
-import { pageMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 const PATH = "/a-propos";
 const REPO_URL = "https://github.com/Forthtilliath/bon-sang";
@@ -22,11 +26,22 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/a-propos
   });
 }
 
-export default function AboutPage() {
+export default function AboutPage({ params }: PageProps<"/[locale]/a-propos">) {
+  const locale = assertLocale(use(params).locale);
   const t = useTranslations("Pages.about");
+  const quiz = useTranslations("Quiz");
+  const meta = useTranslations("Metadata");
+  const format = useFormatter();
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd(locale, [
+          { name: meta("title"), path: "/" },
+          { name: t("title"), path: PATH },
+        ])}
+      />
+
       <PageHeader title={t("title")} lead={t("lead")} />
 
       <section>
@@ -45,10 +60,18 @@ export default function AboutPage() {
 
           <Block title={t("method.title")}>
             <p>{t("method.body")}</p>
+            <p className="text-sm">
+              {quiz("criteriaVersion", {
+                date: format.dateTime(parseIsoDate(CRITERIA_UPDATED_AT) ?? new Date(), {
+                  dateStyle: "short",
+                }),
+              })}
+            </p>
           </Block>
 
           <Block title={t("privacy.title")}>
             <p>{t("privacy.body")}</p>
+            <p className="text-sm">{t("privacy.analytics")}</p>
           </Block>
 
           <Block title={t("tech.title")}>

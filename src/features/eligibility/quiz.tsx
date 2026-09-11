@@ -55,7 +55,14 @@ export function Quiz() {
   }
 
   if (quiz.submitted && quiz.result) {
-    return <QuizResult result={quiz.result} onRestart={quiz.restart} />;
+    const sex = quiz.answers.sex;
+    return (
+      <QuizResult
+        result={quiz.result}
+        onRestart={quiz.restart}
+        sex={sex === "female" || sex === "male" ? sex : null}
+      />
+    );
   }
 
   const current = quiz.current;

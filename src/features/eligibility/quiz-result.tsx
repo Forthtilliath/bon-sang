@@ -8,8 +8,9 @@ import { EMPTY_TRACKER, TRACKER_STORAGE_KEY, type TrackerState } from "@/feature
 import { usePersistentState } from "@/hooks/use-persistent-state";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
-import { formatIsoDate } from "@/lib/dates";
+import { formatIsoDate, parseIsoDate } from "@/lib/dates";
 
+import { CRITERIA_UPDATED_AT } from "./questions";
 import type { EligibilityResult, Verdict } from "./types";
 
 type QuizT = (key: string, values?: Record<string, string | number>) => string;
@@ -25,9 +26,12 @@ const CARD_STYLES: Record<Verdict, string> = {
 export function QuizResult({
   result,
   onRestart,
+  sex,
 }: {
   result: EligibilityResult;
   onRestart: () => void;
+  /** Réponse à la question « sexe » du quiz, si donnée (`null` sinon). */
+  sex?: "female" | "male" | null;
 }) {
   const t = useTranslations("Quiz") as unknown as QuizT;
   const format = useFormatter();
@@ -39,6 +43,18 @@ export function QuizResult({
   useEffect(() => {
     headingRef.current?.focus();
   }, []);
+
+  // Le quiz alimente le profil du suivi : dès que le sexe est renseigné, il est
+  // reporté sur le profil s'il n'a jamais été précisé côté suivi (jamais d'écrasement
+  // d'un choix déjà fait dans `/mon-suivi`).
+  useEffect(() => {
+    if (!tracker.hydrated || !sex) return;
+    if (tracker.value.profile.sex !== "unspecified") return;
+    tracker.setValue((prev) => ({ ...prev, profile: { ...prev.profile, sex } }));
+    // `tracker.value`/`tracker.setValue` sont volontairement absents des deps : ils
+    // changeraient à chaque écriture, ce qui redéclencherait cet effet en boucle.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tracker.hydrated, sex]);
 
   const verdictKey =
     result.verdict === "wait" ? (result.until ? "waitWithDate" : "waitNoDate") : result.verdict;
@@ -127,7 +143,16 @@ export function QuizResult({
         </button>
       </div>
 
-      <p className="border-border text-muted border-t pt-4 text-xs">{t("disclaimer")}</p>
+      <div className="border-border text-muted border-t pt-4 text-xs">
+        <p>{t("disclaimer")}</p>
+        <p>
+          {t("criteriaVersion", {
+            date: format.dateTime(parseIsoDate(CRITERIA_UPDATED_AT) ?? new Date(), {
+              dateStyle: "short",
+            }),
+          })}
+        </p>
+      </div>
     </div>
   );
 }

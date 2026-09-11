@@ -5,13 +5,20 @@ import type { Collecte, DonKind } from "./types";
 export const PERIODS = ["all", "week", "month"] as const;
 export type Period = (typeof PERIODS)[number];
 
+export const RADII_KM = [10, 25, 50, 100] as const;
+
 export type Filters = {
   /** Vide = tous les types. */
   kinds: DonKind[];
   period: Period;
+  /** Distance maximale depuis l'origine (km) ; `null` = pas de limite. Ignoré sans origine. */
+  radiusKm?: number | null;
 };
 
-export const DEFAULT_FILTERS: Filters = { kinds: [], period: "all" };
+export const DEFAULT_FILTERS: Filters = { kinds: [], period: "all", radiusKm: null };
+
+export const SORTS = ["date", "distance"] as const;
+export type Sort = (typeof SORTS)[number];
 
 export type Point = { lat: number; lng: number };
 
@@ -79,4 +86,31 @@ export function withDistance(collectes: Collecte[], origin: Point | null): Colle
 
 export function toggleKind(kinds: DonKind[], kind: DonKind): DonKind[] {
   return kinds.includes(kind) ? kinds.filter((k) => k !== kind) : [...kinds, kind];
+}
+
+/** Retire les collectes hors rayon (celles sans distance connue restent visibles). */
+export function withinRadius(
+  collectes: CollecteWithDistance[],
+  radiusKm: number | null | undefined,
+): CollecteWithDistance[] {
+  if (!radiusKm) return collectes;
+  return collectes.filter((c) => c.distanceKm === null || c.distanceKm <= radiusKm);
+}
+
+/** Trie par date (sites fixes d'abord) ou par distance (sans-coordonnées en dernier). */
+export function sortCollectes(
+  collectes: CollecteWithDistance[],
+  sort: Sort,
+): CollecteWithDistance[] {
+  if (sort === "date") {
+    return [...collectes].sort((a, b) => {
+      if (a.fixe !== b.fixe) return a.fixe ? -1 : 1;
+      return (a.date ?? "").localeCompare(b.date ?? "");
+    });
+  }
+  return [...collectes].sort((a, b) => {
+    if (a.distanceKm === null) return 1;
+    if (b.distanceKm === null) return -1;
+    return a.distanceKm - b.distanceKm;
+  });
 }

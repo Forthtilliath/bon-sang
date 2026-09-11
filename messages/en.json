@@ -103,9 +103,11 @@
     "untilDate": "Possible from {date}",
     "reasonsTitle": "Points flagged",
     "disclaimer": "This test is indicative and not exhaustive. Only the confidential medical interview before donating decides whether you can donate.",
+    "criteriaVersion": "Criteria captured from the EFS website as of {date}.",
     "units": {
       "years": "years",
-      "kg": "kg"
+      "kg": "kg",
+      "count": "donations"
     },
     "questions": {
       "age": { "label": "How old are you?" },
@@ -163,7 +165,19 @@
           "old": "More than 8 weeks ago"
         }
       },
-      "lastDonationDate": { "label": "Date of your last donation?" }
+      "lastDonationDate": { "label": "Date of your last donation?" },
+      "sex": {
+        "label": "What is your sex?",
+        "help": "Used to compute the maximum number of whole blood donations over 12 months.",
+        "options": {
+          "female": "Female",
+          "male": "Male",
+          "unspecified": "Not specified"
+        }
+      },
+      "donationsLast12Months": {
+        "label": "How many whole blood donations have you made in the last 12 months?"
+      }
     },
     "verdicts": {
       "eligible": {
@@ -203,7 +217,8 @@
       "transfusion": "Having received a transfusion or a blood product is a permanent contraindication to donating.",
       "riskExposure": "After exposure to a risk of a transmissible infection, a 4-month deferral applies.",
       "chronic": "A chronic illness or long-term treatment must be assessed with the collection doctor.",
-      "interval": "Respect an 8-week interval between two whole blood donations."
+      "interval": "Respect an 8-week interval between two whole blood donations.",
+      "annualCap": "You have reached the maximum number of whole blood donations over 12 months for your profile."
     },
     "faq": {
       "title": "Frequently asked questions",
@@ -250,12 +265,21 @@
       "place": "Place",
       "placePlaceholder": "Optional",
       "submit": "Add",
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
       "delete": "Delete",
       "types": {
         "blood": "Whole blood",
         "plasma": "Plasma",
         "platelets": "Platelets"
       }
+    },
+    "stats": {
+      "title": "Statistics",
+      "total": "Donations logged",
+      "nextBadge": "{remaining, plural, one {# more donation} other {# more donations}} for the “{badge}” badge.",
+      "allBadges": "All donation-count badges are unlocked."
     },
     "profile": {
       "title": "Profile",
@@ -307,6 +331,8 @@
     "source": "Data: Carto API of the Établissement français du sang. Times are indicative, check before travelling.",
     "permanent": "Permanent site",
     "book": "Book an appointment",
+    "share": "Share",
+    "shareCopied": "Link copied!",
     "spotsLeft": "{count, plural, one {# spot left} other {# spots left}}",
     "filterKinds": "Filter by donation type",
     "visibleCount": "{count, plural, one {# blood drive shown} other {# blood drives shown}}",
@@ -321,6 +347,15 @@
     "locating": "Locating…",
     "locateDenied": "Location denied.",
     "locateUnsupported": "Location unavailable on this device.",
+    "radiusLabel": "Radius",
+    "radiusAny": "No limit",
+    "radiusValue": "{km} km",
+    "sortLabel": "Sort",
+    "sorts": {
+      "date": "Date",
+      "distance": "Distance"
+    },
+    "full": "Full",
     "periods": {
       "all": "All",
       "week": "7 days",
@@ -455,7 +490,8 @@
       },
       "privacy": {
         "title": "Your data",
-        "body": "No account, no server. Your donation log, your reminders and the test result stay in your browser and are sent nowhere. No advertising trackers."
+        "body": "No account, no server. Your donation log, your reminders and the test result stay in your browser and are sent nowhere. No advertising trackers.",
+        "analytics": "Anonymous, cookie-less audience measurement (Vercel Analytics) counts page views, with no identifier and no personal data."
       },
       "tech": {
         "title": "How it is built",

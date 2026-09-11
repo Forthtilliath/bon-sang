@@ -1,4 +1,4 @@
-import { formatIsoDate } from "./dates";
+import { addDays, formatIsoDate } from "./dates";
 
 type IcsEvent = {
   uid: string;
@@ -54,8 +54,16 @@ export function buildIcs(event: IcsEvent, now: Date = new Date()): string {
     `UID:${event.uid}`,
     `DTSTAMP:${icsDate(now)}T000000Z`,
     `DTSTART;VALUE=DATE:${icsDate(event.start)}`,
+    // Événement journée entière : DTEND est exclusif (RFC 5545), donc le lendemain.
+    `DTEND;VALUE=DATE:${icsDate(addDays(event.start, 1))}`,
     `SUMMARY:${escapeText(event.title)}`,
     event.description ? `DESCRIPTION:${escapeText(event.description)}` : null,
+    "BEGIN:VALARM",
+    "ACTION:DISPLAY",
+    `DESCRIPTION:${escapeText(event.title)}`,
+    // Rappel la veille à la même heure de calendrier que la génération du fichier.
+    "TRIGGER:-P1D",
+    "END:VALARM",
     "END:VEVENT",
     "END:VCALENDAR",
   ].filter((line): line is string => line !== null);

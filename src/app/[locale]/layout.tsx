@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -5,6 +6,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 import { JsonLd } from "@/components/json-ld";
+import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { routing } from "@/i18n/routing";
@@ -104,6 +106,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           </main>
           <SiteFooter />
         </NextIntlClientProvider>
+        {/* Sans cookie, sans identifiant persistant : cf. Footer.privacy et Pages.about.privacy. */}
+        <Analytics />
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

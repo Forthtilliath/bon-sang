@@ -32,6 +32,8 @@ const HEALTHY = [
   "Non",
   "Non",
   "Jamais",
+  "Non précisé",
+  "0",
 ];
 
 test("un profil sans obstacle est déclaré éligible", async ({ page }) => {
@@ -57,7 +59,7 @@ test("un mineur doit patienter", async ({ page }) => {
 test("le retour arrière fonctionne", async ({ page }) => {
   await page.goto("/eligibilite");
   await step(page, "30");
-  await expect(page.getByText("Question 2 sur 13")).toBeVisible();
+  await expect(page.getByText("Question 2 sur 15")).toBeVisible();
   await page.getByRole("button", { name: "Précédent" }).click();
-  await expect(page.getByText("Question 1 sur 13")).toBeVisible();
+  await expect(page.getByText("Question 1 sur 15")).toBeVisible();
 });

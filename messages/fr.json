@@ -103,9 +103,11 @@
     "untilDate": "Possible à partir du {date}",
     "reasonsTitle": "Points relevés",
     "disclaimer": "Ce test est indicatif et non exhaustif. Seul l'entretien médical confidentiel avant le don détermine si vous pouvez donner.",
+    "criteriaVersion": "Critères relevés sur le site de l'EFS au {date}.",
     "units": {
       "years": "ans",
-      "kg": "kg"
+      "kg": "kg",
+      "count": "dons"
     },
     "questions": {
       "age": { "label": "Quel âge avez-vous ?" },
@@ -163,7 +165,19 @@
           "old": "Il y a plus de 8 semaines"
         }
       },
-      "lastDonationDate": { "label": "Date de votre dernier don ?" }
+      "lastDonationDate": { "label": "Date de votre dernier don ?" },
+      "sex": {
+        "label": "Quel est votre sexe ?",
+        "help": "Sert à calculer le nombre maximal de dons de sang total sur 12 mois.",
+        "options": {
+          "female": "Femme",
+          "male": "Homme",
+          "unspecified": "Non précisé"
+        }
+      },
+      "donationsLast12Months": {
+        "label": "Combien de dons de sang total avez-vous faits au cours des 12 derniers mois ?"
+      }
     },
     "verdicts": {
       "eligible": {
@@ -203,7 +217,8 @@
       "transfusion": "Avoir reçu une transfusion ou un produit sanguin est une contre-indication définitive au don.",
       "riskExposure": "Après une exposition à un risque d'infection transmissible, un délai de 4 mois s'applique.",
       "chronic": "Une maladie chronique ou un traitement au long cours doit être évalué avec le médecin de collecte.",
-      "interval": "Respectez un délai de 8 semaines entre deux dons de sang total."
+      "interval": "Respectez un délai de 8 semaines entre deux dons de sang total.",
+      "annualCap": "Vous avez atteint le nombre maximal de dons de sang total sur 12 mois pour votre profil."
     },
     "faq": {
       "title": "Questions fréquentes",
@@ -250,12 +265,21 @@
       "place": "Lieu",
       "placePlaceholder": "Optionnel",
       "submit": "Ajouter",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "edit": "Modifier",
       "delete": "Supprimer",
       "types": {
         "blood": "Sang total",
         "plasma": "Plasma",
         "platelets": "Plaquettes"
       }
+    },
+    "stats": {
+      "title": "Statistiques",
+      "total": "Dons enregistrés",
+      "nextBadge": "Encore {remaining, plural, one {# don} other {# dons}} avant le badge « {badge} ».",
+      "allBadges": "Tous les badges liés au nombre de dons sont débloqués."
     },
     "profile": {
       "title": "Profil",
@@ -310,6 +334,8 @@
     "source": "Données : API Carto de l'Établissement français du sang. Horaires indicatifs, vérifiez avant de vous déplacer.",
     "permanent": "Site permanent",
     "book": "Prendre rendez-vous",
+    "share": "Partager",
+    "shareCopied": "Lien copié !",
     "spotsLeft": "{count, plural, one {# place restante} other {# places restantes}}",
     "filterKinds": "Filtrer par type de don",
     "visibleCount": "{count, plural, one {# collecte affichée} other {# collectes affichées}}",
@@ -324,6 +350,15 @@
     "locating": "Localisation…",
     "locateDenied": "Localisation refusée.",
     "locateUnsupported": "Localisation indisponible sur cet appareil.",
+    "radiusLabel": "Rayon",
+    "radiusAny": "Sans limite",
+    "radiusValue": "{km} km",
+    "sortLabel": "Trier",
+    "sorts": {
+      "date": "Date",
+      "distance": "Distance"
+    },
+    "full": "Complet",
     "periods": {
       "all": "Toutes",
       "week": "7 jours",
@@ -458,7 +493,8 @@
       },
       "privacy": {
         "title": "Vos données",
-        "body": "Aucun compte, aucun serveur. Votre journal de dons, vos rappels et le résultat du test restent dans votre navigateur et ne sont envoyés nulle part. Aucun traceur publicitaire."
+        "body": "Aucun compte, aucun serveur. Votre journal de dons, vos rappels et le résultat du test restent dans votre navigateur et ne sont envoyés nulle part. Aucun traceur publicitaire.",
+        "analytics": "Une mesure d'audience anonyme et sans cookie (Vercel Analytics) compte les pages vues, sans identifiant ni donnée personnelle."
       },
       "tech": {
         "title": "Comment c'est fait",

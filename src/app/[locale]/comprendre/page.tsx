@@ -8,7 +8,7 @@ import { Container } from "@/components/ui/container";
 import { ExternalLink } from "@/components/ui/external-link";
 import { FACTS_SOURCE, KEY_FIGURES, SHELF_LIFE } from "@/data/facts";
 import { assertLocale } from "@/lib/locale";
-import { localizedPath, pageMetadata, SITE_URL } from "@/lib/seo";
+import { breadcrumbJsonLd, localizedPath, pageMetadata, SITE_URL } from "@/lib/seo";
 
 const PATH = "/comprendre";
 const PURPOSE = ["transfusion", "chronic", "plasma"] as const;
@@ -28,6 +28,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/comprend
 export default function UnderstandPage({ params }: PageProps<"/[locale]/comprendre">) {
   const locale = assertLocale(use(params).locale);
   const t = useTranslations("Pages.understand");
+  const meta = useTranslations("Metadata");
 
   return (
     <>
@@ -41,6 +42,12 @@ export default function UnderstandPage({ params }: PageProps<"/[locale]/comprend
           inLanguage: locale,
           about: { "@type": "MedicalProcedure", name: "Blood transfusion" },
         }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd(locale, [
+          { name: meta("title"), path: "/" },
+          { name: t("title"), path: PATH },
+        ])}
       />
 
       <PageHeader title={t("title")} lead={t("lead")} />
