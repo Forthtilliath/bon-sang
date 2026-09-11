@@ -10,10 +10,18 @@ import { pageMetadata } from "@/lib/seo";
 
 const PATH = "/collectes";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/collectes">) {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: PageProps<"/[locale]/collectes">) {
   const locale = assertLocale((await params).locale);
   const t = await getTranslations({ locale, namespace: "Pages.collections" });
-  return pageMetadata({ locale, path: PATH, title: t("title"), description: t("lead") });
+  const query = normalizeQuery((await searchParams).ville);
+  const meta = pageMetadata({ locale, path: PATH, title: t("title"), description: t("lead") });
+
+  // Variantes paramétrées (`?ville=…`) : contenu dupliqué d'une ville à l'autre,
+  // on garde la page mère indexable mais on retire ces variantes des résultats.
+  return query ? { ...meta, robots: { index: false, follow: true } } : meta;
 }
 
 export default async function CollectionsPage({
