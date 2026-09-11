@@ -234,7 +234,8 @@ export function CollectesMap({ collectes, activeId, origin, onSelect, onError }:
       map.setFeatureState({ source: SOURCE_ID, id: activeIdRef.current }, { active: true });
     }
 
-    if (fc.features.length > 0) {
+    // Ne recadre pas si une collecte est sélectionnée (on reste sur son survol).
+    if (fc.features.length > 0 && !activeIdRef.current) {
       const bounds = new LngLatBounds();
       for (const feature of fc.features) {
         bounds.extend((feature.geometry as GeoJSON.Point).coordinates as [number, number]);
@@ -265,7 +266,6 @@ export function CollectesMap({ collectes, activeId, origin, onSelect, onError }:
     mapRef.current = map;
 
     const setupLayers = () => {
-      if (!map.isStyleLoaded()) return;
       addClusterLayers(map);
       applyData();
     };

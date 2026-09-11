@@ -1,6 +1,13 @@
 "use client";
 
-import { type ComponentProps, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type ComponentProps,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import dynamic from "next/dynamic";
 import { useFormatter, useTranslations } from "next-intl";
 
@@ -44,8 +51,15 @@ function DeferredMap({
 }: ComponentProps<typeof CollectesMap> & { eager?: boolean }) {
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const canObserve = typeof IntersectionObserver !== "undefined";
-  const visible = eager === true || inView || !canObserve;
+  // `false` au rendu serveur et à la 1re passe client (hydratation identique),
+  // `true` ensuite : évite toute divergence sur le contenu de cette colonne.
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  const canObserve = hydrated && typeof IntersectionObserver !== "undefined";
+  const visible = eager === true || inView || (hydrated && !canObserve);
 
   useEffect(() => {
     if (visible || !ref.current) return;
