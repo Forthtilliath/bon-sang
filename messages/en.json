@@ -103,6 +103,7 @@
     "untilDate": "Possible from {date}",
     "reasonsTitle": "Points flagged",
     "disclaimer": "This test is indicative and not exhaustive. Only the confidential medical interview before donating decides whether you can donate.",
+    "criteriaVersion": "Criteria captured from the EFS website as of {date}.",
     "units": {
       "years": "years",
       "kg": "kg",

@@ -1,10 +1,12 @@
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 import { PageHeader } from "@/components/page-header";
 import { Container } from "@/components/ui/container";
 import { ExternalLink } from "@/components/ui/external-link";
 import { FACTS_SOURCE } from "@/data/facts";
+import { CRITERIA_UPDATED_AT } from "@/features/eligibility";
+import { parseIsoDate } from "@/lib/dates";
 import { assertLocale } from "@/lib/locale";
 import { pageMetadata } from "@/lib/seo";
 
@@ -24,6 +26,8 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/a-propos
 
 export default function AboutPage() {
   const t = useTranslations("Pages.about");
+  const quiz = useTranslations("Quiz");
+  const format = useFormatter();
 
   return (
     <>
@@ -45,6 +49,13 @@ export default function AboutPage() {
 
           <Block title={t("method.title")}>
             <p>{t("method.body")}</p>
+            <p className="text-sm">
+              {quiz("criteriaVersion", {
+                date: format.dateTime(parseIsoDate(CRITERIA_UPDATED_AT) ?? new Date(), {
+                  dateStyle: "short",
+                }),
+              })}
+            </p>
           </Block>
 
           <Block title={t("privacy.title")}>

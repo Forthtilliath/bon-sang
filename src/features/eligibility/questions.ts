@@ -1,5 +1,12 @@
 import type { Answers } from "./types";
 
+/**
+ * Date (ISO) à laquelle les règles ci-dessous ont été relevées sur le site grand
+ * public de l'EFS. À mettre à jour manuellement si les critères officiels changent
+ * (ROADMAP §6.2 : « critères au JJ/MM/AAAA »).
+ */
+export const CRITERIA_UPDATED_AT = "2026-09-10";
+
 type BaseQuestion = {
   id: string;
   /** Affichée seulement si cette condition est vraie (question de suivi). */

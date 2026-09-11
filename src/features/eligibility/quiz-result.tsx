@@ -8,8 +8,9 @@ import { EMPTY_TRACKER, TRACKER_STORAGE_KEY, type TrackerState } from "@/feature
 import { usePersistentState } from "@/hooks/use-persistent-state";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
-import { formatIsoDate } from "@/lib/dates";
+import { formatIsoDate, parseIsoDate } from "@/lib/dates";
 
+import { CRITERIA_UPDATED_AT } from "./questions";
 import type { EligibilityResult, Verdict } from "./types";
 
 type QuizT = (key: string, values?: Record<string, string | number>) => string;
@@ -142,7 +143,16 @@ export function QuizResult({
         </button>
       </div>
 
-      <p className="border-border text-muted border-t pt-4 text-xs">{t("disclaimer")}</p>
+      <div className="border-border text-muted border-t pt-4 text-xs">
+        <p>{t("disclaimer")}</p>
+        <p>
+          {t("criteriaVersion", {
+            date: format.dateTime(parseIsoDate(CRITERIA_UPDATED_AT) ?? new Date(), {
+              dateStyle: "short",
+            }),
+          })}
+        </p>
+      </div>
     </div>
   );
 }

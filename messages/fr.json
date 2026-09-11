@@ -103,6 +103,7 @@
     "untilDate": "Possible à partir du {date}",
     "reasonsTitle": "Points relevés",
     "disclaimer": "Ce test est indicatif et non exhaustif. Seul l'entretien médical confidentiel avant le don détermine si vous pouvez donner.",
+    "criteriaVersion": "Critères relevés sur le site de l'EFS au {date}.",
     "units": {
       "years": "ans",
       "kg": "kg",
