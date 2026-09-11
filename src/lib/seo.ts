@@ -21,6 +21,22 @@ export function localizedPath(locale: Locale, path: string): string {
   return `${prefix}${clean}` || "/";
 }
 
+export type BreadcrumbItem = { name: string; path: string };
+
+/** JSON-LD `BreadcrumbList` : `items` va de la racine à la page courante. */
+export function breadcrumbJsonLd(locale: Locale, items: BreadcrumbItem[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: `${SITE_URL}${localizedPath(locale, item.path)}`,
+    })),
+  };
+}
+
 /** Bloc `alternates` (canonical + hreflang + x-default) pour `generateMetadata`. */
 export function alternates(locale: Locale, path: string): Metadata["alternates"] {
   const languages = Object.fromEntries(
