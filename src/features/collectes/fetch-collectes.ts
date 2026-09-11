@@ -5,6 +5,9 @@ import { normalizeCollectes, upcomingCollectes } from "./normalize";
 import { formatIsoDate } from "@/lib/dates";
 import type { CollectesResult } from "./types";
 
+/** Longueur minimale d'une recherche de ville, partagée avec la page appelante. */
+export const MIN_QUERY_LENGTH = 2;
+
 const REVALIDATE_SECONDS = 3600;
 // Les coordonnées d'une ville ne changent (quasiment) jamais : un cache bien plus
 // long que celui des collectes évite de re-géocoder à chaque recherche répétée.
@@ -28,6 +31,12 @@ async function efsFetch<T>(
   }
 }
 
+/** Nettoie une entrée de recherche brute ; `null` si trop courte pour être exploitable. */
+export function normalizeCityQuery(raw: string | null | undefined): string | null {
+  const trimmed = raw?.trim();
+  return trimmed && trimmed.length >= MIN_QUERY_LENGTH ? trimmed : null;
+}
+
 async function geocodeCity(query: string): Promise<EfsCity | null> {
   const cities = await efsFetch<EfsCity[]>(
     `/city/searchbyinput?searchString=${encodeURIComponent(query)}`,
@@ -46,7 +55,7 @@ async function geocodeCity(query: string): Promise<EfsCity | null> {
  */
 export async function fetchCollectesByCity(rawQuery: string): Promise<CollectesResult> {
   const query = rawQuery.trim();
-  if (query.length < 2) return { status: "empty", query, collectes: [] };
+  if (query.length < MIN_QUERY_LENGTH) return { status: "empty", query, collectes: [] };
 
   const city = await geocodeCity(query);
   if (!city || typeof city.lat !== "number" || typeof city.lon !== "number") {
