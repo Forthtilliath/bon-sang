@@ -140,11 +140,30 @@ describe("<Quiz>", () => {
   it("signale une contre-indication définitive après une transfusion", async () => {
     const user = userEvent.setup();
     renderWithIntl(<Quiz />);
-    const answers = [...HEALTHY];
-    answers[9] = "Oui"; // question « transfusion déjà reçue »
-    await run(user, answers);
+    for (const label of ["30", "70", "Oui", "Non", "Non, aucun", "Non", "Non", "Non", "Non"])
+      await advance(user, label);
+    await advance(user, "Oui"); // question « transfusion déjà reçue »
     const status = screen.getByRole("status");
     expect(status).toHaveTextContent("Le don n'est pas possible");
     expect(status).toHaveTextContent("contre-indication définitive");
+  });
+
+  it("arrête le test dès la première question si elle invalide déjà l'éligibilité", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<Quiz />);
+    await advance(user, "17"); // âge : mineur
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(screen.queryByText("Combien pesez-vous ?", { selector: "legend" })).not.toBeInTheDocument();
+  });
+
+  it("pose quand même la question de suivi avant de couper le test", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<Quiz />);
+    for (const label of ["30", "70", "Oui", "Non", "Non, aucun"]) await advance(user, label);
+    // Question « tatouage » : répondre « Oui » révèle la date au lieu de couper aussitôt.
+    await user.click(screen.getByRole("radio", { name: "Oui" }));
+    await user.click(screen.getByRole("button", { name: "Suivant" }));
+    expect(screen.getByRole("group")).toHaveTextContent("À quelle date ?");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 });
