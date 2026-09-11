@@ -8,6 +8,12 @@ export const alt = "Bon Sang";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// Nom de marque (logo), jamais traduit : hissé en constantes hors JSX (cf.
+// `i18next/no-literal-string`, qui ne vérifie que les littéraux de l'arbre JSX).
+const BRAND_PREFIX = "Bon ";
+const BRAND_HIGHLIGHT = "Sang";
+const BRAND_FOOTER = "bon-sang";
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -32,8 +38,8 @@ export default async function OgImage({ params }: { params: Promise<{ locale: st
       }}
     >
       <div style={{ display: "flex", fontSize: 108, fontWeight: 700, letterSpacing: -2 }}>
-        <span>Bon&nbsp;</span>
-        <span style={{ color: "#f0434f" }}>Sang</span>
+        <span>{BRAND_PREFIX}</span>
+        <span style={{ color: "#f0434f" }}>{BRAND_HIGHLIGHT}</span>
       </div>
       <div style={{ fontSize: 40, color: "#a0a0ab", maxWidth: 900, lineHeight: 1.3 }}>
         {t("description")}
@@ -48,7 +54,7 @@ export default async function OgImage({ params }: { params: Promise<{ locale: st
           fontWeight: 600,
         }}
       >
-        bon-sang
+        {BRAND_FOOTER}
       </div>
     </div>,
     size,

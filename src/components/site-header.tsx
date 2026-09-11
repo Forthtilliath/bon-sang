@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
+import { BrandMark } from "@/components/brand-mark";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -84,7 +85,7 @@ export function SiteHeader() {
     <header className="border-border bg-bg/80 sticky top-0 z-40 border-b backdrop-blur">
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link href="/" className="shrink-0 font-semibold tracking-tight">
-          Bon <span className="text-primary">Sang</span>
+          <BrandMark />
         </Link>
 
         <nav aria-label={t("primary")} className="hidden md:block">
