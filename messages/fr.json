@@ -314,6 +314,11 @@
     "filterKinds": "Filtrer par type de don",
     "visibleCount": "{count, plural, one {# collecte affichée} other {# collectes affichées}}",
     "noneMatchFilters": "Aucune collecte ne correspond à ces filtres.",
+    "viewToggle": "Affichage",
+    "views": {
+      "list": "Liste",
+      "map": "Carte"
+    },
     "distance": "à {km} km",
     "locate": "Autour de moi",
     "locating": "Localisation…",

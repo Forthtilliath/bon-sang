@@ -311,6 +311,11 @@
     "filterKinds": "Filter by donation type",
     "visibleCount": "{count, plural, one {# blood drive shown} other {# blood drives shown}}",
     "noneMatchFilters": "No blood drive matches these filters.",
+    "viewToggle": "View",
+    "views": {
+      "list": "List",
+      "map": "Map"
+    },
     "distance": "{km} km away",
     "locate": "Near me",
     "locating": "Locating…",

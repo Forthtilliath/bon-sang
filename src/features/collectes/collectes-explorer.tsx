@@ -78,6 +78,13 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
   const [geoStatus, setGeoStatus] = useState<GeoStatus>("idle");
   const [activeId, setActiveId] = useState<string | null>(null);
   const [mapFailed, setMapFailed] = useState(false);
+  // Vue mobile : liste ou carte (les deux côte à côte dès `lg`).
+  const [view, setView] = useState<"list" | "map">("list");
+
+  const selectCollecte = (id: string | null) => {
+    setActiveId(id);
+    if (id) setView("map");
+  };
 
   const today = formatIsoDate(new Date());
 
@@ -163,19 +170,47 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
         </div>
       </div>
 
-      <p className="text-muted text-sm" role="status" aria-live="polite">
-        {t("visibleCount", { count: visible.length })}
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-muted text-sm" role="status" aria-live="polite">
+          {t("visibleCount", { count: visible.length })}
+        </p>
+
+        <div
+          className="border-border flex rounded-full border p-0.5 text-sm lg:hidden"
+          role="group"
+          aria-label={t("viewToggle")}
+        >
+          {(["list", "map"] as const).map((option) => (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={view === option}
+              onClick={() => setView(option)}
+              className={cn(
+                "rounded-full px-3 py-1 transition-colors",
+                view === option ? "bg-primary text-primary-fg" : "text-muted",
+              )}
+            >
+              {t(`views.${option}`)}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-        <ul className="flex max-h-[70vh] flex-col gap-2 overflow-y-auto pr-1">
+        <ul
+          className={cn(
+            "max-h-[70vh] flex-col gap-2 overflow-y-auto pr-1 lg:flex",
+            view === "map" ? "hidden" : "flex",
+          )}
+        >
           {visible.map((collecte) => (
             <li key={collecte.id}>
               <ExplorerCard
                 collecte={collecte}
                 distanceKm={collecte.distanceKm}
                 active={collecte.id === activeId}
-                onSelect={() => setActiveId(collecte.id)}
+                onSelect={() => selectCollecte(collecte.id)}
               />
             </li>
           ))}
@@ -184,13 +219,18 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
           ) : null}
         </ul>
 
-        <div className="lg:sticky lg:top-20 lg:h-[70vh]">
+        <div
+          className={cn(
+            "lg:sticky lg:top-20 lg:block lg:h-[70vh]",
+            view === "list" ? "hidden" : "block",
+          )}
+        >
           {mapFailed ? (
             <MapUnavailable />
           ) : (
             <MapErrorBoundary onError={() => setMapFailed(true)} fallback={<MapUnavailable />}>
               <DeferredMap
-                eager={activeId !== null}
+                eager={activeId !== null || view === "map"}
                 collectes={visible}
                 activeId={activeId}
                 origin={origin}
