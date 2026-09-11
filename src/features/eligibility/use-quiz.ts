@@ -83,7 +83,10 @@ export function useQuiz() {
       // réponse qui vient de bloquer (ex. la date du tatouage après « tatouage récent ? »,
       // révélée par son `showIf`) : elle est posée quand même, pour ne pas perdre la date
       // de fin d'attente affichée dans le résultat.
-      if ((isLast || !upcoming?.showIf) && (isLast || evaluate(prev.answers).verdict !== "eligible")) {
+      if (
+        (isLast || !upcoming?.showIf) &&
+        (isLast || evaluate(prev.answers).verdict !== "eligible")
+      ) {
         return { ...prev, submitted: true, peak: 1 };
       }
       return reconcile({ ...prev, index: index + 1 }, prev.peak);
