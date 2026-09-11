@@ -53,3 +53,5 @@ next-env.d.ts
 # régénérés par `next dev` — suivis pour garder l'arbre git propre
 !AGENTS.md
 !CLAUDE.md
+# lu par GitHub pour pré-remplir les pull requests
+!.github/PULL_REQUEST_TEMPLATE.md
