@@ -15,6 +15,9 @@ async function run(page: Page, answers: string[]) {
   await page.goto("/eligibilite");
   for (let i = 0; i < answers.length; i += 1) {
     await step(page, answers[i], i === answers.length - 1);
+    // Une réponse disqualifiante arrête le quiz avant la dernière question (cf.
+    // `use-quiz.ts` `next()`) : le résultat s'affiche déjà, inutile de continuer.
+    if (await page.getByRole("status").count()) break;
   }
 }
 
