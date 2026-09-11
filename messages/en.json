@@ -322,6 +322,8 @@
     "source": "Data: Carto API of the Établissement français du sang. Times are indicative, check before travelling.",
     "permanent": "Permanent site",
     "book": "Book an appointment",
+    "share": "Share",
+    "shareCopied": "Link copied!",
     "spotsLeft": "{count, plural, one {# spot left} other {# spots left}}",
     "filterKinds": "Filter by donation type",
     "visibleCount": "{count, plural, one {# blood drive shown} other {# blood drives shown}}",

@@ -9,6 +9,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import dynamic from "next/dynamic";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { ExternalLink } from "@/components/ui/external-link";
@@ -92,18 +93,37 @@ type GeoStatus = "idle" | "loading" | "denied" | "unsupported";
 
 export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
   const t = useTranslations("Collectes");
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [origin, setOrigin] = useState<Point | null>(null);
   const [sort, setSort] = useState<Sort>("date");
   const [geoStatus, setGeoStatus] = useState<GeoStatus>("idle");
-  const [activeId, setActiveId] = useState<string | null>(null);
+  // Lien profond `?id=` : présélectionne la collecte visée par un lien partagé.
+  const [activeId, setActiveId] = useState<string | null>(() => searchParams.get("id"));
   const [mapFailed, setMapFailed] = useState(false);
   // Vue mobile : liste ou carte (les deux côte à côte dès `lg`).
-  const [view, setView] = useState<"list" | "map">("list");
+  const [view, setView] = useState<"list" | "map">(() => (searchParams.get("id") ? "map" : "list"));
 
   const selectCollecte = (id: string | null) => {
     setActiveId(id);
     if (id) setView("map");
+    // Reflète la sélection dans l'URL (sans entrée d'historique) : la page devient
+    // partageable telle quelle.
+    const params = new URLSearchParams(searchParams.toString());
+    if (id) params.set("id", id);
+    else params.delete("id");
+    router.replace(params.size > 0 ? `${pathname}?${params.toString()}` : pathname, {
+      scroll: false,
+    });
+  };
+
+  const buildShareUrl = (id: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("id", id);
+    const path = `${pathname}?${params.toString()}`;
+    return typeof window === "undefined" ? path : `${window.location.origin}${path}`;
   };
 
   const today = formatIsoDate(new Date());
@@ -280,6 +300,7 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
                 distanceKm={collecte.distanceKm}
                 active={collecte.id === activeId}
                 onSelect={() => selectCollecte(collecte.id)}
+                shareUrl={buildShareUrl(collecte.id)}
               />
             </li>
           ))}
@@ -329,16 +350,38 @@ function ExplorerCard({
   distanceKm,
   active,
   onSelect,
+  shareUrl,
 }: {
   collecte: Collecte;
   distanceKm: number | null;
   active: boolean;
   onSelect: () => void;
+  shareUrl: string;
 }) {
   const t = useTranslations("Collectes");
   const format = useFormatter();
   const ref = useRef<HTMLDivElement>(null);
   const full = collecte.placesRestantes === 0;
+  const [copied, setCopied] = useState(false);
+
+  const share = async () => {
+    const data = { title: collecte.nom || collecte.ville, url: shareUrl };
+    if (navigator.share) {
+      try {
+        await navigator.share(data);
+      } catch {
+        // Partage annulé par l'utilisateur : rien à faire.
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Presse-papiers indisponible (contexte non sécurisé, permission refusée).
+    }
+  };
 
   // Sélection depuis la carte : ramène la fiche correspondante dans la liste.
   useEffect(() => {
@@ -390,11 +433,16 @@ function ExplorerCard({
           </span>
         ))}
       </span>
-      {collecte.rdvUrl ? (
-        <ExternalLink href={collecte.rdvUrl} className="text-xs">
-          {t("book")}
-        </ExternalLink>
-      ) : null}
+      <span className="flex flex-wrap items-center gap-3">
+        {collecte.rdvUrl ? (
+          <ExternalLink href={collecte.rdvUrl} className="text-xs">
+            {t("book")}
+          </ExternalLink>
+        ) : null}
+        <button type="button" onClick={share} className="text-primary text-xs hover:underline">
+          {copied ? t("shareCopied") : t("share")}
+        </button>
+      </span>
     </div>
   );
 }

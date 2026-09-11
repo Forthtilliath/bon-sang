@@ -8,6 +8,16 @@ vi.mock("./collectes-map", () => ({
   CollectesMap: () => <div data-testid="map" />,
 }));
 
+// `useRouter`/`usePathname`/`useSearchParams` exigent le routeur applicatif de
+// Next (absent en environnement de test) : on les remplace par des équivalents
+// minimaux, suffisants pour exercer le lien profond `?id=`.
+const routerReplace = vi.fn();
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/collectes",
+  useRouter: () => ({ replace: routerReplace }),
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 import { CollectesExplorer } from "./collectes-explorer";
 
 let seq = 0;
@@ -108,6 +118,31 @@ describe("<CollectesExplorer>", () => {
       "aria-pressed",
       "true",
     );
+
+    vi.unstubAllGlobals();
+  });
+
+  it("reflète la sélection dans l'URL (lien profond `?id=`)", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<CollectesExplorer collectes={SAMPLE} />);
+    await user.click(screen.getByRole("button", { name: /Site Lyon/ }));
+    expect(routerReplace).toHaveBeenLastCalledWith(
+      `/collectes?id=${SAMPLE[2].id}`,
+      expect.objectContaining({ scroll: false }),
+    );
+  });
+
+  it("copie le lien de partage dans le presse-papiers", async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("navigator", { ...navigator, clipboard: { writeText } });
+
+    renderWithIntl(<CollectesExplorer collectes={SAMPLE} />);
+    const shareButtons = screen.getAllByRole("button", { name: "Partager" });
+    await user.click(shareButtons[2]);
+
+    expect(writeText).toHaveBeenCalledWith(expect.stringContaining(`id=${SAMPLE[2].id}`));
+    expect(await screen.findByRole("button", { name: "Lien copié !" })).toBeInTheDocument();
 
     vi.unstubAllGlobals();
   });

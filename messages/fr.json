@@ -325,6 +325,8 @@
     "source": "Données : API Carto de l'Établissement français du sang. Horaires indicatifs, vérifiez avant de vous déplacer.",
     "permanent": "Site permanent",
     "book": "Prendre rendez-vous",
+    "share": "Partager",
+    "shareCopied": "Lien copié !",
     "spotsLeft": "{count, plural, one {# place restante} other {# places restantes}}",
     "filterKinds": "Filtrer par type de don",
     "visibleCount": "{count, plural, one {# collecte affichée} other {# collectes affichées}}",
