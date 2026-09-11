@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type ComponentProps, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useFormatter, useTranslations } from "next-intl";
 
@@ -24,10 +24,50 @@ import { MapErrorBoundary } from "./map-error-boundary";
 
 const CollectesMap = dynamic(() => import("./collectes-map").then((mod) => mod.CollectesMap), {
   ssr: false,
-  loading: () => (
-    <div className="border-border bg-surface h-80 w-full animate-pulse rounded-2xl border lg:h-full" />
-  ),
+  loading: () => <MapSkeleton />,
 });
+
+function MapSkeleton() {
+  return (
+    <div className="border-border bg-surface h-80 w-full animate-pulse rounded-2xl border lg:h-full" />
+  );
+}
+
+/**
+ * Diffère le chargement du bundle `maplibre-gl` : la carte (et son import) n'est
+ * montée qu'une fois le conteneur proche du viewport, ou plus tôt si `eager`
+ * (bascule vers la vue carte, sélection d'une collecte).
+ */
+function DeferredMap({
+  eager,
+  ...props
+}: ComponentProps<typeof CollectesMap> & { eager?: boolean }) {
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const canObserve = typeof IntersectionObserver !== "undefined";
+  const visible = eager === true || inView || !canObserve;
+
+  useEffect(() => {
+    if (visible || !ref.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) setInView(true);
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [visible]);
+
+  if (visible) return <CollectesMap {...props} />;
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className="border-border bg-surface h-80 w-full animate-pulse rounded-2xl border lg:h-full"
+    />
+  );
+}
 
 type GeoStatus = "idle" | "loading" | "denied" | "unsupported";
 
@@ -149,7 +189,8 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
             <MapUnavailable />
           ) : (
             <MapErrorBoundary onError={() => setMapFailed(true)} fallback={<MapUnavailable />}>
-              <CollectesMap
+              <DeferredMap
+                eager={activeId !== null}
                 collectes={visible}
                 activeId={activeId}
                 origin={origin}
