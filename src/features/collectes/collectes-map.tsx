@@ -1,7 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import { LngLatBounds, Map as MlMap, Marker, NavigationControl, Popup } from "maplibre-gl";
+import {
+  type GeoJSONSource,
+  LngLatBounds,
+  Map as MlMap,
+  Marker,
+  NavigationControl,
+  Popup,
+} from "maplibre-gl";
 import { useFormatter, useTranslations } from "next-intl";
 
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -15,7 +22,13 @@ import type { Collecte } from "./types";
 const STYLE_LIGHT = "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json";
 const STYLE_DARK = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 const FRANCE_CENTER: [number, number] = [2.35, 46.6];
-const ORIGIN_KEY = "__origin__";
+const SOURCE_ID = "collectes";
+
+// Couleurs alignées sur `globals.css` (paint MapLibre : pas de `var(--…)`).
+const MARKER_LIGHT = { fill: "#d21f2c", ring: "#b3161f" };
+const MARKER_DARK = { fill: "#f0434f", ring: "#d81f2a" };
+
+const EMPTY_FC: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
 
 function prefersDark(): boolean {
   const explicit = document.documentElement.dataset.theme;
@@ -28,6 +41,10 @@ function styleUrl(): string {
   return prefersDark() ? STYLE_DARK : STYLE_LIGHT;
 }
 
+function markerColors() {
+  return prefersDark() ? MARKER_DARK : MARKER_LIGHT;
+}
+
 function motionDuration(ms: number): number {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? 0 : ms;
 }
@@ -37,12 +54,88 @@ type Props = {
   activeId: string | null;
   origin: Point | null;
   onSelect: (id: string | null) => void;
+  /** Appelé si la carte ne peut pas démarrer (WebGL indisponible, contexte perdu). */
+  onError?: () => void;
 };
 
 type PopupHelpers = {
   t: ReturnType<typeof useTranslations<"Collectes">>;
   format: ReturnType<typeof useFormatter>;
 };
+
+function toFeatureCollection(collectes: Collecte[]): GeoJSON.FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: collectes
+      .filter((c) => c.lat !== null && c.lng !== null)
+      .map((c) => ({
+        type: "Feature",
+        geometry: { type: "Point", coordinates: [c.lng as number, c.lat as number] },
+        properties: { id: c.id },
+      })),
+  };
+}
+
+/** Source clusterisée + couches cercle/symbole. Rejouée après chaque `setStyle`. */
+function addClusterLayers(map: MlMap) {
+  if (map.getSource(SOURCE_ID)) return;
+  const { fill, ring } = markerColors();
+
+  map.addSource(SOURCE_ID, {
+    type: "geojson",
+    data: EMPTY_FC,
+    cluster: true,
+    clusterRadius: 48,
+    clusterMaxZoom: 13,
+    promoteId: "id",
+  });
+
+  map.addLayer({
+    id: "clusters",
+    type: "circle",
+    source: SOURCE_ID,
+    filter: ["has", "point_count"],
+    paint: {
+      "circle-color": fill,
+      "circle-opacity": 0.92,
+      "circle-radius": ["step", ["get", "point_count"], 15, 10, 20, 30, 26],
+      "circle-stroke-width": 2,
+      "circle-stroke-color": "#fff",
+    },
+  });
+
+  map.addLayer({
+    id: "cluster-count",
+    type: "symbol",
+    source: SOURCE_ID,
+    filter: ["has", "point_count"],
+    layout: {
+      "text-field": ["get", "point_count_abbreviated"],
+      "text-font": ["Open Sans Bold", "Noto Sans Bold", "Arial Unicode MS Bold"],
+      "text-size": 12,
+      "text-allow-overlap": true,
+    },
+    paint: { "text-color": "#fff" },
+  });
+
+  map.addLayer({
+    id: "unclustered",
+    type: "circle",
+    source: SOURCE_ID,
+    filter: ["!", ["has", "point_count"]],
+    paint: {
+      "circle-color": fill,
+      "circle-radius": ["case", ["boolean", ["feature-state", "active"], false], 9, 6],
+      "circle-stroke-width": ["case", ["boolean", ["feature-state", "active"], false], 4, 2],
+      "circle-stroke-color": [
+        "case",
+        ["boolean", ["feature-state", "active"], false],
+        ring,
+        "#fff",
+      ],
+    },
+  });
+}
 
 function el(tag: string, className: string, text?: string): HTMLElement {
   const node = document.createElement(tag);
@@ -96,15 +189,22 @@ function popupContent(collecte: Collecte, { t, format }: PopupHelpers): HTMLElem
   return root;
 }
 
-export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
+export function CollectesMap({ collectes, activeId, origin, onSelect, onError }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MlMap | null>(null);
-  const markersRef = useRef(new globalThis.Map<string, Marker>());
+  const originMarkerRef = useRef<Marker | null>(null);
   const popupRef = useRef<Popup | null>(null);
   // Vrai quand on retire la bulle par code (évite de déclencher `onSelect(null)`).
   const closingPopupRef = useRef(false);
-  // Dernière collecte active : sert à rendre le focus au bon marqueur à la fermeture.
-  const lastActiveRef = useRef<string | null>(null);
+
+  const collectesRef = useRef(collectes);
+  const activeIdRef = useRef(activeId);
+  const onSelectRef = useRef(onSelect);
+  const onErrorRef = useRef(onError);
+  useEffect(() => {
+    onSelectRef.current = onSelect;
+    onErrorRef.current = onError;
+  }, [onSelect, onError]);
 
   const removePopup = useCallback(() => {
     if (!popupRef.current) return;
@@ -121,20 +221,88 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
     helpersRef.current = { t, format };
   }, [t, format]);
 
+  /** (Re)pousse les données dans la source et recadre la vue. */
+  const applyData = useCallback(() => {
+    const map = mapRef.current;
+    const source = map?.getSource(SOURCE_ID) as GeoJSONSource | undefined;
+    if (!map || !source) return;
+
+    const fc = toFeatureCollection(collectesRef.current);
+    source.setData(fc);
+
+    if (activeIdRef.current) {
+      map.setFeatureState({ source: SOURCE_ID, id: activeIdRef.current }, { active: true });
+    }
+
+    if (fc.features.length > 0) {
+      const bounds = new LngLatBounds();
+      for (const feature of fc.features) {
+        bounds.extend((feature.geometry as GeoJSON.Point).coordinates as [number, number]);
+      }
+      map.fitBounds(bounds, { padding: 48, maxZoom: 12, duration: motionDuration(400) });
+    }
+  }, []);
+
   useEffect(() => {
     const container = containerRef.current;
-    const markers = markersRef.current;
     if (!container || mapRef.current) return;
 
-    const map = new MlMap({
-      container,
-      style: styleUrl(),
-      center: FRANCE_CENTER,
-      zoom: 4.5,
-    });
+    let map: MlMap;
+    try {
+      map = new MlMap({
+        container,
+        style: styleUrl(),
+        center: FRANCE_CENTER,
+        zoom: 4.5,
+      });
+    } catch {
+      // WebGL indisponible : la liste prend le relais.
+      onErrorRef.current?.();
+      return;
+    }
+
     map.addControl(new NavigationControl({ showCompass: false }), "top-right");
-    map.on("load", () => map.resize());
     mapRef.current = map;
+
+    const setupLayers = () => {
+      if (!map.isStyleLoaded()) return;
+      addClusterLayers(map);
+      applyData();
+    };
+
+    map.on("load", () => map.resize());
+    // `style.load` couvre le chargement initial et chaque bascule de thème
+    // (`setStyle` purge la source et les couches, qu'on rejoue ici).
+    map.on("style.load", setupLayers);
+    map.on("webglcontextlost", () => onErrorRef.current?.());
+
+    map.on("click", "clusters", (event) => {
+      const feature = event.features?.[0];
+      const clusterId = feature?.properties?.cluster_id;
+      if (clusterId == null) return;
+      const source = map.getSource(SOURCE_ID) as GeoJSONSource;
+      void source.getClusterExpansionZoom(clusterId).then((zoom) => {
+        map.easeTo({
+          center: (feature!.geometry as GeoJSON.Point).coordinates as [number, number],
+          zoom,
+          duration: motionDuration(400),
+        });
+      });
+    });
+
+    map.on("click", "unclustered", (event) => {
+      const id = event.features?.[0]?.properties?.id;
+      if (typeof id === "string") onSelectRef.current(id);
+    });
+
+    for (const layer of ["clusters", "unclustered"] as const) {
+      map.on("mouseenter", layer, () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", layer, () => {
+        map.getCanvas().style.cursor = "";
+      });
+    }
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const onThemeChange = () => map.setStyle(styleUrl());
@@ -142,66 +310,41 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
     // Bascule de thème manuelle (émise par le sélecteur de thème de l'en-tête).
     window.addEventListener("bonsang:themechange", onThemeChange);
 
+    // La colonne carte est masquée/affichée selon la vue mobile : on suit sa taille.
+    const resizeObserver = new ResizeObserver(() => map.resize());
+    resizeObserver.observe(container);
+
     return () => {
       media.removeEventListener("change", onThemeChange);
       window.removeEventListener("bonsang:themechange", onThemeChange);
+      resizeObserver.disconnect();
       removePopup();
+      originMarkerRef.current?.remove();
+      originMarkerRef.current = null;
       map.remove();
       mapRef.current = null;
-      markers.clear();
     };
-  }, [removePopup]);
+  }, [applyData, removePopup]);
 
-  // (Re)pose les marqueurs des collectes quand la liste filtrée change.
+  // Nouvelle liste filtrée : on met à jour la source et on recadre.
   useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    for (const [id, marker] of markersRef.current) {
-      if (id !== ORIGIN_KEY) {
-        marker.remove();
-        markersRef.current.delete(id);
-      }
-    }
-
-    const bounds = new LngLatBounds();
-    let count = 0;
-
-    for (const collecte of collectes) {
-      if (collecte.lat === null || collecte.lng === null) continue;
-      const marker = document.createElement("button");
-      marker.type = "button";
-      marker.setAttribute("aria-label", collecte.nom || collecte.ville);
-      marker.className = "ofm-marker";
-      marker.addEventListener("click", () => onSelect(collecte.id));
-
-      markersRef.current.set(
-        collecte.id,
-        new Marker({ element: marker }).setLngLat([collecte.lng, collecte.lat]).addTo(map),
-      );
-      bounds.extend([collecte.lng, collecte.lat]);
-      count += 1;
-    }
-
-    if (count > 0) {
-      map.fitBounds(bounds, { padding: 48, maxZoom: 12, duration: motionDuration(400) });
-    }
-  }, [collectes, onSelect]);
+    collectesRef.current = collectes;
+    applyData();
+  }, [collectes, applyData]);
 
   // Marqueur de position (géolocalisation).
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    markersRef.current.get(ORIGIN_KEY)?.remove();
-    markersRef.current.delete(ORIGIN_KEY);
+    originMarkerRef.current?.remove();
+    originMarkerRef.current = null;
     if (!origin) return;
 
     const dot = document.createElement("div");
-    dot.className = "ofm-marker ofm-marker--origin";
-    markersRef.current.set(
-      ORIGIN_KEY,
-      new Marker({ element: dot }).setLngLat([origin.lng, origin.lat]).addTo(map),
-    );
+    dot.className = "ofm-origin";
+    originMarkerRef.current = new Marker({ element: dot })
+      .setLngLat([origin.lng, origin.lat])
+      .addTo(map);
   }, [origin]);
 
   // Centre sur la collecte sélectionnée, la met en évidence et ouvre sa bulle d'info.
@@ -209,22 +352,22 @@ export function CollectesMap({ collectes, activeId, origin, onSelect }: Props) {
     const map = mapRef.current;
     if (!map) return;
 
-    const previousActive = lastActiveRef.current;
-    lastActiveRef.current = activeId;
+    const previousActive = activeIdRef.current;
+    activeIdRef.current = activeId;
 
-    for (const [id, marker] of markersRef.current) {
-      if (id === ORIGIN_KEY) continue;
-      marker.getElement().classList.toggle("ofm-marker--active", id === activeId);
+    if (map.getSource(SOURCE_ID)) {
+      if (previousActive && previousActive !== activeId) {
+        map.setFeatureState({ source: SOURCE_ID, id: previousActive }, { active: false });
+      }
+      if (activeId) {
+        map.setFeatureState({ source: SOURCE_ID, id: activeId }, { active: true });
+      }
     }
 
     const collecte = activeId ? collectes.find((c) => c.id === activeId) : null;
 
     if (!collecte || collecte.lat === null || collecte.lng === null) {
       removePopup();
-      // Bulle fermée : le focus revient sur le marqueur qui l'avait ouverte.
-      if (previousActive && previousActive !== activeId) {
-        markersRef.current.get(previousActive)?.getElement().focus();
-      }
       return;
     }
 
