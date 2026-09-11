@@ -126,7 +126,10 @@ export const RULES: readonly Rule[] = [
     evaluate: (a) => {
       const sex = a.sex;
       const count = a.donationsLast12Months;
-      if (typeof count !== "number" || (sex !== "male" && sex !== "female" && sex !== "unspecified"))
+      if (
+        typeof count !== "number" ||
+        (sex !== "male" && sex !== "female" && sex !== "unspecified")
+      )
         return eligible;
       return count >= ANNUAL_BLOOD_CAP[sex]
         ? { verdict: "wait", reasonKey: "annualCap", until: null }

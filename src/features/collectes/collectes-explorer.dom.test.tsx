@@ -94,7 +94,9 @@ describe("<CollectesExplorer>", () => {
 
   it("affiche « Complet » pour une collecte sans place restante", () => {
     renderWithIntl(
-      <CollectesExplorer collectes={[{ ...collecte("Site plein", ["blood"]), placesRestantes: 0 }]} />,
+      <CollectesExplorer
+        collectes={[{ ...collecte("Site plein", ["blood"]), placesRestantes: 0 }]}
+      />,
     );
     expect(screen.getByText("Complet")).toBeInTheDocument();
   });

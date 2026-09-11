@@ -98,7 +98,10 @@ export function withinRadius(
 }
 
 /** Trie par date (sites fixes d'abord) ou par distance (sans-coordonnées en dernier). */
-export function sortCollectes(collectes: CollecteWithDistance[], sort: Sort): CollecteWithDistance[] {
+export function sortCollectes(
+  collectes: CollecteWithDistance[],
+  sort: Sort,
+): CollecteWithDistance[] {
   if (sort === "date") {
     return [...collectes].sort((a, b) => {
       if (a.fixe !== b.fixe) return a.fixe ? -1 : 1;

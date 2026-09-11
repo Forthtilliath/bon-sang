@@ -214,9 +214,7 @@ function Journal({ tracker }: { tracker: TrackerApi }) {
                 key={donation.id}
                 className={cn(
                   "flex items-center justify-between gap-3 rounded-xl border p-3 text-sm",
-                  donation.id === editingId
-                    ? "border-primary bg-primary-subtle"
-                    : "border-border",
+                  donation.id === editingId ? "border-primary bg-primary-subtle" : "border-border",
                 )}
               >
                 <span>

@@ -11,10 +11,7 @@ import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 const PATH = "/collectes";
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: PageProps<"/[locale]/collectes">) {
+export async function generateMetadata({ params, searchParams }: PageProps<"/[locale]/collectes">) {
   const locale = assertLocale((await params).locale);
   const t = await getTranslations({ locale, namespace: "Pages.collections" });
   const query = normalizeQuery((await searchParams).ville);
