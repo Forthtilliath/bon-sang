@@ -1,3 +1,4 @@
+import { ANNUAL_BLOOD_CAP } from "@/features/tracker/eligibility-date";
 import { addDays, addMonths, latestDate, parseIsoDate } from "@/lib/dates";
 
 import type {
@@ -115,6 +116,21 @@ export const RULES: readonly Rule[] = [
         reasonKey: "interval",
         until: last ? addDays(last, 56) : null,
       };
+    },
+  },
+  {
+    id: "annualCap",
+    // Plafond annuel de dons de sang total, selon le sexe (mêmes seuils que le
+    // suivi `Tracker`, cf. `ANNUAL_BLOOD_CAP`). Pas de date connue : contrairement
+    // au suivi, le quiz ne connaît pas la date du don le plus ancien de la fenêtre.
+    evaluate: (a) => {
+      const sex = a.sex;
+      const count = a.donationsLast12Months;
+      if (typeof count !== "number" || (sex !== "male" && sex !== "female" && sex !== "unspecified"))
+        return eligible;
+      return count >= ANNUAL_BLOOD_CAP[sex]
+        ? { verdict: "wait", reasonKey: "annualCap", until: null }
+        : eligible;
     },
   },
 ] as const;

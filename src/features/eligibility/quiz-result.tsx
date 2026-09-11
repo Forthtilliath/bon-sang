@@ -25,9 +25,12 @@ const CARD_STYLES: Record<Verdict, string> = {
 export function QuizResult({
   result,
   onRestart,
+  sex,
 }: {
   result: EligibilityResult;
   onRestart: () => void;
+  /** Réponse à la question « sexe » du quiz, si donnée (`null` sinon). */
+  sex?: "female" | "male" | null;
 }) {
   const t = useTranslations("Quiz") as unknown as QuizT;
   const format = useFormatter();
@@ -39,6 +42,18 @@ export function QuizResult({
   useEffect(() => {
     headingRef.current?.focus();
   }, []);
+
+  // Le quiz alimente le profil du suivi : dès que le sexe est renseigné, il est
+  // reporté sur le profil s'il n'a jamais été précisé côté suivi (jamais d'écrasement
+  // d'un choix déjà fait dans `/mon-suivi`).
+  useEffect(() => {
+    if (!tracker.hydrated || !sex) return;
+    if (tracker.value.profile.sex !== "unspecified") return;
+    tracker.setValue((prev) => ({ ...prev, profile: { ...prev.profile, sex } }));
+    // `tracker.value`/`tracker.setValue` sont volontairement absents des deps : ils
+    // changeraient à chaque écriture, ce qui redéclencherait cet effet en boucle.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tracker.hydrated, sex]);
 
   const verdictKey =
     result.verdict === "wait" ? (result.until ? "waitWithDate" : "waitNoDate") : result.verdict;

@@ -105,7 +105,8 @@
     "disclaimer": "This test is indicative and not exhaustive. Only the confidential medical interview before donating decides whether you can donate.",
     "units": {
       "years": "years",
-      "kg": "kg"
+      "kg": "kg",
+      "count": "donations"
     },
     "questions": {
       "age": { "label": "How old are you?" },
@@ -163,7 +164,19 @@
           "old": "More than 8 weeks ago"
         }
       },
-      "lastDonationDate": { "label": "Date of your last donation?" }
+      "lastDonationDate": { "label": "Date of your last donation?" },
+      "sex": {
+        "label": "What is your sex?",
+        "help": "Used to compute the maximum number of whole blood donations over 12 months.",
+        "options": {
+          "female": "Female",
+          "male": "Male",
+          "unspecified": "Not specified"
+        }
+      },
+      "donationsLast12Months": {
+        "label": "How many whole blood donations have you made in the last 12 months?"
+      }
     },
     "verdicts": {
       "eligible": {
@@ -203,7 +216,8 @@
       "transfusion": "Having received a transfusion or a blood product is a permanent contraindication to donating.",
       "riskExposure": "After exposure to a risk of a transmissible infection, a 4-month deferral applies.",
       "chronic": "A chronic illness or long-term treatment must be assessed with the collection doctor.",
-      "interval": "Respect an 8-week interval between two whole blood donations."
+      "interval": "Respect an 8-week interval between two whole blood donations.",
+      "annualCap": "You have reached the maximum number of whole blood donations over 12 months for your profile."
     },
     "faq": {
       "title": "Frequently asked questions",

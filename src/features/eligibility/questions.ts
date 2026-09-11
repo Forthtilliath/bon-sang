@@ -9,7 +9,7 @@ type BaseQuestion = {
 export type Question = BaseQuestion &
   (
     | { kind: "boolean" }
-    | { kind: "number"; min: number; max: number; unit: "years" | "kg" }
+    | { kind: "number"; min: number; max: number; unit: "years" | "kg" | "count" }
     | { kind: "choice"; options: readonly string[] }
     | { kind: "date"; notFuture?: boolean }
   );
@@ -49,6 +49,11 @@ export const QUESTIONS: readonly Question[] = [
     notFuture: true,
     showIf: (a) => isChoice(a, "lastDonation", "recent"),
   },
+  // Alimente le plafond annuel de dons (règle `annualCap`) et le profil du suivi
+  // (mêmes valeurs que `Sex`) : posées en fin de parcours, sans effet sur l'ordre
+  // des questions déjà couvert par les tests existants.
+  { id: "sex", kind: "choice", options: ["female", "male", "unspecified"] },
+  { id: "donationsLast12Months", kind: "number", min: 0, max: 10, unit: "count" },
 ] as const;
 
 /** Liste des questions à afficher compte tenu des réponses déjà données. */

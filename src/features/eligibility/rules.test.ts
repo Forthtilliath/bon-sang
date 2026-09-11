@@ -92,6 +92,30 @@ describe("evaluate — délais temporaires", () => {
   });
 });
 
+describe("evaluate — plafond annuel de dons (sexe)", () => {
+  it("plafond atteint pour un homme (6 dons / 12 mois) => wait", () => {
+    const result = evaluate({ ...OK, sex: "male", donationsLast12Months: 6 }, TODAY);
+    expect(result.verdict).toBe("wait");
+    expect(result.reasons.some((r) => r.reasonKey === "annualCap")).toBe(true);
+  });
+
+  it("plafond non atteint pour une femme (3 dons / 12 mois) => eligible", () => {
+    expect(evaluate({ ...OK, sex: "female", donationsLast12Months: 3 }, TODAY).verdict).toBe(
+      "eligible",
+    );
+  });
+
+  it("plafond atteint pour une femme (4 dons / 12 mois) => wait", () => {
+    expect(evaluate({ ...OK, sex: "female", donationsLast12Months: 4 }, TODAY).verdict).toBe(
+      "wait",
+    );
+  });
+
+  it("sans réponse à ces deux questions, aucune incidence", () => {
+    expect(evaluate(OK, TODAY).verdict).toBe("eligible");
+  });
+});
+
 describe("evaluate — avis médical", () => {
   it("maladie chronique => check", () => {
     expect(evaluate({ ...OK, chronic: true }, TODAY).verdict).toBe("check");

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { TRACKER_STORAGE_KEY } from "@/features/tracker";
 import { renderWithIntl, screen, userEvent } from "@/test/render";
 
 import { Quiz } from "./quiz";
@@ -50,6 +51,8 @@ const HEALTHY = [
   "Non",
   "Non",
   "Jamais",
+  "Non précisé",
+  "0",
 ];
 
 beforeEach(() => {
@@ -59,7 +62,7 @@ beforeEach(() => {
 describe("<Quiz>", () => {
   it("affiche la progression et la première question", () => {
     renderWithIntl(<Quiz />);
-    expect(screen.getByText("Question 1 sur 13")).toBeInTheDocument();
+    expect(screen.getByText("Question 1 sur 15")).toBeInTheDocument();
     expect(screen.getByRole("group")).toHaveTextContent("Quel âge avez-vous ?");
   });
 
@@ -82,10 +85,10 @@ describe("<Quiz>", () => {
     renderWithIntl(<Quiz />);
     for (const label of ["30", "70", "Oui", "Non", "Non, aucun"]) await advance(user, label);
     // Étape 6 : question « tatouage ». Répondre « Oui » doit révéler la date.
-    expect(screen.getByText("Question 6 sur 13")).toBeInTheDocument();
+    expect(screen.getByText("Question 6 sur 15")).toBeInTheDocument();
     await user.click(screen.getByRole("radio", { name: "Oui" }));
     await user.click(screen.getByRole("button", { name: "Suivant" }));
-    expect(screen.getByText("Question 7 sur 14")).toBeInTheDocument();
+    expect(screen.getByText("Question 7 sur 16")).toBeInTheDocument();
     expect(screen.getByRole("group")).toHaveTextContent("À quelle date ?");
   });
 
@@ -122,6 +125,16 @@ describe("<Quiz>", () => {
     await user.click(dontKnow);
     expect(dontKnow).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByText("Vous avez indiqué ne pas connaître cette date.")).toBeInTheDocument();
+  });
+
+  it("reporte le sexe renseigné sur le profil du suivi", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<Quiz />);
+    const answers = [...HEALTHY];
+    answers[13] = "Femme"; // question « sexe »
+    await run(user, answers);
+    const stored = JSON.parse(window.localStorage.getItem(TRACKER_STORAGE_KEY) ?? "{}");
+    expect(stored.profile.sex).toBe("female");
   });
 
   it("signale une contre-indication définitive après une transfusion", async () => {
