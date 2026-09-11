@@ -34,7 +34,14 @@ beforeEach(() => {
 describe("<Tracker>", () => {
   it("affiche les sections du suivi", () => {
     renderWithIntl(<Tracker />);
-    for (const title of ["Prochain don", "Journal de dons", "Profil", "Badges", "Vos données"]) {
+    for (const title of [
+      "Prochain don",
+      "Journal de dons",
+      "Statistiques",
+      "Profil",
+      "Badges",
+      "Vos données",
+    ]) {
       expect(screen.getByRole("heading", { name: title })).toBeInTheDocument();
     }
   });
@@ -53,6 +60,34 @@ describe("<Tracker>", () => {
 
     await user.click(within(list).getByRole("button", { name: "Supprimer" }));
     expect(screen.getByText("Aucun don enregistré pour l'instant.")).toBeInTheDocument();
+  });
+
+  it("modifie un don existant", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<Tracker />);
+    addDonation({ date: "2026-01-15", type: "plasma", place: "Toulouse" });
+
+    const list = screen.getAllByRole("list")[0];
+    await user.click(within(list).getByRole("button", { name: "Modifier" }));
+    expect(screen.getByLabelText("Date")).toHaveValue("2026-01-15");
+
+    fireEvent.change(screen.getByLabelText("Lieu"), { target: { value: "Bordeaux" } });
+    await user.click(screen.getByRole("button", { name: "Enregistrer" }));
+
+    expect(within(list).getByText(/Bordeaux/)).toBeInTheDocument();
+    expect(within(list).queryByText(/Toulouse/)).not.toBeInTheDocument();
+    expect(within(list).getAllByRole("listitem")).toHaveLength(1);
+  });
+
+  it("met à jour les statistiques et le compte à rebours du prochain badge", () => {
+    renderWithIntl(<Tracker />);
+    expect(screen.getByText("Encore 1 don avant le badge « Premier don ».")).toBeInTheDocument();
+
+    addDonation({ date: "2026-02-01" });
+
+    expect(screen.getByText("Encore 2 dons avant le badge « Trois dons ».")).toBeInTheDocument();
+    const stats = screen.getByRole("heading", { name: "Statistiques" }).closest("section")!;
+    expect(within(stats).getByText("Dons enregistrés")).toBeInTheDocument();
   });
 
   it("débloque le badge « Premier don » dès le premier don", () => {

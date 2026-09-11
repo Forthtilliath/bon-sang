@@ -265,12 +265,21 @@
       "place": "Place",
       "placePlaceholder": "Optional",
       "submit": "Add",
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
       "delete": "Delete",
       "types": {
         "blood": "Whole blood",
         "plasma": "Plasma",
         "platelets": "Platelets"
       }
+    },
+    "stats": {
+      "title": "Statistics",
+      "total": "Donations logged",
+      "nextBadge": "{remaining, plural, one {# more donation} other {# more donations}} for the “{badge}” badge.",
+      "allBadges": "All donation-count badges are unlocked."
     },
     "profile": {
       "title": "Profile",

@@ -265,12 +265,21 @@
       "place": "Lieu",
       "placePlaceholder": "Optionnel",
       "submit": "Ajouter",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "edit": "Modifier",
       "delete": "Supprimer",
       "types": {
         "blood": "Sang total",
         "plasma": "Plasma",
         "platelets": "Plaquettes"
       }
+    },
+    "stats": {
+      "title": "Statistiques",
+      "total": "Dons enregistrés",
+      "nextBadge": "Encore {remaining, plural, one {# don} other {# dons}} avant le badge « {badge} ».",
+      "allBadges": "Tous les badges liés au nombre de dons sont débloqués."
     },
     "profile": {
       "title": "Profil",
