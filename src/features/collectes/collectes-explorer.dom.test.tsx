@@ -82,6 +82,36 @@ describe("<CollectesExplorer>", () => {
     expect(screen.getByText("Aucune collecte ne correspond à ces filtres.")).toBeInTheDocument();
   });
 
+  it("affiche « Complet » pour une collecte sans place restante", () => {
+    renderWithIntl(
+      <CollectesExplorer collectes={[{ ...collecte("Site plein", ["blood"]), placesRestantes: 0 }]} />,
+    );
+    expect(screen.getByText("Complet")).toBeInTheDocument();
+  });
+
+  it("affiche le rayon et le tri après géolocalisation, triée par distance", async () => {
+    const user = userEvent.setup();
+    const getCurrentPosition = vi.fn((success: PositionCallback) => {
+      success({
+        coords: { latitude: 43.6, longitude: 1.44 } as GeolocationCoordinates,
+        timestamp: Date.now(),
+      } as GeolocationPosition);
+    });
+    vi.stubGlobal("navigator", { ...navigator, geolocation: { getCurrentPosition } });
+
+    renderWithIntl(<CollectesExplorer collectes={SAMPLE} />);
+    await user.click(screen.getByRole("button", { name: "Autour de moi" }));
+
+    expect(getCurrentPosition).toHaveBeenCalled();
+    expect(screen.getByRole("group", { name: "Trier" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Distance" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+
+    vi.unstubAllGlobals();
+  });
+
   it("bascule la période sélectionnée", async () => {
     const user = userEvent.setup();
     renderWithIntl(<CollectesExplorer collectes={SAMPLE} />);

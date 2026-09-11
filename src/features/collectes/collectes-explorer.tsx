@@ -22,9 +22,14 @@ import {
   type Period,
   PERIODS,
   type Point,
+  RADII_KM,
+  type Sort,
+  SORTS,
   filterCollectes,
+  sortCollectes,
   toggleKind,
   withDistance,
+  withinRadius,
 } from "./filter";
 import type { Collecte } from "./types";
 import { MapErrorBoundary } from "./map-error-boundary";
@@ -89,6 +94,7 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
   const t = useTranslations("Collectes");
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [origin, setOrigin] = useState<Point | null>(null);
+  const [sort, setSort] = useState<Sort>("date");
   const [geoStatus, setGeoStatus] = useState<GeoStatus>("idle");
   const [activeId, setActiveId] = useState<string | null>(null);
   const [mapFailed, setMapFailed] = useState(false);
@@ -102,10 +108,11 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
 
   const today = formatIsoDate(new Date());
 
-  const visible = useMemo(
-    () => withDistance(filterCollectes(collectes, filters, today), origin),
-    [collectes, filters, origin, today],
-  );
+  const visible = useMemo(() => {
+    const withDist = withDistance(filterCollectes(collectes, filters, today), origin);
+    const ranged = origin ? withinRadius(withDist, filters.radiusKm) : withDist;
+    return sortCollectes(ranged, sort);
+  }, [collectes, filters, origin, sort, today]);
 
   const locate = () => {
     if (!("geolocation" in navigator)) {
@@ -116,6 +123,8 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setOrigin({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        // « Autour de moi » implique naturellement un tri par distance.
+        setSort("distance");
         setGeoStatus("idle");
       },
       () => setGeoStatus("denied"),
@@ -180,6 +189,52 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
           ) : null}
           {geoStatus === "unsupported" ? (
             <span className="text-muted text-xs">{t("locateUnsupported")}</span>
+          ) : null}
+
+          {origin ? (
+            <>
+              <label className="text-muted flex items-center gap-1.5 text-sm">
+                {t("radiusLabel")}
+                <select
+                  value={filters.radiusKm ?? ""}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      radiusKm: e.target.value ? Number(e.target.value) : null,
+                    }))
+                  }
+                  className="border-border bg-bg rounded-full border px-2 py-1 text-sm"
+                >
+                  <option value="">{t("radiusAny")}</option>
+                  {RADII_KM.map((km) => (
+                    <option key={km} value={km}>
+                      {t("radiusValue", { km })}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <div
+                className="border-border flex rounded-full border p-0.5 text-sm"
+                role="group"
+                aria-label={t("sortLabel")}
+              >
+                {SORTS.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    aria-pressed={sort === option}
+                    onClick={() => setSort(option)}
+                    className={cn(
+                      "rounded-full px-3 py-1 transition-colors",
+                      sort === option ? "bg-primary text-primary-fg" : "text-muted",
+                    )}
+                  >
+                    {t(`sorts.${option}`)}
+                  </button>
+                ))}
+              </div>
+            </>
           ) : null}
         </div>
       </div>
@@ -283,6 +338,7 @@ function ExplorerCard({
   const t = useTranslations("Collectes");
   const format = useFormatter();
   const ref = useRef<HTMLDivElement>(null);
+  const full = collecte.placesRestantes === 0;
 
   // Sélection depuis la carte : ramène la fiche correspondante dans la liste.
   useEffect(() => {
@@ -297,6 +353,11 @@ function ExplorerCard({
         active ? "border-primary bg-primary-subtle" : "border-border",
       )}
     >
+      {full ? (
+        <span className="w-fit rounded-full border border-amber-600/30 bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
+          {t("full")}
+        </span>
+      ) : null}
       <button
         type="button"
         onClick={onSelect}

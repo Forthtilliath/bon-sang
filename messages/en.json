@@ -336,6 +336,15 @@
     "locating": "Locating…",
     "locateDenied": "Location denied.",
     "locateUnsupported": "Location unavailable on this device.",
+    "radiusLabel": "Radius",
+    "radiusAny": "No limit",
+    "radiusValue": "{km} km",
+    "sortLabel": "Sort",
+    "sorts": {
+      "date": "Date",
+      "distance": "Distance"
+    },
+    "full": "Full",
     "periods": {
       "all": "All",
       "week": "7 days",

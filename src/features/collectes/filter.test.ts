@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { filterCollectes, haversineKm, toggleKind, withDistance } from "./filter";
+import {
+  filterCollectes,
+  haversineKm,
+  sortCollectes,
+  toggleKind,
+  withDistance,
+  withinRadius,
+} from "./filter";
 import type { Collecte } from "./types";
 
 const base: Collecte = {
@@ -82,5 +89,45 @@ describe("toggleKind", () => {
   it("ajoute puis retire", () => {
     expect(toggleKind([], "blood")).toEqual(["blood"]);
     expect(toggleKind(["blood", "plasma"], "blood")).toEqual(["plasma"]);
+  });
+});
+
+describe("withinRadius", () => {
+  const origin = { lat: 43.6, lng: 1.44 };
+  const list = withDistance(
+    [
+      c({ id: "close", lat: 43.61, lng: 1.45 }),
+      c({ id: "far", lat: 48.86, lng: 2.35 }),
+      c({ id: "nocoord", lat: null, lng: null }),
+    ],
+    origin,
+  );
+
+  it("ne filtre rien sans rayon (null ou absent)", () => {
+    expect(withinRadius(list, null).map((x) => x.id)).toEqual(["close", "far", "nocoord"]);
+    expect(withinRadius(list, undefined).map((x) => x.id)).toEqual(["close", "far", "nocoord"]);
+  });
+
+  it("garde les collectes dans le rayon et celles sans coordonnées", () => {
+    expect(withinRadius(list, 50).map((x) => x.id)).toEqual(["close", "nocoord"]);
+  });
+});
+
+describe("sortCollectes", () => {
+  const withDist = withDistance(
+    [
+      c({ id: "a", date: "2026-06-20", lat: 48.86, lng: 2.35 }), // ~590 km
+      c({ id: "b", date: "2026-06-05", lat: 43.65, lng: 1.5 }), // ~7 km
+      c({ id: "c", fixe: true, date: null, lat: 43.601, lng: 1.441 }), // ~0.1 km
+    ],
+    { lat: 43.6, lng: 1.44 },
+  );
+
+  it("« date » : sites fixes d'abord, puis par date croissante", () => {
+    expect(sortCollectes(withDist, "date").map((x) => x.id)).toEqual(["c", "b", "a"]);
+  });
+
+  it("« distance » : du plus proche au plus loin", () => {
+    expect(sortCollectes(withDist, "distance").map((x) => x.id)).toEqual(["c", "b", "a"]);
   });
 });

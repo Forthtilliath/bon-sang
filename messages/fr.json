@@ -339,6 +339,15 @@
     "locating": "Localisation…",
     "locateDenied": "Localisation refusée.",
     "locateUnsupported": "Localisation indisponible sur cet appareil.",
+    "radiusLabel": "Rayon",
+    "radiusAny": "Sans limite",
+    "radiusValue": "{km} km",
+    "sortLabel": "Trier",
+    "sorts": {
+      "date": "Date",
+      "distance": "Distance"
+    },
+    "full": "Complet",
     "periods": {
       "all": "Toutes",
       "week": "7 jours",

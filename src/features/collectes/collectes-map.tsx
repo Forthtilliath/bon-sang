@@ -172,7 +172,9 @@ function popupContent(collecte: Collecte, { t, format }: PopupHelpers): HTMLElem
     root.append(tags);
   }
 
-  if (typeof collecte.placesRestantes === "number") {
+  if (collecte.placesRestantes === 0) {
+    root.append(el("span", "ofm-popup__accent", t("full")));
+  } else if (typeof collecte.placesRestantes === "number") {
     root.append(
       el("span", "ofm-popup__muted", t("spotsLeft", { count: collecte.placesRestantes })),
     );
