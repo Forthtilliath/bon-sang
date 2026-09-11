@@ -20,6 +20,7 @@ import {
   withDistance,
 } from "./filter";
 import type { Collecte } from "./types";
+import { MapErrorBoundary } from "./map-error-boundary";
 
 const CollectesMap = dynamic(() => import("./collectes-map").then((mod) => mod.CollectesMap), {
   ssr: false,
@@ -36,6 +37,7 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
   const [origin, setOrigin] = useState<Point | null>(null);
   const [geoStatus, setGeoStatus] = useState<GeoStatus>("idle");
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [mapFailed, setMapFailed] = useState(false);
 
   const today = formatIsoDate(new Date());
 
@@ -143,14 +145,31 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
         </ul>
 
         <div className="lg:sticky lg:top-20 lg:h-[70vh]">
-          <CollectesMap
-            collectes={visible}
-            activeId={activeId}
-            origin={origin}
-            onSelect={setActiveId}
-          />
+          {mapFailed ? (
+            <MapUnavailable />
+          ) : (
+            <MapErrorBoundary onError={() => setMapFailed(true)} fallback={<MapUnavailable />}>
+              <CollectesMap
+                collectes={visible}
+                activeId={activeId}
+                origin={origin}
+                onSelect={setActiveId}
+                onError={() => setMapFailed(true)}
+              />
+            </MapErrorBoundary>
+          )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function MapUnavailable() {
+  const t = useTranslations("Collectes");
+  return (
+    <div className="border-border bg-surface text-muted flex h-80 w-full flex-col items-center justify-center gap-1 rounded-2xl border p-6 text-center text-sm lg:h-full">
+      <p className="text-fg font-medium">{t("mapUnavailable")}</p>
+      <p className="max-w-xs">{t("mapUnavailableHint")}</p>
     </div>
   );
 }

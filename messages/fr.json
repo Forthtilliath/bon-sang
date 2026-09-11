@@ -300,6 +300,8 @@
     "resultsRegion": "Résultats de la recherche de collectes",
     "mapLabel": "Carte des collectes",
     "mapPopupClose": "Fermer les informations de la collecte",
+    "mapUnavailable": "Carte indisponible",
+    "mapUnavailableHint": "Votre navigateur ne peut pas afficher la carte. La liste des collectes reste utilisable.",
     "intro": "Saisissez une ville ou un code postal pour voir les collectes à venir et les sites permanents à proximité.",
     "resultsCount": "{count, plural, one {# collecte} other {# collectes}} autour de {query}",
     "noResults": "Aucune collecte trouvée pour « {query} » dans les prochaines semaines.",
