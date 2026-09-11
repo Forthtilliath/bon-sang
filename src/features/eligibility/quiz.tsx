@@ -39,6 +39,21 @@ export function Quiz() {
     if (!quiz.submitted) legendRef.current?.focus();
   }, [focusKey, quiz.submitted]);
 
+  // Les réponses sont restaurées depuis `localStorage` après le montage : on
+  // attend l'hydratation pour ne pas afficher l'étape 1 puis sauter à l'étape X.
+  if (!quiz.hydrated) {
+    return (
+      <div className="flex flex-col gap-6" aria-hidden>
+        <div className="bg-surface-strong h-1.5 animate-pulse rounded-full" />
+        <div className="bg-surface h-8 w-2/3 animate-pulse rounded" />
+        <div className="flex flex-col gap-2">
+          <div className="bg-surface h-12 animate-pulse rounded-xl" />
+          <div className="bg-surface h-12 animate-pulse rounded-xl" />
+        </div>
+      </div>
+    );
+  }
+
   if (quiz.submitted && quiz.result) {
     return <QuizResult result={quiz.result} onRestart={quiz.restart} />;
   }
@@ -46,7 +61,7 @@ export function Quiz() {
   const current = quiz.current;
   if (!current) return null;
 
-  const progress = Math.round((quiz.stepNumber / quiz.total) * 100);
+  const progress = Math.round(quiz.progress * 100);
 
   return (
     <div className="flex flex-col gap-6">
