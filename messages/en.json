@@ -297,6 +297,8 @@
     "resultsRegion": "Blood drive search results",
     "mapLabel": "Blood drive map",
     "mapPopupClose": "Close blood drive details",
+    "mapUnavailable": "Map unavailable",
+    "mapUnavailableHint": "Your browser can't display the map. The list of blood drives is still available.",
     "intro": "Enter a city or postcode to see upcoming blood drives and permanent sites nearby.",
     "resultsCount": "{count, plural, one {# blood drive} other {# blood drives}} around {query}",
     "noResults": "No blood drive found for “{query}” in the coming weeks.",
@@ -309,6 +311,11 @@
     "filterKinds": "Filter by donation type",
     "visibleCount": "{count, plural, one {# blood drive shown} other {# blood drives shown}}",
     "noneMatchFilters": "No blood drive matches these filters.",
+    "viewToggle": "View",
+    "views": {
+      "list": "List",
+      "map": "Map"
+    },
     "distance": "{km} km away",
     "locate": "Near me",
     "locating": "Locating…",

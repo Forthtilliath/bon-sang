@@ -1,12 +1,25 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
+import { usePersistentState } from "@/hooks/use-persistent-state";
 import { parseIsoDate } from "@/lib/dates";
 
 import { type Question, visibleQuestions } from "./questions";
 import { evaluate } from "./rules";
 import type { AnswerValue, Answers } from "./types";
+
+const QUIZ_STORAGE_KEY = "bon-sang:quiz";
+
+type QuizProgress = {
+  answers: Answers;
+  index: number;
+  submitted: boolean;
+  /** Fraction (0–1) la plus avancée atteinte : la barre ne recule jamais. */
+  peak: number;
+};
+
+const EMPTY_PROGRESS: QuizProgress = { answers: {}, index: 0, submitted: false, peak: 0 };
 
 function isAnswered(question: Question, answers: Answers): boolean {
   const value = answers[question.id];
@@ -25,41 +38,56 @@ function isAnswered(question: Question, answers: Answers): boolean {
   }
 }
 
+/** Recadre l'index sur la liste visible et met à jour le pic de progression. */
+function reconcile(state: Omit<QuizProgress, "peak">, prevPeak: number): QuizProgress {
+  const visible = visibleQuestions(state.answers);
+  const index = Math.min(state.index, Math.max(0, visible.length - 1));
+  const ratio = visible.length > 0 ? (index + 1) / visible.length : 0;
+  return { ...state, index, peak: Math.max(prevPeak, ratio) };
+}
+
 export function useQuiz() {
-  const [answers, setAnswers] = useState<Answers>({});
-  const [index, setIndex] = useState(0);
-  const [submitted, setSubmitted] = useState(false);
+  const {
+    value: progress,
+    setValue,
+    clear,
+    hydrated,
+  } = usePersistentState<QuizProgress>(QUIZ_STORAGE_KEY, EMPTY_PROGRESS);
+  const { answers, submitted } = progress;
 
   const questions = useMemo(() => visibleQuestions(answers), [answers]);
-  const clampedIndex = Math.min(index, Math.max(0, questions.length - 1));
+  const clampedIndex = Math.min(progress.index, Math.max(0, questions.length - 1));
   const current = questions[clampedIndex];
   const total = questions.length;
 
-  const setAnswer = useCallback((id: string, value: AnswerValue) => {
-    setAnswers((prev) => ({ ...prev, [id]: value }));
-  }, []);
+  const setAnswer = useCallback(
+    (id: string, value: AnswerValue) => {
+      setValue((prev) =>
+        reconcile({ ...prev, answers: { ...prev.answers, [id]: value } }, prev.peak),
+      );
+    },
+    [setValue],
+  );
 
   const canAdvance = current ? isAnswered(current, answers) : false;
   const isLast = clampedIndex === questions.length - 1;
 
   const next = useCallback(() => {
-    if (isLast) {
-      setSubmitted(true);
-    } else {
-      setIndex((i) => Math.min(i + 1, questions.length - 1));
-    }
-  }, [isLast, questions.length]);
+    setValue((prev) => {
+      const visible = visibleQuestions(prev.answers);
+      const index = Math.min(prev.index, Math.max(0, visible.length - 1));
+      if (index >= visible.length - 1) return { ...prev, submitted: true, peak: 1 };
+      return reconcile({ ...prev, index: index + 1 }, prev.peak);
+    });
+  }, [setValue]);
 
   const back = useCallback(() => {
-    setSubmitted(false);
-    setIndex((i) => Math.max(0, i - 1));
-  }, []);
+    setValue((prev) =>
+      reconcile({ ...prev, submitted: false, index: Math.max(0, prev.index - 1) }, prev.peak),
+    );
+  }, [setValue]);
 
-  const restart = useCallback(() => {
-    setAnswers({});
-    setIndex(0);
-    setSubmitted(false);
-  }, []);
+  const restart = useCallback(() => clear(), [clear]);
 
   const result = useMemo(() => (submitted ? evaluate(answers) : null), [submitted, answers]);
 
@@ -69,6 +97,8 @@ export function useQuiz() {
     current,
     stepNumber: clampedIndex + 1,
     total,
+    // Ne redescend pas quand une question conditionnelle grossit le dénominateur.
+    progress: total > 0 ? Math.max(progress.peak, (clampedIndex + 1) / total) : 0,
     canAdvance,
     isFirst: clampedIndex === 0,
     isLast,
@@ -77,6 +107,7 @@ export function useQuiz() {
     restart,
     submitted,
     result,
+    hydrated,
   };
 }
 

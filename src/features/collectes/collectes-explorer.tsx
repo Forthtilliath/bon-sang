@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  type ComponentProps,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import dynamic from "next/dynamic";
 import { useFormatter, useTranslations } from "next-intl";
 
@@ -20,13 +27,61 @@ import {
   withDistance,
 } from "./filter";
 import type { Collecte } from "./types";
+import { MapErrorBoundary } from "./map-error-boundary";
 
 const CollectesMap = dynamic(() => import("./collectes-map").then((mod) => mod.CollectesMap), {
   ssr: false,
-  loading: () => (
-    <div className="border-border bg-surface h-80 w-full animate-pulse rounded-2xl border lg:h-full" />
-  ),
+  loading: () => <MapSkeleton />,
 });
+
+function MapSkeleton() {
+  return (
+    <div className="border-border bg-surface h-80 w-full animate-pulse rounded-2xl border lg:h-full" />
+  );
+}
+
+/**
+ * Diffère le chargement du bundle `maplibre-gl` : la carte (et son import) n'est
+ * montée qu'une fois le conteneur proche du viewport, ou plus tôt si `eager`
+ * (bascule vers la vue carte, sélection d'une collecte).
+ */
+function DeferredMap({
+  eager,
+  ...props
+}: ComponentProps<typeof CollectesMap> & { eager?: boolean }) {
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  // `false` au rendu serveur et à la 1re passe client (hydratation identique),
+  // `true` ensuite : évite toute divergence sur le contenu de cette colonne.
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  const canObserve = hydrated && typeof IntersectionObserver !== "undefined";
+  const visible = eager === true || inView || (hydrated && !canObserve);
+
+  useEffect(() => {
+    if (visible || !ref.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) setInView(true);
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [visible]);
+
+  if (visible) return <CollectesMap {...props} />;
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className="border-border bg-surface h-80 w-full animate-pulse rounded-2xl border lg:h-full"
+    />
+  );
+}
 
 type GeoStatus = "idle" | "loading" | "denied" | "unsupported";
 
@@ -36,6 +91,14 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
   const [origin, setOrigin] = useState<Point | null>(null);
   const [geoStatus, setGeoStatus] = useState<GeoStatus>("idle");
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [mapFailed, setMapFailed] = useState(false);
+  // Vue mobile : liste ou carte (les deux côte à côte dès `lg`).
+  const [view, setView] = useState<"list" | "map">("list");
+
+  const selectCollecte = (id: string | null) => {
+    setActiveId(id);
+    if (id) setView("map");
+  };
 
   const today = formatIsoDate(new Date());
 
@@ -121,19 +184,47 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
         </div>
       </div>
 
-      <p className="text-muted text-sm" role="status" aria-live="polite">
-        {t("visibleCount", { count: visible.length })}
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-muted text-sm" role="status" aria-live="polite">
+          {t("visibleCount", { count: visible.length })}
+        </p>
+
+        <div
+          className="border-border flex rounded-full border p-0.5 text-sm lg:hidden"
+          role="group"
+          aria-label={t("viewToggle")}
+        >
+          {(["list", "map"] as const).map((option) => (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={view === option}
+              onClick={() => setView(option)}
+              className={cn(
+                "rounded-full px-3 py-1 transition-colors",
+                view === option ? "bg-primary text-primary-fg" : "text-muted",
+              )}
+            >
+              {t(`views.${option}`)}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-        <ul className="flex max-h-[70vh] flex-col gap-2 overflow-y-auto pr-1">
+        <ul
+          className={cn(
+            "max-h-[70vh] flex-col gap-2 overflow-y-auto pr-1 lg:flex",
+            view === "map" ? "hidden" : "flex",
+          )}
+        >
           {visible.map((collecte) => (
             <li key={collecte.id}>
               <ExplorerCard
                 collecte={collecte}
                 distanceKm={collecte.distanceKm}
                 active={collecte.id === activeId}
-                onSelect={() => setActiveId(collecte.id)}
+                onSelect={() => selectCollecte(collecte.id)}
               />
             </li>
           ))}
@@ -142,15 +233,38 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
           ) : null}
         </ul>
 
-        <div className="lg:sticky lg:top-20 lg:h-[70vh]">
-          <CollectesMap
-            collectes={visible}
-            activeId={activeId}
-            origin={origin}
-            onSelect={setActiveId}
-          />
+        <div
+          className={cn(
+            "lg:sticky lg:top-20 lg:block lg:h-[70vh]",
+            view === "list" ? "hidden" : "block",
+          )}
+        >
+          {mapFailed ? (
+            <MapUnavailable />
+          ) : (
+            <MapErrorBoundary onError={() => setMapFailed(true)} fallback={<MapUnavailable />}>
+              <DeferredMap
+                eager={activeId !== null || view === "map"}
+                collectes={visible}
+                activeId={activeId}
+                origin={origin}
+                onSelect={setActiveId}
+                onError={() => setMapFailed(true)}
+              />
+            </MapErrorBoundary>
+          )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function MapUnavailable() {
+  const t = useTranslations("Collectes");
+  return (
+    <div className="border-border bg-surface text-muted flex h-80 w-full flex-col items-center justify-center gap-1 rounded-2xl border p-6 text-center text-sm lg:h-full">
+      <p className="text-fg font-medium">{t("mapUnavailable")}</p>
+      <p className="max-w-xs">{t("mapUnavailableHint")}</p>
     </div>
   );
 }

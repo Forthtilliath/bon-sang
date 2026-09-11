@@ -24,18 +24,18 @@ test("une recherche affiche la liste et une carte qui charge ses tuiles", async 
   await expect.poll(() => vectorTiles, { timeout: 15_000 }).toBeGreaterThan(0);
 });
 
-test("cliquer un marqueur ouvre une bulle d'info", async ({ page }) => {
+test("sélectionner une collecte dans la liste ouvre sa bulle sur la carte", async ({ page }) => {
   test.slow();
 
   await page.goto("/collectes?ville=Paris");
   await expect(page.locator(".maplibregl-canvas")).toBeVisible({ timeout: 15_000 });
 
-  const marker = page.locator(".ofm-marker").first();
-  await expect(marker).toBeVisible({ timeout: 10_000 });
-  await marker.click({ force: true });
+  // La liste des fiches est la porte d'entrée clavier ; la carte est clusterisée.
+  const card = page.locator("main ul li button").first();
+  await expect(card).toBeVisible({ timeout: 10_000 });
+  await card.click();
 
   const popup = page.locator(".ofm-popup");
   await expect(popup).toBeVisible();
-  // Un type de don et le lien de RDV sont attendus dans la bulle.
   await expect(popup.locator(".ofm-popup__title")).not.toBeEmpty();
 });

@@ -97,15 +97,6 @@ function NextDonation({ tracker }: { tracker: TrackerApi }) {
               <Link href="/collectes" className={buttonClasses({ variant: "outline", size: "sm" })}>
                 {t("next.findDrive")}
               </Link>
-              {tracker.state.reminder ? (
-                <button
-                  type="button"
-                  onClick={tracker.clearReminder}
-                  className={buttonClasses({ variant: "ghost", size: "sm" })}
-                >
-                  {t("next.clearReminder")}
-                </button>
-              ) : null}
             </div>
           </>
         )}

@@ -122,32 +122,14 @@
 /* Carte des collectes (MapLibre)                                            */
 /* -------------------------------------------------------------------------- */
 
-.ofm-marker {
-  width: 15px;
-  height: 15px;
-  border-radius: 9999px;
-  border: 2px solid #fff;
-  background: var(--ds-primary);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
-  cursor: pointer;
-  transition:
-    transform 0.12s ease,
-    box-shadow 0.12s ease;
-}
-
-.ofm-marker:hover {
-  transform: scale(1.15);
-}
-
-.ofm-marker--active {
-  transform: scale(1.35);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-primary) 35%, transparent);
-}
-
-.ofm-marker--origin {
+/* Marqueur de géolocalisation (les collectes sont des couches WebGL clusterisées). */
+.ofm-origin {
   width: 16px;
   height: 16px;
+  border-radius: 9999px;
+  border: 2px solid #fff;
   background: #2563eb;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
   cursor: default;
 }
 
