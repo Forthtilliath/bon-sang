@@ -13,8 +13,6 @@ import { formatIsoDate, parseIsoDate } from "@/lib/dates";
 import { CRITERIA_UPDATED_AT } from "./questions";
 import type { EligibilityResult, Verdict } from "./types";
 
-type QuizT = (key: string, values?: Record<string, string | number>) => string;
-
 const CARD_STYLES: Record<Verdict, string> = {
   eligible:
     "border-emerald-600/30 bg-emerald-50 text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-100",
@@ -33,7 +31,7 @@ export function QuizResult({
   /** Réponse à la question « sexe » du quiz, si donnée (`null` sinon). */
   sex?: "female" | "male" | null;
 }) {
-  const t = useTranslations("Quiz") as unknown as QuizT;
+  const t = useTranslations("Quiz");
   const format = useFormatter();
   const tracker = usePersistentState<TrackerState>(TRACKER_STORAGE_KEY, EMPTY_TRACKER);
   const [remembered, setRemembered] = useState(false);
@@ -83,9 +81,11 @@ export function QuizResult({
         className={cn("flex flex-col gap-2 rounded-2xl border p-6", CARD_STYLES[result.verdict])}
       >
         <h2 className="text-xl font-semibold tracking-tight">
-          {formattedUntil
-            ? t(`verdicts.${verdictKey}.title`, { date: formattedUntil })
-            : t(`verdicts.${verdictKey}.title`)}
+          {/* `date` n'est référencé que par `verdicts.waitWithDate.title` ; les autres
+              variantes l'ignorent (comportement standard ICU). Le passer systématiquement
+              évite un appel conditionnel et permet à `verdictKey` de rester une union
+              littérale vérifiée par TypeScript, sans contournement de typage. */}
+          {t(`verdicts.${verdictKey}.title`, { date: formattedUntil ?? "" })}
         </h2>
         <p className="text-sm">{t(`verdicts.${verdictKey}.body`)}</p>
       </div>

@@ -7,21 +7,13 @@ import { buttonClasses } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { formatIsoDate } from "@/lib/dates";
 
+import type { QuestionMessageKey } from "./i18n-keys";
 import type { Question } from "./questions";
 import { QuizResult } from "./quiz-result";
 import type { AnswerValue } from "./types";
 import { isFutureDate, useQuiz } from "./use-quiz";
 
-/**
- * Le quiz accède aux messages par clés dynamiques (`questions.${id}.label`, …).
- * next-intl ne peut pas les typer statiquement, d'où cette signature permissive
- * limitée au namespace `Quiz`.
- */
-type QuizT = ((key: string, values?: Record<string, string | number>) => string) & {
-  has: (key: string) => boolean;
-};
-
-const useQuizT = () => useTranslations("Quiz") as unknown as QuizT;
+const useQuizT = () => useTranslations("Quiz");
 
 export function Quiz() {
   const t = useQuizT();
@@ -134,8 +126,9 @@ function QuestionField({
 }) {
   const t = useQuizT();
   const groupId = useId();
-  const label = t(`questions.${question.id}.label`);
-  const help = t.has(`questions.${question.id}.help`) ? t(`questions.${question.id}.help`) : null;
+  const label = t(`questions.${question.id}.label` as QuestionMessageKey);
+  const helpKey = `questions.${question.id}.help` as QuestionMessageKey;
+  const help = t.has(helpKey) ? t(helpKey) : null;
 
   return (
     <fieldset className="flex flex-col gap-4">
@@ -173,7 +166,7 @@ function QuestionField({
           name={groupId}
           options={question.options.map((opt) => ({
             key: opt,
-            label: t(`questions.${question.id}.options.${opt}`),
+            label: t(`questions.${question.id}.options.${opt}` as QuestionMessageKey),
             selected: value === opt,
             onSelect: () => onChange(opt),
           }))}
