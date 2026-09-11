@@ -153,7 +153,9 @@ describe("<Quiz>", () => {
     renderWithIntl(<Quiz />);
     await advance(user, "17"); // âge : mineur
     expect(screen.getByRole("status")).toBeInTheDocument();
-    expect(screen.queryByText("Combien pesez-vous ?", { selector: "legend" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Combien pesez-vous ?", { selector: "legend" }),
+    ).not.toBeInTheDocument();
   });
 
   it("pose quand même la question de suivi avant de couper le test", async () => {
