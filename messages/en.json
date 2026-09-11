@@ -490,7 +490,8 @@
       },
       "privacy": {
         "title": "Your data",
-        "body": "No account, no server. Your donation log, your reminders and the test result stay in your browser and are sent nowhere. No advertising trackers."
+        "body": "No account, no server. Your donation log, your reminders and the test result stay in your browser and are sent nowhere. No advertising trackers.",
+        "analytics": "Anonymous, cookie-less audience measurement (Vercel Analytics) counts page views, with no identifier and no personal data."
       },
       "tech": {
         "title": "How it is built",

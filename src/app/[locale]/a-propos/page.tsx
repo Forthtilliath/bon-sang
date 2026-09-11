@@ -71,6 +71,7 @@ export default function AboutPage({ params }: PageProps<"/[locale]/a-propos">) {
 
           <Block title={t("privacy.title")}>
             <p>{t("privacy.body")}</p>
+            <p className="text-sm">{t("privacy.analytics")}</p>
           </Block>
 
           <Block title={t("tech.title")}>

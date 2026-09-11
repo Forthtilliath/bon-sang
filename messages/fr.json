@@ -493,7 +493,8 @@
       },
       "privacy": {
         "title": "Vos données",
-        "body": "Aucun compte, aucun serveur. Votre journal de dons, vos rappels et le résultat du test restent dans votre navigateur et ne sont envoyés nulle part. Aucun traceur publicitaire."
+        "body": "Aucun compte, aucun serveur. Votre journal de dons, vos rappels et le résultat du test restent dans votre navigateur et ne sont envoyés nulle part. Aucun traceur publicitaire.",
+        "analytics": "Une mesure d'audience anonyme et sans cookie (Vercel Analytics) compte les pages vues, sans identifiant ni donnée personnelle."
       },
       "tech": {
         "title": "Comment c'est fait",

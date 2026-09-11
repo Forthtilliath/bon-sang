@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -104,6 +105,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           </main>
           <SiteFooter />
         </NextIntlClientProvider>
+        {/* Sans cookie, sans identifiant persistant : cf. Footer.privacy et Pages.about.privacy. */}
+        <Analytics />
       </body>
     </html>
   );
