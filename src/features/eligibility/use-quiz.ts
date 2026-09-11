@@ -76,7 +76,16 @@ export function useQuiz() {
     setValue((prev) => {
       const visible = visibleQuestions(prev.answers);
       const index = Math.min(prev.index, Math.max(0, visible.length - 1));
-      if (index >= visible.length - 1) return { ...prev, submitted: true, peak: 1 };
+      const isLast = index >= visible.length - 1;
+      const upcoming = visible[index + 1];
+      // On coupe le test dès qu'une réponse rend le don impossible ou à différer, sans
+      // attendre la dernière question — sauf si la question suivante précise encore la
+      // réponse qui vient de bloquer (ex. la date du tatouage après « tatouage récent ? »,
+      // révélée par son `showIf`) : elle est posée quand même, pour ne pas perdre la date
+      // de fin d'attente affichée dans le résultat.
+      if ((isLast || !upcoming?.showIf) && (isLast || evaluate(prev.answers).verdict !== "eligible")) {
+        return { ...prev, submitted: true, peak: 1 };
+      }
       return reconcile({ ...prev, index: index + 1 }, prev.peak);
     });
   }, [setValue]);
