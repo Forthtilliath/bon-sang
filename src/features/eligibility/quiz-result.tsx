@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 
+import { usePersistentState } from "@forthtilliath/react-kit/usePersistentState";
+
 import { buttonClasses } from "@/components/ui/button";
 import { EMPTY_TRACKER, TRACKER_STORAGE_KEY, type TrackerState } from "@/features/tracker";
-import { usePersistentState } from "@forthtilliath/react-kit/usePersistentState";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
-import { formatIsoDate, parseIsoDate } from "@/lib/dates";
+import { formatIsoDate } from "@/lib/dates";
 
-import { CRITERIA_UPDATED_AT } from "./questions";
+import { CRITERIA_UPDATED_AT_DATE } from "./questions";
 import type { EligibilityResult, Verdict } from "./types";
 
 const CARD_STYLES: Record<Verdict, string> = {
@@ -51,7 +52,7 @@ export function QuizResult({
     tracker.setValue((prev) => ({ ...prev, profile: { ...prev.profile, sex } }));
     // `tracker.value`/`tracker.setValue` sont volontairement absents des deps : ils
     // changeraient à chaque écriture, ce qui redéclencherait cet effet en boucle.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps, @eslint-react/exhaustive-deps
   }, [tracker.hydrated, sex]);
 
   const verdictKey =
@@ -147,7 +148,7 @@ export function QuizResult({
         <p>{t("disclaimer")}</p>
         <p>
           {t("criteriaVersion", {
-            date: format.dateTime(parseIsoDate(CRITERIA_UPDATED_AT) ?? new Date(), {
+            date: format.dateTime(CRITERIA_UPDATED_AT_DATE, {
               dateStyle: "short",
             }),
           })}

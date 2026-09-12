@@ -17,7 +17,7 @@ export function SiteHeader() {
   const menuId = useId();
   const menuRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
-  const wasOpen = useRef(false);
+  const wasOpenRef = useRef(false);
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   const closeMenu = () => setOpen(false);
@@ -72,13 +72,13 @@ export function SiteHeader() {
   // À la fermeture, si le focus est retombé sur le `body` (Escape, clic sur un
   // lien), on le ramène sur le bouton qui a ouvert le menu.
   useEffect(() => {
-    if (wasOpen.current && !open) {
+    if (wasOpenRef.current && !open) {
       const active = document.activeElement;
       if (!active || active === document.body || menuRef.current?.contains(active)) {
         toggleRef.current?.focus();
       }
     }
-    wasOpen.current = open;
+    wasOpenRef.current = open;
   }, [open]);
 
   return (
