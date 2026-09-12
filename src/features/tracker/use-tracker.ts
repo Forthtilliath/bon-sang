@@ -3,12 +3,13 @@
 import { useCallback, useMemo } from "react";
 
 import { usePersistentState } from "@forthtilliath/react-kit/usePersistentState";
+
 import { parseIsoDate } from "@/lib/dates";
 import { randomId } from "@/lib/uuid";
 
 import { earnedBadges } from "./badges";
 import { nextEligibleDate } from "./eligibility-date";
-import { EMPTY_TRACKER, TRACKER_STORAGE_KEY, type Donation, type Profile } from "./types";
+import { type Donation, EMPTY_TRACKER, type Profile, TRACKER_STORAGE_KEY } from "./types";
 import { parseTrackerState } from "./validate";
 
 export function useTracker() {

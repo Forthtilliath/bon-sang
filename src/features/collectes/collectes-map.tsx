@@ -11,11 +11,11 @@ import {
 } from "maplibre-gl";
 import { useFormatter, useTranslations } from "next-intl";
 
-import "maplibre-gl/dist/maplibre-gl.css";
-
 import type { Point } from "./filter";
 import { collecteAddress } from "./normalize";
 import type { Collecte } from "./types";
+
+import "maplibre-gl/dist/maplibre-gl.css";
 
 // Fonds CARTO (vectoriels, gratuits, sans clé) : `voyager` et `dark-matter` sont
 // assortis, donc la bascule clair/sombre reste homogène.

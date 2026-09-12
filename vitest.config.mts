@@ -1,6 +1,5 @@
-import { fileURLToPath } from "node:url";
-
 import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
 const serverOnlyStub = fileURLToPath(new URL("./src/test/stubs/empty.ts", import.meta.url));

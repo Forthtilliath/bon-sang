@@ -1,5 +1,4 @@
 import type { ReactElement, ReactNode } from "react";
-
 import { render, type RenderOptions } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 

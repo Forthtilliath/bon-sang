@@ -1,5 +1,5 @@
-import type { DonKind, Collecte } from "./types";
 import type { EfsCollection, EfsLocation, EfsSearchResponse } from "./efs";
+import type { Collecte, DonKind } from "./types";
 
 /** `"2026-09-10T00:00:00"` ou `"10/09/2026 00:00:00"` -> `"2026-09-10"`. */
 export function parseEfsDate(value: string | null | undefined): string | null {

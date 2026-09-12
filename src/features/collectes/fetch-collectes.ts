@@ -1,8 +1,9 @@
+import { formatIsoDate } from "@/lib/dates";
+
 import "server-only";
 
 import { EFS_API_BASE, type EfsCity, type EfsSearchResponse } from "./efs";
 import { normalizeCollectes, upcomingCollectes } from "./normalize";
-import { formatIsoDate } from "@/lib/dates";
 import type { CollectesResult } from "./types";
 
 /** Longueur minimale d'une recherche de ville, partagée avec la page appelante. */
