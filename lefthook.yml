@@ -1,0 +1,4 @@
+commit-msg:
+  commands:
+    strip-claude-attribution:
+      run: node scripts/strip-claude-attribution.mjs {1}
