@@ -1,10 +1,10 @@
 import {
   BLOOD_GROUPS,
-  DONATION_TYPES,
-  SEXES,
   type Donation,
+  DONATION_TYPES,
   type Profile,
   type Reminder,
+  SEXES,
   type TrackerState,
 } from "./types";
 

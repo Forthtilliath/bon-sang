@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { earnedBadges } from "./badges";
-import { EMPTY_TRACKER, type Donation, type TrackerState } from "./types";
+import { type Donation, EMPTY_TRACKER, type TrackerState } from "./types";
 
 const donation = (date: string, type: Donation["type"] = "blood"): Donation => ({
   id: date,

@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 
 import { JsonLd } from "@forthtilliath/react-kit/json-ld";
+
 import { PageHeader } from "@/components/page-header";
 import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";

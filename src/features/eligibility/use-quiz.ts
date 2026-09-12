@@ -3,11 +3,12 @@
 import { useCallback, useMemo } from "react";
 
 import { usePersistentState } from "@forthtilliath/react-kit/usePersistentState";
+
 import { parseIsoDate } from "@/lib/dates";
 
 import { type Question, visibleQuestions } from "./questions";
 import { evaluate } from "./rules";
-import type { AnswerValue, Answers } from "./types";
+import type { Answers, AnswerValue } from "./types";
 
 const QUIZ_STORAGE_KEY = "bon-sang:quiz";
 

@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 import { JsonLd } from "@forthtilliath/react-kit/json-ld";
+
 import { PageHeader } from "@/components/page-header";
 import { cardClasses, LABEL_RADIUS } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
