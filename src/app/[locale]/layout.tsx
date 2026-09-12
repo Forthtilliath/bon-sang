@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-import { JsonLd } from "@/components/json-ld";
+import { JsonLd } from "@forthtilliath/react-kit/json-ld";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";

@@ -2,7 +2,7 @@ import { use } from "react";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-import { JsonLd } from "@/components/json-ld";
+import { JsonLd } from "@forthtilliath/react-kit/json-ld";
 import { PageHeader } from "@/components/page-header";
 import { Container } from "@/components/ui/container";
 import { Quiz } from "@/features/eligibility";
