@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { renderWithIntl, screen, userEvent } from "@/test/render";
