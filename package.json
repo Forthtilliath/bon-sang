@@ -14,7 +14,8 @@
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prepare": "lefthook install"
   },
   "dependencies": {
     "@forthtilliath/react-kit": "0.2.1",
@@ -45,6 +46,7 @@
     "eslint-plugin-i18next": "6.1.5",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "jsdom": "30.0.1",
+    "lefthook": "2.1.12",
     "prettier": "3.9.6",
     "prettier-plugin-tailwindcss": "0.8.1",
     "tailwindcss": "^4",
@@ -54,6 +56,7 @@
   "allowScripts": {
     "@parcel/watcher@2.6.0": true,
     "@swc/core@1.16.2": true,
+    "lefthook@2.1.12": true,
     "unrs-resolver@1.12.2": true
   }
 }
