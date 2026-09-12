@@ -24,10 +24,10 @@ export function Quiz() {
   // vrai changement, jamais au premier rendu (arrivée sur la page).
   const legendRef = useRef<HTMLLegendElement>(null);
   const focusKey = quiz.submitted ? "result" : `step-${quiz.stepNumber}`;
-  const prevFocusKey = useRef(focusKey);
+  const prevFocusKeyRef = useRef(focusKey);
   useEffect(() => {
-    if (prevFocusKey.current === focusKey) return;
-    prevFocusKey.current = focusKey;
+    if (prevFocusKeyRef.current === focusKey) return;
+    prevFocusKeyRef.current = focusKey;
     if (!quiz.submitted) legendRef.current?.focus();
   }, [focusKey, quiz.submitted]);
 
@@ -277,6 +277,9 @@ function DateField({
         <input
           id={id}
           type="date"
+          // Doit refléter la vraie date du jour à chaque rendu (borne max du
+          // champ) — pas un état à figer une fois pour toutes au montage.
+          // eslint-disable-next-line @eslint-react/purity
           max={question.notFuture ? formatIsoDate(new Date()) : undefined}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}

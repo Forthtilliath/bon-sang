@@ -1,10 +1,10 @@
-export { Tracker } from "./tracker";
-export { ANNUAL_BLOOD_CAP, nextEligibleDate } from "./eligibility-date";
 export { earnedBadges } from "./badges";
+export { ANNUAL_BLOOD_CAP, nextEligibleDate } from "./eligibility-date";
+export { Tracker } from "./tracker";
 export {
-  EMPTY_TRACKER,
-  TRACKER_STORAGE_KEY,
   type Donation,
+  EMPTY_TRACKER,
   type Sex,
+  TRACKER_STORAGE_KEY,
   type TrackerState,
 } from "./types";

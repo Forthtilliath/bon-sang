@@ -10,14 +10,14 @@ import { daysBetween, formatIsoDate, parseIsoDate } from "@/lib/dates";
 import { downloadTextFile } from "@/lib/download";
 import { buildIcs } from "@/lib/ics";
 
-import { BADGES, type BadgeId } from "./badges";
+import { type BadgeId, BADGES } from "./badges";
 import {
   BLOOD_GROUPS,
-  DONATION_TYPES,
-  SEXES,
   type Donation,
+  DONATION_TYPES,
   type DonationType,
   type Sex,
+  SEXES,
 } from "./types";
 import { useTracker } from "./use-tracker";
 import { MAX_IMPORT_BYTES } from "./validate";
@@ -80,7 +80,12 @@ function NextDonation({ tracker }: { tracker: TrackerApi }) {
               {format.dateTime(date, { dateStyle: "long" })}
             </p>
             <p className="text-muted text-sm">
-              {t("next.inDays", { days: Math.max(0, daysBetween(new Date(), date)) })}
+              {t("next.inDays", {
+                // Doit refléter la vraie date du jour à chaque rendu (compte
+                // à rebours) — pas un état à figer une fois pour toutes.
+                // eslint-disable-next-line @eslint-react/purity
+                days: Math.max(0, daysBetween(new Date(), date)),
+              })}
               {reason ? ` · ${t(`next.reason.${reason}`)}` : ""}
             </p>
             <div className="mt-2 flex flex-wrap gap-3">
@@ -159,6 +164,9 @@ function Journal({ tracker }: { tracker: TrackerApi }) {
             id={dateId}
             type="date"
             required
+            // Doit refléter la vraie date du jour à chaque rendu (borne max
+            // du champ) — pas un état à figer une fois pour toutes.
+            // eslint-disable-next-line @eslint-react/purity
             max={formatIsoDate(new Date())}
             value={date}
             onChange={(e) => setDate(e.target.value)}
@@ -371,7 +379,7 @@ function Badges({ tracker }: { tracker: TrackerApi }) {
 function DataControls({ tracker }: { tracker: TrackerApi }) {
   const t = useTranslations("Tracker");
   const [error, setError] = useState(false);
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const exportJson = () => {
     downloadTextFile(
@@ -385,7 +393,7 @@ function DataControls({ tracker }: { tracker: TrackerApi }) {
     if (!file) return;
     const ok = file.size <= MAX_IMPORT_BYTES && tracker.importState(await file.text());
     setError(!ok);
-    if (fileInput.current) fileInput.current.value = "";
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
@@ -401,7 +409,7 @@ function DataControls({ tracker }: { tracker: TrackerApi }) {
         <label className={cn(buttonClasses({ variant: "outline", size: "sm" }), "cursor-pointer")}>
           {t("data.import")}
           <input
-            ref={fileInput}
+            ref={fileInputRef}
             type="file"
             accept="application/json"
             className="sr-only"

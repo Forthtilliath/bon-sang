@@ -6,6 +6,9 @@ import { NAV_ITEMS } from "@/lib/site";
 export function SiteFooter() {
   const nav = useTranslations("Nav");
   const t = useTranslations("Footer");
+  // Doit refléter la vraie année en cours à chaque rendu (mention légale) —
+  // pas un état à figer une fois pour toutes au montage.
+  // eslint-disable-next-line @eslint-react/purity
   const year = new Date().getFullYear();
   // Nom de l'auteur : mention légale, jamais traduite. Un gabarit hors JSX plutôt
   // qu'un texte en dur entre balises (cf. règle `i18next/no-literal-string`).

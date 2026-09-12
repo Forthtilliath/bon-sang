@@ -3,12 +3,12 @@ import { useFormatter, useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 import { JsonLd } from "@forthtilliath/react-kit/json-ld";
+
 import { PageHeader } from "@/components/page-header";
 import { Container } from "@/components/ui/container";
 import { ExternalLink } from "@/components/ui/external-link";
 import { FACTS_SOURCE } from "@/data/facts";
-import { CRITERIA_UPDATED_AT } from "@/features/eligibility";
-import { parseIsoDate } from "@/lib/dates";
+import { CRITERIA_UPDATED_AT_DATE } from "@/features/eligibility";
 import { assertLocale } from "@/lib/locale";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
@@ -62,7 +62,7 @@ export default function AboutPage({ params }: PageProps<"/[locale]/a-propos">) {
             <p>{t("method.body")}</p>
             <p className="text-sm">
               {quiz("criteriaVersion", {
-                date: format.dateTime(parseIsoDate(CRITERIA_UPDATED_AT) ?? new Date(), {
+                date: format.dateTime(CRITERIA_UPDATED_AT_DATE, {
                   dateStyle: "short",
                 }),
               })}

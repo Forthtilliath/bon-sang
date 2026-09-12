@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MAX_IMPORT_BYTES, isTrackerState, parseTrackerState } from "./validate";
+import { isTrackerState, MAX_IMPORT_BYTES, parseTrackerState } from "./validate";
 
 const valid = {
   profile: { sex: "male", bloodGroup: "O+" },

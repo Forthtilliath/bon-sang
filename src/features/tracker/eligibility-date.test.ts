@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { formatIsoDate } from "@/lib/dates";
 
 import { nextEligibleDate } from "./eligibility-date";
-import { EMPTY_TRACKER, type Donation, type TrackerState } from "./types";
+import { type Donation, EMPTY_TRACKER, type TrackerState } from "./types";
 
 const TODAY = new Date("2026-06-01T00:00:00");
 const iso = (d: Date | null) => (d ? formatIsoDate(d) : null);

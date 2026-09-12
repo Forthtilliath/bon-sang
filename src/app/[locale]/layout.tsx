@@ -6,6 +6,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 import { JsonLd } from "@forthtilliath/react-kit/json-ld";
+
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -76,6 +77,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       <head>
         {/* Applique le thème choisi avant le premier rendu pour éviter un flash. */}
         <script
+          // Chaîne statique en dur, jamais dérivée d'une entrée utilisateur : pas de risque XSS.
+          // eslint-disable-next-line @eslint-react/dom-no-dangerously-set-innerhtml
           dangerouslySetInnerHTML={{
             __html:
               'try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}',
