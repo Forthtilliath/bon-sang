@@ -5,7 +5,7 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import { buttonClasses } from "@/components/ui/button";
 import { EMPTY_TRACKER, TRACKER_STORAGE_KEY, type TrackerState } from "@/features/tracker";
-import { usePersistentState } from "@/hooks/use-persistent-state";
+import { usePersistentState } from "@forthtilliath/react-kit/usePersistentState";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import { formatIsoDate, parseIsoDate } from "@/lib/dates";
