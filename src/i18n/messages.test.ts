@@ -50,7 +50,9 @@ describe("catalogues de messages i18n", () => {
       if (enValue === undefined) continue;
       const a = placeholders(frValue);
       const b = placeholders(enValue);
-      if (a.join(",") !== b.join(",")) mismatches.push(`${key}: fr[${a}] en[${b}]`);
+      if (a.join(",") !== b.join(",")) {
+        mismatches.push(`${key}: fr[${a.join(",")}] en[${b.join(",")}]`);
+      }
     }
     expect(mismatches).toEqual([]);
   });

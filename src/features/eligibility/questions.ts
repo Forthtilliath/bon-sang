@@ -1,3 +1,5 @@
+import { parseIsoDate } from "@/lib/dates";
+
 import type { Answers } from "./types";
 
 /**
@@ -6,6 +8,14 @@ import type { Answers } from "./types";
  * (ROADMAP §6.2 : « critères au JJ/MM/AAAA »).
  */
 export const CRITERIA_UPDATED_AT = "2026-09-10";
+
+/**
+ * `CRITERIA_UPDATED_AT` déjà résolue en `Date`, calculée une seule fois au
+ * chargement du module plutôt qu'à chaque rendu (cf. `@eslint-react/purity`) —
+ * le fallback `new Date()` ne se déclenche que si la constante ci-dessus est
+ * mal formée, ce qui n'arrive jamais en pratique.
+ */
+export const CRITERIA_UPDATED_AT_DATE = parseIsoDate(CRITERIA_UPDATED_AT) ?? new Date();
 
 type BaseQuestion = {
   id: string;
