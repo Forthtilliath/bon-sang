@@ -36,10 +36,12 @@
   "HomePage": {
     "hero": {
       "eyebrow": "Don du sang",
-      "title": "Comprendre, se tester, trouver une collecte.",
+      "title": "Comprendre, se tester, <accent>trouver une collecte.</accent>",
       "lead": "Un don de sang ne se conserve pas et ne se fabrique pas. Voici de quoi passer à l'acte en confiance.",
       "ctaPrimary": "Puis-je donner ?",
-      "ctaSecondary": "Trouver une collecte"
+      "ctaSecondary": "Trouver une collecte",
+      "stickerTop": "1 don",
+      "stickerBottom": "jusqu'à 3 patients aidés"
     },
     "pillars": {
       "title": "Par où commencer",
@@ -68,6 +70,11 @@
       "title": "Dix minutes suffisent pour aider jusqu'à trois personnes.",
       "body": "Commencez par vérifier si vous êtes éligible, c'est sans engagement.",
       "button": "Vérifier mon éligibilité"
+    },
+    "marquee": {
+      "noFactory": "Ne se fabrique pas",
+      "noStock": "Ne se conserve pas longtemps",
+      "everyDay": "Chaque jour compte"
     }
   },
   "Footer": {
@@ -372,6 +379,7 @@
   },
   "Pages": {
     "understand": {
+      "eyebrow": "Le b.a.-ba",
       "title": "Comprendre le don du sang",
       "lead": "À quoi sert un don, le parcours d'une poche de la collecte au patient, et quelques repères chiffrés.",
       "metaDescription": "À quoi sert un don du sang, le parcours d'une poche de la collecte au patient, et les chiffres clés, expliqués simplement.",
@@ -431,6 +439,7 @@
       }
     },
     "whoItHelps": {
+      "eyebrow": "Des vies derrière chaque poche",
       "title": "Qui ça aide",
       "lead": "Le don profite d'abord à des personnes qu'on ne voit pas : des malades chroniques pour qui la transfusion fait partie de la vie.",
       "metaDescription": "Drépanocytose, mucoviscidose, maladie de Steinert : trois maladies où le don du sang change le quotidien des patients.",
@@ -462,18 +471,22 @@
       }
     },
     "eligibility": {
+      "eyebrow": "Test express",
       "title": "Puis-je donner ?",
       "lead": "Un questionnaire d'après les critères officiels de l'EFS. Résultat indicatif : l'entretien pré-don fait foi."
     },
     "collections": {
+      "eyebrow": "Carte des collectes",
       "title": "Collectes près de chez vous",
       "lead": "La carte et la liste des collectes à venir, à partir des données ouvertes de l'EFS."
     },
     "tracker": {
+      "eyebrow": "Carnet de donneur",
       "title": "Mon suivi",
       "lead": "Votre journal de dons, vos badges et la date à laquelle vous pourrez redonner, stockés dans votre navigateur."
     },
     "about": {
+      "eyebrow": "Coulisses",
       "title": "À propos",
       "lead": "Bon Sang est un projet personnel et indépendant. Voici ses sources, sa méthode et ce qu'il fait de vos données.",
       "metaDescription": "Bon Sang : un site indépendant sur le don du sang. Sources, méthodologie, confidentialité et mentions.",

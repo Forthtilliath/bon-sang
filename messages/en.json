@@ -36,10 +36,12 @@
   "HomePage": {
     "hero": {
       "eyebrow": "Blood donation",
-      "title": "Understand, check, find a blood drive.",
+      "title": "Understand, check, <accent>find a blood drive.</accent>",
       "lead": "Blood cannot be stored for long and cannot be manufactured. Here is what you need to act with confidence.",
       "ctaPrimary": "Can I donate?",
-      "ctaSecondary": "Find a blood drive"
+      "ctaSecondary": "Find a blood drive",
+      "stickerTop": "1 donation",
+      "stickerBottom": "helps up to 3 patients"
     },
     "pillars": {
       "title": "Where to start",
@@ -68,6 +70,11 @@
       "title": "Ten minutes are enough to help up to three people.",
       "body": "Start by checking whether you are eligible — no commitment.",
       "button": "Check my eligibility"
+    },
+    "marquee": {
+      "noFactory": "Can't be manufactured",
+      "noStock": "Doesn't keep for long",
+      "everyDay": "Every day counts"
     }
   },
   "Footer": {
@@ -369,6 +376,7 @@
   },
   "Pages": {
     "understand": {
+      "eyebrow": "The basics",
       "title": "Understanding blood donation",
       "lead": "What a donation is used for, the journey of a blood bag from drive to patient, and a few key figures.",
       "metaDescription": "What a blood donation is used for, the journey of a blood bag from drive to patient, and the key figures, explained simply.",
@@ -428,6 +436,7 @@
       }
     },
     "whoItHelps": {
+      "eyebrow": "Lives behind every bag",
       "title": "Who it helps",
       "lead": "Donation mostly helps people you never see: patients with chronic conditions for whom transfusion is part of life.",
       "metaDescription": "Sickle cell disease, cystic fibrosis, Steinert's disease: three conditions where blood donation changes patients' daily lives.",
@@ -459,18 +468,22 @@
       }
     },
     "eligibility": {
+      "eyebrow": "Quick check",
       "title": "Can I donate?",
       "lead": "A questionnaire based on the official EFS criteria. The result is indicative: the pre-donation interview prevails."
     },
     "collections": {
+      "eyebrow": "Blood drive map",
       "title": "Blood drives near you",
       "lead": "The map and list of upcoming blood drives, based on EFS open data."
     },
     "tracker": {
+      "eyebrow": "Donor log",
       "title": "My log",
       "lead": "Your donation log, your badges and the date you can donate again, stored in your browser."
     },
     "about": {
+      "eyebrow": "Behind the scenes",
       "title": "About",
       "lead": "Bon Sang is a personal, independent project. Here are its sources, its method and what it does with your data.",
       "metaDescription": "Bon Sang: an independent site about blood donation. Sources, methodology, privacy and legal notices.",
