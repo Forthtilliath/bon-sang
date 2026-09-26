@@ -3,6 +3,7 @@
 import { useFormatter, useTranslations } from "next-intl";
 
 import { buttonClasses } from "@/components/ui/button";
+import { cardClasses } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { daysBetween, formatIsoDate } from "@/lib/dates";
 import { downloadTextFile } from "@/lib/download";
@@ -29,13 +30,15 @@ export function NextDonation({ tracker }: { tracker: TrackerApi }) {
 
   return (
     <Section title={t("next.title")}>
-      <div className="border-border bg-surface flex flex-col gap-3 rounded-2xl border p-6">
+      <div
+        className={cardClasses({ className: "bg-primary-subtle flex flex-col gap-3 p-6 sm:p-8" })}
+      >
         {date ? (
           <>
-            <p className="text-primary text-2xl font-semibold tracking-tight">
+            <p className="font-display text-primary text-4xl font-semibold tracking-tight sm:text-5xl">
               {format.dateTime(date, { dateStyle: "long" })}
             </p>
-            <p className="text-muted text-sm">
+            <p className="text-muted">
               {t("next.inDays", { days: Math.max(0, daysBetween(new Date(), date)) })}
               {reason ? ` · ${t(`next.reason.${reason}`)}` : ""}
             </p>
@@ -56,7 +59,7 @@ export function NextDonation({ tracker }: { tracker: TrackerApi }) {
           </>
         ) : (
           <>
-            <p className="text-sm">{hasDonations ? t("next.now") : t("next.unknown")}</p>
+            <p>{hasDonations ? t("next.now") : t("next.unknown")}</p>
             <div className="mt-1 flex flex-wrap gap-3">
               <Link href="/collectes" className={buttonClasses({ variant: "outline", size: "sm" })}>
                 {t("next.findDrive")}

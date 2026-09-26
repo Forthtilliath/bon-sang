@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 
+import { cardClasses } from "@/components/ui/card";
+
 import type { BadgeId } from "./badges";
 import { Section, type TrackerApi } from "./tracker-ui";
 import { DONATION_TYPES } from "./types";
@@ -19,7 +21,7 @@ export function Stats({ tracker }: { tracker: TrackerApi }) {
 
   return (
     <Section title={t("stats.title")}>
-      <div className="grid gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <StatCard label={t("stats.total")} value={total} />
         {DONATION_TYPES.map((type) => (
           <StatCard
@@ -43,8 +45,10 @@ export function Stats({ tracker }: { tracker: TrackerApi }) {
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="border-border bg-surface flex flex-col gap-1 rounded-xl border p-4">
-      <span className="text-2xl font-semibold tracking-tight">{value}</span>
+    <div className={cardClasses({ className: "flex flex-col gap-1 p-5" })}>
+      <span className="font-display text-primary text-4xl font-semibold tracking-tight">
+        {value}
+      </span>
       <span className="text-muted text-xs">{label}</span>
     </div>
   );

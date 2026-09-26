@@ -3,6 +3,8 @@
 import { useId } from "react";
 import { useTranslations } from "next-intl";
 
+import { inputClasses } from "@/components/ui/input";
+
 import { Field, Section, type TrackerApi } from "./tracker-ui";
 import { BLOOD_GROUPS, SEXES, type Sex } from "./types";
 
@@ -20,7 +22,7 @@ export function ProfileCard({ tracker }: { tracker: TrackerApi }) {
             id={sexId}
             value={tracker.state.profile.sex}
             onChange={(e) => tracker.setProfile({ sex: e.target.value as Sex })}
-            className="border-border bg-bg rounded-xl border px-3 py-2 text-sm"
+            className={inputClasses()}
           >
             {SEXES.map((option) => (
               <option key={option} value={option}>
@@ -36,7 +38,7 @@ export function ProfileCard({ tracker }: { tracker: TrackerApi }) {
             onChange={(e) =>
               tracker.setProfile({ bloodGroup: e.target.value as (typeof BLOOD_GROUPS)[number] })
             }
-            className="border-border bg-bg rounded-xl border px-3 py-2 text-sm"
+            className={inputClasses()}
           >
             {BLOOD_GROUPS.map((option) => (
               <option key={option} value={option}>
