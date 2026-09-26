@@ -107,6 +107,9 @@ export function DateField({
         <input
           id={id}
           type="date"
+          // Doit refléter la vraie date du jour à chaque rendu (borne max du
+          // champ) — pas un état à figer une fois pour toutes au montage.
+          // eslint-disable-next-line @eslint-react/purity
           max={question.notFuture ? formatIsoDate(new Date()) : undefined}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}

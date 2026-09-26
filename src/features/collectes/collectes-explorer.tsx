@@ -10,26 +10,26 @@ import { inputClasses } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { formatIsoDate } from "@/lib/dates";
 
-import { DON_KINDS } from "./types";
+import { ExplorerCard } from "./explorer-card";
+import { DeferredMap, MapUnavailable } from "./explorer-map";
 import {
   DEFAULT_FILTERS,
+  filterCollectes,
   type Filters,
   type Period,
   PERIODS,
   type Point,
   RADII_KM,
   type Sort,
-  SORTS,
-  filterCollectes,
   sortCollectes,
+  SORTS,
   toggleKind,
   withDistance,
   withinRadius,
 } from "./filter";
-import type { Collecte } from "./types";
-import { ExplorerCard } from "./explorer-card";
-import { DeferredMap, MapUnavailable } from "./explorer-map";
 import { MapErrorBoundary } from "./map-error-boundary";
+import type { Collecte } from "./types";
+import { DON_KINDS } from "./types";
 
 type GeoStatus = "idle" | "loading" | "denied" | "unsupported";
 
@@ -68,6 +68,9 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
     return typeof window === "undefined" ? path : `${window.location.origin}${path}`;
   };
 
+  // Doit refléter la vraie date du jour à chaque rendu (filtre les collectes
+  // passées) — pas un état à figer une fois pour toutes au montage.
+  // eslint-disable-next-line @eslint-react/purity
   const today = formatIsoDate(new Date());
 
   const visible = useMemo(() => {

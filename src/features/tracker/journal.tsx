@@ -10,7 +10,7 @@ import { cn } from "@/lib/cn";
 import { formatIsoDate, parseIsoDate } from "@/lib/dates";
 
 import { Field, Section, type TrackerApi } from "./tracker-ui";
-import { DONATION_TYPES, type Donation, type DonationType } from "./types";
+import { type Donation, DONATION_TYPES, type DonationType } from "./types";
 
 export function Journal({ tracker }: { tracker: TrackerApi }) {
   const t = useTranslations("Tracker");
@@ -61,6 +61,9 @@ export function Journal({ tracker }: { tracker: TrackerApi }) {
             id={dateId}
             type="date"
             required
+            // Doit refléter la vraie date du jour à chaque rendu (borne max
+            // du champ) — pas un état à figer une fois pour toutes.
+            // eslint-disable-next-line @eslint-react/purity
             max={formatIsoDate(new Date())}
             value={date}
             onChange={(e) => setDate(e.target.value)}
