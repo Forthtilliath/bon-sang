@@ -12,6 +12,7 @@ import {
 import { useFormatter, useTranslations } from "next-intl";
 
 import "maplibre-gl/dist/maplibre-gl.css";
+import "./collectes-map.css";
 
 import type { Point } from "./filter";
 import {
@@ -262,7 +263,7 @@ export function CollectesMap({ collectes, activeId, origin, onSelect, onError }:
       ref={containerRef}
       role="region"
       aria-label={t("mapLabel")}
-      className="border-border h-80 w-full overflow-hidden rounded-2xl border lg:h-full"
+      className="border-ink shadow-sticker h-80 w-full overflow-hidden rounded-3xl border-2 lg:h-full"
     />
   );
 }
