@@ -11,9 +11,6 @@ import {
 } from "maplibre-gl";
 import { useFormatter, useTranslations } from "next-intl";
 
-import "maplibre-gl/dist/maplibre-gl.css";
-import "./collectes-map.css";
-
 import type { Point } from "./filter";
 import {
   addClusterLayers,
@@ -25,6 +22,9 @@ import {
 } from "./map-layers";
 import { popupContent, type PopupHelpers } from "./map-popup";
 import type { Collecte } from "./types";
+
+import "maplibre-gl/dist/maplibre-gl.css";
+import "./collectes-map.css";
 
 type Props = {
   collectes: Collecte[];
