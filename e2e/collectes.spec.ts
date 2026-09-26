@@ -38,4 +38,6 @@ test("sélectionner une collecte dans la liste ouvre sa bulle sur la carte", asy
   const popup = page.locator(".ofm-popup");
   await expect(popup).toBeVisible();
   await expect(popup.locator(".ofm-popup__title")).not.toBeEmpty();
+  // La bulle doit s'ouvrir en haut de son contenu : le nom de la collecte reste visible.
+  await expect(popup.locator(".ofm-popup__title")).toBeInViewport();
 });
