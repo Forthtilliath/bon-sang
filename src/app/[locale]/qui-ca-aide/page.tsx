@@ -99,7 +99,7 @@ export default function WhoItHelpsPage({ params }: PageProps<"/[locale]/qui-ca-a
               >
                 <span
                   aria-hidden="true"
-                  className="font-display text-primary pointer-events-none absolute -top-6 left-3 text-9xl leading-none"
+                  className="font-display text-primary pointer-events-none absolute top-1 left-5 text-9xl leading-none"
                 >
                   {QUOTE_MARK}
                 </span>
