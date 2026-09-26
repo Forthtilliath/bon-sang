@@ -141,7 +141,8 @@ function QuestionField({
       >
         {label}
       </legend>
-      {help ? <p className="text-muted -mt-2 text-sm">{help}</p> : null}
+      {/* Un `<legend>` échappe au `gap` du fieldset : marge explicite sous la question. */}
+      {help ? <p className="text-muted mt-2 text-sm">{help}</p> : null}
 
       {question.kind === "boolean" ? (
         <OptionList
