@@ -5,13 +5,23 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 10
-    # Majeures bloquées, à lever quand l'écosystème suit :
-    # - eslint 10 : `eslint-plugin-jsx-a11y` ne l'accepte pas encore en peer (ERESOLVE).
-    # - maplibre-gl 6 : casse l'affichage des tuiles vectorielles CARTO.
+    # Montées testées et bloquées car elles cassent le site ou l'outillage (retestées
+    # le 2026-09-26). À lever quand l'écosystème suit :
+    # - eslint 10 : `eslint-plugin-jsx-a11y` et `eslint-plugin-react` ne l'acceptent
+    #   pas encore en peer → `npm ci` échoue (ERESOLVE).
+    # - maplibre-gl 6 : la carte s'affiche mais les tuiles vectorielles CARTO ne se
+    #   chargent plus (e2e `collectes.spec.ts`).
+    # - typescript ≥ 6.1 (dont la 7, réécriture native) : hors de la plage supportée
+    #   par `typescript-eslint` (`<6.1.0`).
+    # - @types/node majeure : doit suivre la version de Node du projet (`.nvmrc` = 24).
     ignore:
       - dependency-name: eslint
         update-types: ["version-update:semver-major"]
       - dependency-name: maplibre-gl
+        update-types: ["version-update:semver-major"]
+      - dependency-name: typescript
+        versions: [">= 6.1.0"]
+      - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
     groups:
       dev-dependencies:
@@ -23,3 +33,7 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    # Une seule PR hebdomadaire pour toutes les actions plutôt qu'une par action.
+    groups:
+      github-actions:
+        patterns: ["*"]
