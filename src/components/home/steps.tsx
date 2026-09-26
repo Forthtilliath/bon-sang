@@ -24,11 +24,11 @@ export function Steps() {
           <div className="relative mt-10">
             <span
               aria-hidden="true"
-              className="border-primary absolute top-0 bottom-0 left-[26px] border-l-4 border-dotted lg:hidden"
+              className="border-primary absolute top-0 bottom-10 left-[26px] border-l-4 border-dotted lg:hidden"
             />
             <span
               aria-hidden="true"
-              className="border-primary absolute top-[26px] right-0 left-0 hidden border-t-4 border-dotted lg:block"
+              className="border-primary absolute top-[26px] right-[calc(25%-18px)] left-0 hidden border-t-4 border-dotted lg:block"
             />
             <ol className="relative grid gap-8 lg:grid-cols-4 lg:gap-6">
               {STEPS.map((step, index) => (
