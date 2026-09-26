@@ -35,11 +35,11 @@ export function Quiz() {
   if (!quiz.hydrated) {
     return (
       <div className="flex flex-col gap-6" aria-hidden>
-        <div className="bg-surface-strong h-1.5 animate-pulse rounded-full" />
-        <div className="bg-surface h-8 w-2/3 animate-pulse rounded" />
+        <div className="border-ink bg-surface h-3.5 animate-pulse rounded-full border-2" />
+        <div className="bg-surface h-9 w-2/3 animate-pulse rounded-lg" />
         <div className="flex flex-col gap-2">
-          <div className="bg-surface h-12 animate-pulse rounded-xl" />
-          <div className="bg-surface h-12 animate-pulse rounded-xl" />
+          <div className="bg-surface h-14 animate-pulse rounded-2xl" />
+          <div className="bg-surface h-14 animate-pulse rounded-2xl" />
         </div>
       </div>
     );
@@ -64,11 +64,14 @@ export function Quiz() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <p className="text-muted text-sm" aria-live="polite">
+        <p
+          className="text-primary font-mono text-xs tracking-[0.16em] uppercase"
+          aria-live="polite"
+        >
           {t("progress", { current: quiz.stepNumber, total: quiz.total })}
         </p>
         <div
-          className="bg-surface-strong h-1.5 overflow-hidden rounded-full"
+          className="border-ink bg-bg h-3.5 overflow-hidden rounded-full border-2"
           role="progressbar"
           aria-label={t("progressLabel")}
           aria-valuenow={quiz.stepNumber}
@@ -76,7 +79,7 @@ export function Quiz() {
           aria-valuemax={quiz.total}
         >
           <div
-            className="bg-primary h-full rounded-full transition-[width]"
+            className="bg-primary h-full rounded-r-full transition-[width] duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -90,7 +93,7 @@ export function Quiz() {
         legendRef={legendRef}
       />
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="border-border flex items-center justify-between gap-3 border-t-2 border-dashed pt-5">
         <button
           type="button"
           onClick={quiz.back}
@@ -134,7 +137,7 @@ function QuestionField({
       <legend
         ref={legendRef}
         tabIndex={-1}
-        className="text-xl font-medium tracking-tight text-balance focus:outline-none"
+        className="font-display text-2xl font-semibold tracking-tight text-balance focus:outline-none sm:text-3xl"
       >
         {label}
       </legend>
