@@ -4,6 +4,8 @@ import { type FormEvent, useId, useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { buttonClasses } from "@/components/ui/button";
+import { cardClasses } from "@/components/ui/card";
+import { inputClasses } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { formatIsoDate, parseIsoDate } from "@/lib/dates";
 
@@ -49,7 +51,10 @@ export function Journal({ tracker }: { tracker: TrackerApi }) {
     <Section title={t("journal.title")}>
       <form
         onSubmit={submit}
-        className="border-border flex flex-wrap items-end gap-3 rounded-2xl border p-4"
+        className={cardClasses({
+          variant: "soft",
+          className: "flex flex-wrap items-end gap-4 p-5",
+        })}
       >
         <Field label={t("journal.date")} htmlFor={dateId}>
           <input
@@ -59,7 +64,7 @@ export function Journal({ tracker }: { tracker: TrackerApi }) {
             max={formatIsoDate(new Date())}
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="border-border bg-bg rounded-xl border px-3 py-2 text-sm"
+            className={inputClasses()}
           />
         </Field>
         <Field label={t("journal.type")} htmlFor={typeId}>
@@ -67,7 +72,7 @@ export function Journal({ tracker }: { tracker: TrackerApi }) {
             id={typeId}
             value={type}
             onChange={(e) => setType(e.target.value as DonationType)}
-            className="border-border bg-bg rounded-xl border px-3 py-2 text-sm"
+            className={inputClasses()}
           >
             {DONATION_TYPES.map((option) => (
               <option key={option} value={option}>
@@ -83,7 +88,7 @@ export function Journal({ tracker }: { tracker: TrackerApi }) {
             value={place}
             onChange={(e) => setPlace(e.target.value)}
             placeholder={t("journal.placePlaceholder")}
-            className="border-border bg-bg rounded-xl border px-3 py-2 text-sm"
+            className={inputClasses()}
           />
         </Field>
         <button type="submit" className={buttonClasses({ size: "sm" })}>
@@ -110,12 +115,14 @@ export function Journal({ tracker }: { tracker: TrackerApi }) {
               <li
                 key={donation.id}
                 className={cn(
-                  "flex items-center justify-between gap-3 rounded-xl border p-3 text-sm",
-                  donation.id === editingId ? "border-primary bg-primary-subtle" : "border-border",
+                  "flex items-center justify-between gap-3 rounded-2xl border-2 p-4 text-sm",
+                  donation.id === editingId
+                    ? "border-ink bg-primary-subtle shadow-sticker-sm"
+                    : "border-border bg-bg",
                 )}
               >
                 <span>
-                  <span className="font-medium">
+                  <span className="font-display text-base font-semibold">
                     {parsed ? format.dateTime(parsed, { dateStyle: "medium" }) : donation.date}
                   </span>{" "}
                   · {t(`journal.types.${donation.type}`)}
@@ -125,7 +132,7 @@ export function Journal({ tracker }: { tracker: TrackerApi }) {
                   <button
                     type="button"
                     onClick={() => startEdit(donation)}
-                    className="text-muted hover:text-primary"
+                    className="text-muted hover:text-primary font-medium underline-offset-4 hover:underline"
                   >
                     {t("journal.edit")}
                   </button>
@@ -135,7 +142,7 @@ export function Journal({ tracker }: { tracker: TrackerApi }) {
                       tracker.removeDonation(donation.id);
                       if (editingId === donation.id) resetForm();
                     }}
-                    className="text-muted hover:text-primary"
+                    className="text-muted hover:text-primary font-medium underline-offset-4 hover:underline"
                   >
                     {t("journal.delete")}
                   </button>

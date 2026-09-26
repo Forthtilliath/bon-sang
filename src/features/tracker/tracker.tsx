@@ -26,7 +26,9 @@ export function Tracker() {
       <ProfileCard tracker={tracker} />
       <Badges tracker={tracker} />
       <DataControls tracker={tracker} />
-      <p className="border-border text-muted border-t pt-4 text-xs">{t("privacyNote")}</p>
+      <p className="border-border text-muted border-t-2 border-dashed pt-4 text-xs">
+        {t("privacyNote")}
+      </p>
     </div>
   );
 }
