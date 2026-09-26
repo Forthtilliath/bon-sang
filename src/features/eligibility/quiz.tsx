@@ -4,14 +4,13 @@ import { useEffect, useId, useRef } from "react";
 import { useTranslations } from "next-intl";
 
 import { buttonClasses } from "@/components/ui/button";
-import { cn } from "@/lib/cn";
-import { formatIsoDate } from "@/lib/dates";
 
 import type { QuestionMessageKey } from "./i18n-keys";
 import type { Question } from "./questions";
+import { DateField, NumberField, OptionList } from "./quiz-fields";
 import { QuizResult } from "./quiz-result";
 import type { AnswerValue } from "./types";
-import { isFutureDate, useQuiz } from "./use-quiz";
+import { useQuiz } from "./use-quiz";
 
 const useQuizT = () => useTranslations("Quiz");
 
@@ -181,122 +180,5 @@ function QuestionField({
         <DateField question={question} label={label} value={value} onChange={onChange} />
       ) : null}
     </fieldset>
-  );
-}
-
-function OptionList({
-  name,
-  options,
-}: {
-  name: string;
-  options: { key: string; label: string; selected: boolean; onSelect: () => void }[];
-}) {
-  return (
-    <div className="flex flex-col gap-2">
-      {options.map((option) => (
-        <label
-          key={option.key}
-          className={cn(
-            "flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm transition-colors",
-            option.selected ? "border-primary bg-primary-subtle" : "border-border hover:bg-surface",
-          )}
-        >
-          <input
-            type="radio"
-            name={name}
-            checked={option.selected}
-            onChange={option.onSelect}
-            className="accent-primary size-4"
-          />
-          {option.label}
-        </label>
-      ))}
-    </div>
-  );
-}
-
-function NumberField({
-  question,
-  label,
-  value,
-  onChange,
-}: {
-  question: Extract<Question, { kind: "number" }>;
-  label: string;
-  value: AnswerValue;
-  onChange: (value: AnswerValue) => void;
-}) {
-  const t = useQuizT();
-  const id = useId();
-  return (
-    <div className="flex items-center gap-2">
-      <label htmlFor={id} className="sr-only">
-        {label}
-      </label>
-      <input
-        id={id}
-        type="number"
-        inputMode="numeric"
-        min={question.min}
-        max={question.max}
-        value={typeof value === "number" && Number.isFinite(value) ? value : ""}
-        onChange={(e) => {
-          const next = e.target.valueAsNumber;
-          onChange(Number.isFinite(next) ? next : undefined);
-        }}
-        className="border-border bg-bg w-28 rounded-xl border px-3 py-2 text-sm"
-      />
-      <span className="text-muted text-sm">{t(`units.${question.unit}`)}</span>
-    </div>
-  );
-}
-
-function DateField({
-  question,
-  label,
-  value,
-  onChange,
-}: {
-  question: Extract<Question, { kind: "date" }>;
-  label: string;
-  value: AnswerValue;
-  onChange: (value: AnswerValue) => void;
-}) {
-  const t = useQuizT();
-  const id = useId();
-  const invalid = question.notFuture && isFutureDate(value);
-  // `""` = « je ne sais pas » : une réponse valable, distincte de « pas encore répondu ».
-  const dontKnow = value === "";
-
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="sr-only">
-        {label}
-      </label>
-      <div className="flex flex-wrap items-center gap-2">
-        <input
-          id={id}
-          type="date"
-          max={question.notFuture ? formatIsoDate(new Date()) : undefined}
-          value={typeof value === "string" ? value : ""}
-          onChange={(e) => onChange(e.target.value)}
-          aria-invalid={invalid || undefined}
-          className="border-border bg-bg rounded-xl border px-3 py-2 text-sm"
-        />
-        <button
-          type="button"
-          aria-pressed={dontKnow}
-          onClick={() => onChange(dontKnow ? undefined : "")}
-          className={cn(
-            buttonClasses({ variant: "ghost", size: "sm" }),
-            dontKnow && "border-primary bg-primary-subtle text-primary border",
-          )}
-        >
-          {t("dontKnow")}
-        </button>
-      </div>
-      {dontKnow ? <p className="text-muted text-sm">{t("dontKnowActive")}</p> : null}
-      {invalid ? <p className="text-primary text-sm">{t("futureDate")}</p> : null}
-    </div>
   );
 }
