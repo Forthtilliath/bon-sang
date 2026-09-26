@@ -13,7 +13,7 @@ import { MAX_IMPORT_BYTES } from "./validate";
 export function DataControls({ tracker }: { tracker: TrackerApi }) {
   const t = useTranslations("Tracker");
   const [error, setError] = useState(false);
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const exportJson = () => {
     downloadTextFile(
@@ -27,7 +27,7 @@ export function DataControls({ tracker }: { tracker: TrackerApi }) {
     if (!file) return;
     const ok = file.size <= MAX_IMPORT_BYTES && tracker.importState(await file.text());
     setError(!ok);
-    if (fileInput.current) fileInput.current.value = "";
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
@@ -43,7 +43,7 @@ export function DataControls({ tracker }: { tracker: TrackerApi }) {
         <label className={cn(buttonClasses({ variant: "outline", size: "sm" }), "cursor-pointer")}>
           {t("data.import")}
           <input
-            ref={fileInput}
+            ref={fileInputRef}
             type="file"
             accept="application/json"
             className="sr-only"

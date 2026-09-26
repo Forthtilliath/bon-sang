@@ -39,7 +39,12 @@ export function NextDonation({ tracker }: { tracker: TrackerApi }) {
               {format.dateTime(date, { dateStyle: "long" })}
             </p>
             <p className="text-muted">
-              {t("next.inDays", { days: Math.max(0, daysBetween(new Date(), date)) })}
+              {t("next.inDays", {
+                // Doit refléter la vraie date du jour à chaque rendu (compte
+                // à rebours) — pas un état à figer une fois pour toutes.
+                // eslint-disable-next-line @eslint-react/purity
+                days: Math.max(0, daysBetween(new Date(), date)),
+              })}
               {reason ? ` · ${t(`next.reason.${reason}`)}` : ""}
             </p>
             <div className="mt-2 flex flex-wrap gap-3">

@@ -23,10 +23,10 @@ export function Quiz() {
   // vrai changement, jamais au premier rendu (arrivée sur la page).
   const legendRef = useRef<HTMLLegendElement>(null);
   const focusKey = quiz.submitted ? "result" : `step-${quiz.stepNumber}`;
-  const prevFocusKey = useRef(focusKey);
+  const prevFocusKeyRef = useRef(focusKey);
   useEffect(() => {
-    if (prevFocusKey.current === focusKey) return;
-    prevFocusKey.current = focusKey;
+    if (prevFocusKeyRef.current === focusKey) return;
+    prevFocusKeyRef.current = focusKey;
     if (!quiz.submitted) legendRef.current?.focus();
   }, [focusKey, quiz.submitted]);
 
