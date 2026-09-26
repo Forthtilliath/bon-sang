@@ -54,7 +54,7 @@ export function QuizResult({
     tracker.setValue((prev) => ({ ...prev, profile: { ...prev.profile, sex } }));
     // `tracker.value`/`tracker.setValue` sont volontairement absents des deps : ils
     // changeraient à chaque écriture, ce qui redéclencherait cet effet en boucle.
-    // eslint-disable-next-line react-hooks/exhaustive-deps, @eslint-react/exhaustive-deps
+    // eslint-disable-next-line @eslint-react/exhaustive-deps
   }, [tracker.hydrated, sex]);
 
   const verdictKey =
