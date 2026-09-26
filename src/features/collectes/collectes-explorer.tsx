@@ -4,6 +4,9 @@ import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import { cardClasses } from "@/components/ui/card";
+import { chipClasses, SEGMENT_GROUP, segmentClasses } from "@/components/ui/chip";
+import { inputClasses } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { formatIsoDate } from "@/lib/dates";
 
@@ -93,7 +96,7 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-3">
+      <div className={cardClasses({ variant: "soft", className: "flex flex-col gap-3 p-4" })}>
         <fieldset className="flex flex-wrap items-center gap-2">
           <legend className="sr-only">{t("filterKinds")}</legend>
           {DON_KINDS.map((kind) => {
@@ -104,12 +107,7 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
                 type="button"
                 aria-pressed={active}
                 onClick={() => setFilters((f) => ({ ...f, kinds: toggleKind(f.kinds, kind) }))}
-                className={cn(
-                  "rounded-full border px-3 py-1 text-sm transition-colors",
-                  active
-                    ? "border-primary bg-primary-subtle text-primary"
-                    : "border-border text-muted hover:bg-surface",
-                )}
+                className={chipClasses(active)}
               >
                 {t(`kinds.${kind}`)}
               </button>
@@ -118,17 +116,14 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
         </fieldset>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="border-border flex rounded-full border p-0.5 text-sm">
+          <div className={SEGMENT_GROUP}>
             {PERIODS.map((period) => (
               <button
                 key={period}
                 type="button"
                 aria-pressed={filters.period === period}
                 onClick={() => setFilters((f) => ({ ...f, period: period as Period }))}
-                className={cn(
-                  "rounded-full px-3 py-1 transition-colors",
-                  filters.period === period ? "bg-primary text-primary-fg" : "text-muted",
-                )}
+                className={segmentClasses(filters.period === period)}
               >
                 {t(`periods.${period}`)}
               </button>
@@ -139,7 +134,10 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
             type="button"
             onClick={locate}
             disabled={geoStatus === "loading"}
-            className="border-border text-muted hover:bg-surface rounded-full border px-3 py-1 text-sm disabled:opacity-60"
+            className={chipClasses(
+              origin !== null,
+              "flex items-center gap-1.5 disabled:opacity-60",
+            )}
           >
             {geoStatus === "loading" ? t("locating") : t("locate")}
           </button>
@@ -162,7 +160,7 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
                       radiusKm: e.target.value ? Number(e.target.value) : null,
                     }))
                   }
-                  className="border-border bg-bg rounded-full border px-2 py-1 text-sm"
+                  className={inputClasses("rounded-full px-3 py-1")}
                 >
                   <option value="">{t("radiusAny")}</option>
                   {RADII_KM.map((km) => (
@@ -173,21 +171,14 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
                 </select>
               </label>
 
-              <div
-                className="border-border flex rounded-full border p-0.5 text-sm"
-                role="group"
-                aria-label={t("sortLabel")}
-              >
+              <div className={SEGMENT_GROUP} role="group" aria-label={t("sortLabel")}>
                 {SORTS.map((option) => (
                   <button
                     key={option}
                     type="button"
                     aria-pressed={sort === option}
                     onClick={() => setSort(option)}
-                    className={cn(
-                      "rounded-full px-3 py-1 transition-colors",
-                      sort === option ? "bg-primary text-primary-fg" : "text-muted",
-                    )}
+                    className={segmentClasses(sort === option)}
                   >
                     {t(`sorts.${option}`)}
                   </button>
@@ -203,21 +194,14 @@ export function CollectesExplorer({ collectes }: { collectes: Collecte[] }) {
           {t("visibleCount", { count: visible.length })}
         </p>
 
-        <div
-          className="border-border flex rounded-full border p-0.5 text-sm lg:hidden"
-          role="group"
-          aria-label={t("viewToggle")}
-        >
+        <div className={cn(SEGMENT_GROUP, "lg:hidden")} role="group" aria-label={t("viewToggle")}>
           {(["list", "map"] as const).map((option) => (
             <button
               key={option}
               type="button"
               aria-pressed={view === option}
               onClick={() => setView(option)}
-              className={cn(
-                "rounded-full px-3 py-1 transition-colors",
-                view === option ? "bg-primary text-primary-fg" : "text-muted",
-              )}
+              className={segmentClasses(view === option)}
             >
               {t(`views.${option}`)}
             </button>

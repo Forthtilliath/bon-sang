@@ -10,8 +10,9 @@ export const FRANCE_CENTER: [number, number] = [2.35, 46.6];
 export const SOURCE_ID = "collectes";
 
 // Couleurs alignées sur `globals.css` (paint MapLibre : pas de `var(--…)`).
-const MARKER_LIGHT = { fill: "#d21f2c", ring: "#b3161f" };
-const MARKER_DARK = { fill: "#f0434f", ring: "#d81f2a" };
+// Collectes en rouge globule, grappes en jaune plasma, sélection cerclée de plasma.
+const MARKER_LIGHT = { fill: "#b8102b", cluster: "#f4c24f", ink: "#1f1216", halo: "#f7f1e8" };
+const MARKER_DARK = { fill: "#ff6273", cluster: "#ffc94d", ink: "#1a0f05", halo: "#150b0e" };
 
 const EMPTY_FC: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -50,7 +51,7 @@ export function toFeatureCollection(collectes: Collecte[]): GeoJSON.FeatureColle
 /** Source clusterisée + couches cercle/symbole. Rejouée après chaque `setStyle`. */
 export function addClusterLayers(map: MlMap) {
   if (map.getSource(SOURCE_ID)) return;
-  const { fill, ring } = markerColors();
+  const { fill, cluster, ink, halo } = markerColors();
 
   map.addSource(SOURCE_ID, {
     type: "geojson",
@@ -67,11 +68,10 @@ export function addClusterLayers(map: MlMap) {
     source: SOURCE_ID,
     filter: ["has", "point_count"],
     paint: {
-      "circle-color": fill,
-      "circle-opacity": 0.92,
-      "circle-radius": ["step", ["get", "point_count"], 15, 10, 20, 30, 26],
-      "circle-stroke-width": 2,
-      "circle-stroke-color": "#fff",
+      "circle-color": cluster,
+      "circle-radius": ["step", ["get", "point_count"], 16, 10, 21, 30, 27],
+      "circle-stroke-width": 2.5,
+      "circle-stroke-color": ink,
     },
   });
 
@@ -86,7 +86,7 @@ export function addClusterLayers(map: MlMap) {
       "text-size": 12,
       "text-allow-overlap": true,
     },
-    paint: { "text-color": "#fff" },
+    paint: { "text-color": ink },
   });
 
   map.addLayer({
@@ -96,13 +96,13 @@ export function addClusterLayers(map: MlMap) {
     filter: ["!", ["has", "point_count"]],
     paint: {
       "circle-color": fill,
-      "circle-radius": ["case", ["boolean", ["feature-state", "active"], false], 9, 6],
-      "circle-stroke-width": ["case", ["boolean", ["feature-state", "active"], false], 4, 2],
+      "circle-radius": ["case", ["boolean", ["feature-state", "active"], false], 10, 7],
+      "circle-stroke-width": ["case", ["boolean", ["feature-state", "active"], false], 5, 2],
       "circle-stroke-color": [
         "case",
         ["boolean", ["feature-state", "active"], false],
-        ring,
-        "#fff",
+        cluster,
+        halo,
       ],
     },
   });

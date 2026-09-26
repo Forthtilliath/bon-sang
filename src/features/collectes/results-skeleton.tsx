@@ -8,11 +8,11 @@ export function ResultsSkeleton() {
           {Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
-              className="border-border bg-surface h-24 animate-pulse rounded-2xl border"
+              className="border-border bg-surface h-28 animate-pulse rounded-2xl border-2"
             />
           ))}
         </div>
-        <div className="border-border bg-surface h-80 animate-pulse rounded-2xl border lg:h-[70vh]" />
+        <div className="border-ink bg-surface h-80 animate-pulse rounded-3xl border-2 lg:h-[70vh]" />
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ const CollectesMap = dynamic(() => import("./collectes-map").then((mod) => mod.C
 
 function MapSkeleton() {
   return (
-    <div className="border-border bg-surface h-80 w-full animate-pulse rounded-2xl border lg:h-full" />
+    <div className="border-ink bg-surface h-80 w-full animate-pulse rounded-3xl border-2 lg:h-full" />
   );
 }
 
@@ -53,7 +53,7 @@ export function DeferredMap({
     <div
       ref={ref}
       aria-hidden
-      className="border-border bg-surface h-80 w-full animate-pulse rounded-2xl border lg:h-full"
+      className="border-ink bg-surface h-80 w-full animate-pulse rounded-3xl border-2 lg:h-full"
     />
   );
 }
@@ -61,8 +61,8 @@ export function DeferredMap({
 export function MapUnavailable() {
   const t = useTranslations("Collectes");
   return (
-    <div className="border-border bg-surface text-muted flex h-80 w-full flex-col items-center justify-center gap-1 rounded-2xl border p-6 text-center text-sm lg:h-full">
-      <p className="text-fg font-medium">{t("mapUnavailable")}</p>
+    <div className="border-ink bg-surface text-muted flex h-80 w-full flex-col items-center justify-center gap-1 rounded-3xl border-2 border-dashed p-6 text-center text-sm lg:h-full">
+      <p className="font-display text-fg text-lg font-semibold">{t("mapUnavailable")}</p>
       <p className="max-w-xs">{t("mapUnavailableHint")}</p>
     </div>
   );
