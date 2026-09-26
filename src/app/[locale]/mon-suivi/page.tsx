@@ -31,9 +31,9 @@ export default function TrackerPage({ params }: PageProps<"/[locale]/mon-suivi">
         ])}
       />
 
-      <PageHeader title={t("title")} lead={t("lead")} />
+      <PageHeader eyebrow={t("eyebrow")} title={t("title")} lead={t("lead")} />
       <section>
-        <Container className="max-w-2xl py-12">
+        <Container className="max-w-3xl py-12 sm:py-16">
           <Tracker />
         </Container>
       </section>

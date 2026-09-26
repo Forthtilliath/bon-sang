@@ -3,7 +3,9 @@ import { getTranslations } from "next-intl/server";
 
 import { JsonLd } from "@forthtilliath/react-kit/json-ld";
 import { PageHeader } from "@/components/page-header";
+import { buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { inputClasses } from "@/components/ui/input";
 import { CollectesResults } from "@/features/collectes/collectes-results";
 import { normalizeCityQuery } from "@/features/collectes/fetch-collectes";
 import { ResultsSkeleton } from "@/features/collectes/results-skeleton";
@@ -43,11 +45,11 @@ export default async function CollectionsPage({
         ])}
       />
 
-      <PageHeader title={page("title")} lead={page("lead")} />
+      <PageHeader eyebrow={page("eyebrow")} title={page("title")} lead={page("lead")} />
 
       <section>
         <Container className="py-12">
-          <form method="get" className="flex max-w-md flex-wrap gap-2">
+          <form method="get" className="flex max-w-lg flex-wrap gap-3">
             <label htmlFor="ville" className="sr-only">
               {t("searchLabel")}
             </label>
@@ -57,12 +59,9 @@ export default async function CollectionsPage({
               type="search"
               defaultValue={query ?? ""}
               placeholder={t("searchPlaceholder")}
-              className="border-border bg-bg min-w-0 flex-1 rounded-xl border px-3 py-2 text-sm"
+              className={inputClasses("min-w-0 flex-1 rounded-full px-5 py-2.5 text-base")}
             />
-            <button
-              type="submit"
-              className="bg-primary text-primary-fg hover:bg-primary-strong rounded-xl px-4 py-2 text-sm font-medium"
-            >
+            <button type="submit" className={buttonClasses()}>
               {t("searchSubmit")}
             </button>
           </form>
@@ -77,7 +76,7 @@ export default async function CollectionsPage({
             )}
           </div>
 
-          <p className="border-border text-muted mt-8 max-w-2xl border-t pt-4 text-xs">
+          <p className="border-ink text-muted mt-10 max-w-2xl border-t-2 border-dashed pt-4 text-xs">
             {t("source")}
           </p>
         </Container>
