@@ -4,6 +4,7 @@ import { useId } from "react";
 import { useTranslations } from "next-intl";
 
 import { buttonClasses } from "@/components/ui/button";
+import { inputClasses } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { formatIsoDate } from "@/lib/dates";
 
@@ -24,8 +25,10 @@ export function OptionList({
         <label
           key={option.key}
           className={cn(
-            "flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm transition-colors",
-            option.selected ? "border-primary bg-primary-subtle" : "border-border hover:bg-surface",
+            "flex cursor-pointer items-center gap-3 rounded-2xl border-2 px-4 py-3.5 font-medium transition-[background-color,border-color,box-shadow]",
+            option.selected
+              ? "border-ink bg-primary-subtle shadow-sticker-sm"
+              : "border-border bg-bg hover:border-ink",
           )}
         >
           <input
@@ -33,7 +36,7 @@ export function OptionList({
             name={name}
             checked={option.selected}
             onChange={option.onSelect}
-            className="accent-primary size-4"
+            className="accent-primary size-5"
           />
           {option.label}
         </label>
@@ -71,7 +74,7 @@ export function NumberField({
           const next = e.target.valueAsNumber;
           onChange(Number.isFinite(next) ? next : undefined);
         }}
-        className="border-border bg-bg w-28 rounded-xl border px-3 py-2 text-sm"
+        className={inputClasses("w-32 text-base")}
       />
       <span className="text-muted text-sm">{t(`units.${question.unit}`)}</span>
     </div>
@@ -108,7 +111,7 @@ export function DateField({
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
           aria-invalid={invalid || undefined}
-          className="border-border bg-bg rounded-xl border px-3 py-2 text-sm"
+          className={inputClasses("text-base")}
         />
         <button
           type="button"
@@ -116,14 +119,14 @@ export function DateField({
           onClick={() => onChange(dontKnow ? undefined : "")}
           className={cn(
             buttonClasses({ variant: "ghost", size: "sm" }),
-            dontKnow && "border-primary bg-primary-subtle text-primary border",
+            dontKnow && "border-ink bg-accent text-accent-fg hover:bg-accent",
           )}
         >
           {t("dontKnow")}
         </button>
       </div>
       {dontKnow ? <p className="text-muted text-sm">{t("dontKnowActive")}</p> : null}
-      {invalid ? <p className="text-primary text-sm">{t("futureDate")}</p> : null}
+      {invalid ? <p className="text-primary text-sm font-medium">{t("futureDate")}</p> : null}
     </div>
   );
 }
