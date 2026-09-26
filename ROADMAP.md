@@ -3,6 +3,10 @@
 **Bon Sang** — site d'information et d'incitation au don du sang. Projet de portfolio
 (catégorie `react`, prolonge le « fil santé » avec Glucodose).
 
+> **Statut : terminé** — v1.0.0 le 2026-09-27 (voir [`CHANGELOG.md`](./CHANGELOG.md)). Les
+> 10 lots ci-dessous sont livrés, suivis d'un audit d'améliorations et d'une refonte
+> graphique (§9). Ce document est conservé comme trace du plan initial.
+
 ---
 
 ## 1. Objectif & angle
@@ -22,17 +26,17 @@ produit assumé (pas de compte, pas de RGPD lourd) et un argument à mettre en a
 
 ## 2. Stack technique
 
-| Domaine     | Choix                                                           |
-| ----------- | --------------------------------------------------------------- |
-| Framework   | Next.js 16 (App Router, RSC, Turbopack), TS strict              |
-| Style       | Tailwind CSS v4                                                 |
-| i18n        | FR (défaut) + EN — `next-intl` v4, segment `[locale]`           |
-| Carte       | MapLibre GL JS + tuiles vecteur (style clair/sombre)            |
-| Données EFS | ISR (revalidate) sur un fetch de l'open data                    |
-| État perso  | localStorage + petit hook `usePersistentState`                  |
-| Tests       | Vitest (logique quiz / dates) + Playwright (parcours)           |
-| Qualité     | ESLint (flat config) + Prettier + a11y (eslint-plugin-jsx-a11y) |
-| Déploiement | Vercel (ISR natif)                                              |
+| Domaine     | Choix                                                              |
+| ----------- | ------------------------------------------------------------------ |
+| Framework   | Next.js 16 (App Router, RSC, Turbopack), React 19, TS 6 strict     |
+| Style       | Tailwind CSS v4, thème « Plasma & Globule » (tokens `@theme`)      |
+| i18n        | FR (défaut) + EN — `next-intl` v4, segment `[locale]`              |
+| Carte       | MapLibre GL JS + tuiles vecteur (style clair/sombre)               |
+| Données EFS | ISR (revalidate) sur un fetch de l'open data                       |
+| État perso  | localStorage via `usePersistentState` (`@forthtilliath/react-kit`) |
+| Tests       | Vitest + Testing Library, Playwright + axe, Lighthouse CI          |
+| Qualité     | ESLint (`@forthtilliath/eslint-config`) + Prettier + lefthook      |
+| Déploiement | Vercel (ISR natif)                                                 |
 
 ---
 
@@ -99,18 +103,24 @@ heureDebut, heureFin, horaires, typesDon[], fixe, rdvUrl, placesRestantes }`.
 
 ## 5. Architecture dossiers
 
+Arborescence réelle en fin de projet (le plan initial prévoyait `features/suivi/` et
+`hooks/` ; le hook de persistance vit désormais dans `@forthtilliath/react-kit`) :
+
 ```
 src/
-  app/[locale]/...          routes ci-dessus + layout, not-found, error
-  components/               UI réutilisable (Button, Card, Stepper, MapView…)
+  app/[locale]/...          routes ci-dessus + layout, not-found, error, icône, image OG
+  components/
+    ui/                     primitives du thème (button, card, input, chip, eyebrow, drop, wave…)
+    home/                   sections de l'accueil (hero, poche de sang, bandeau, étapes…)
+    …                       en-tête, pied de page, bascules thème / langue, en-tête de page
   features/
-    eligibility/            moteur de règles, composants du quiz
-    collectes/              fetch EFS, normalisation, carte, filtres
-    suivi/                  logique dates, badges, storage
-  data/                     règles quiz, contenu maladies, badges (typé)
-  i18n/                     config next-intl, messages/fr.json, messages/en.json
-  lib/                      utils (dates, fetch, cn)
-  hooks/                    usePersistentState, useGeolocation
+    eligibility/            moteur de règles, quiz et ses champs, résultat
+    collectes/              fetch EFS, normalisation, filtres, explorateur, carte MapLibre
+    tracker/                journal, prochaine date, statistiques, badges, import/export
+  data/                     contenu typé (chiffres clés, maladies)
+  i18n/                     config next-intl, navigation, routing
+  lib/                      utilitaires (dates, .ics, SEO, cn, uuid…)
+  test/                     helpers Vitest
 messages/                   fr.json, en.json
 ```
 
@@ -127,9 +137,9 @@ messages/                   fr.json, en.json
    `https://oudonner.api.efs.sante.fr/carto-api/v3` (`/city/searchbyinput` pour géocoder,
    `/samplingcollection/searchbycityname` et `/searchinsquare` pour les collectes). Pas de
    clé requise. Peu fiable côté serveur EFS → cache ISR + fallback en place.
-2. **Critères d'éligibilité** : figer la liste de règles depuis la page officielle
-   EFS à une date donnée, avec mention « critères au JJ/MM/AAAA ». _Encore à faire :
-   contenu du quiz volontairement présenté comme indicatif et non exhaustif._
+2. ~~**Critères d'éligibilité**~~ ✅ **Résolu** : règles figées à une date
+   (`CRITERIA_UPDATED_AT`), mention « critères au JJ/MM/AAAA » sous le résultat du quiz et
+   dans « À propos ». Le quiz reste présenté comme indicatif et non exhaustif.
 3. ~~**Tuiles carto**~~ ✅ **Résolu (lot 8)** : fonds **CARTO** (`basemaps.cartocdn.com`),
    styles `voyager` (clair) / `dark-matter` (sombre). Sans clé, sans variable d'env.
 4. **Contenu témoignages** : rédigé par nos soins, personas illustratifs.
@@ -157,3 +167,20 @@ messages/                   fr.json, en.json
 
 Comptes utilisateurs, backend/BDD, notifications push, prise de RDV réelle,
 appli mobile. Le rappel se fait via `.ics` / la page `/mon-suivi`, pas par email.
+
+---
+
+## 9. Après les lots — jusqu'à la v1.0.0
+
+- **Audit d'améliorations** (septembre 2026) : en-têtes de sécurité, validation des imports,
+  tests de composants et d'accessibilité (axe), clavier et focus (quiz, menu, carte), carte
+  clusterisée et chargée à la demande, persistance du quiz, partage d'une collecte, service
+  worker, Lighthouse CI, analytics sans cookie.
+- **Refonte graphique « Plasma & Globule »** : identité propre (palette sang / plasma / veine,
+  Fraunces + Bricolage Grotesque + JetBrains Mono, composants « sticker », poche de sang
+  illustrée), fichiers de plus de 300 lignes découpés.
+- **Maintenance** : dépendances à jour, montées majeures incompatibles ignorées par
+  Dependabot (maplibre-gl 6, eslint 10, typescript ≥ 6.1, @types/node majeure).
+
+Restes connus, hors v1.0.0 : migration vers maplibre-gl 6 (corrige un avis de sécurité non
+exploitable ici, mais casse les tuiles CARTO), E2E sur viewport mobile et WebKit.
