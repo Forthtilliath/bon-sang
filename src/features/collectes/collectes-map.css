@@ -1,0 +1,97 @@
+/* Carte des collectes (MapLibre) : marqueur de position et bulles d'info. */
+/* Chargé avec la carte (import dans collectes-map.tsx), tokens de globals.css. */
+
+/* Marqueur de géolocalisation (les collectes sont des couches WebGL clusterisées). */
+.ofm-origin {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  border: 3px solid var(--ds-bg);
+  background: var(--ds-info);
+  box-shadow: 0 0 0 2px var(--ds-info);
+  cursor: default;
+}
+
+.ofm-popup-shell .maplibregl-popup:focus-visible .maplibregl-popup-content,
+.ofm-popup-shell .maplibregl-popup:focus .maplibregl-popup-content {
+  outline: 3px solid var(--ds-primary);
+  outline-offset: 3px;
+}
+
+.ofm-popup-shell .maplibregl-popup-content {
+  background: var(--ds-bg);
+  color: var(--ds-fg);
+  border: 2px solid var(--ds-ink);
+  border-radius: 14px 14px 14px 4px;
+  padding: 12px 14px;
+  box-shadow: 4px 4px 0 0 var(--ds-shadow);
+  max-height: 220px;
+  overflow-y: auto;
+  font-family: var(--font-sans);
+}
+
+.ofm-popup-shell .maplibregl-popup-tip {
+  border-top-color: var(--ds-ink);
+  border-bottom-color: var(--ds-ink);
+}
+
+.ofm-popup-shell .maplibregl-popup-close-button {
+  color: var(--ds-muted);
+  font-size: 18px;
+  padding: 0 6px;
+}
+
+.ofm-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  line-height: 1.4;
+  padding-right: 8px;
+}
+
+.ofm-popup__title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.ofm-popup__muted {
+  color: var(--ds-muted);
+}
+
+.ofm-popup__pre {
+  white-space: pre-line;
+}
+
+.ofm-popup__accent {
+  color: var(--ds-primary);
+  font-weight: 600;
+}
+
+.ofm-popup__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.ofm-popup__tag {
+  border: 1px solid var(--ds-ink);
+  border-radius: 9999px;
+  padding: 1px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ds-fg);
+}
+
+.ofm-popup__link {
+  margin-top: 4px;
+  color: var(--ds-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-underline-offset: 3px;
+}
