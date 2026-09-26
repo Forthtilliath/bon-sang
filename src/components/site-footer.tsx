@@ -53,7 +53,7 @@ export function SiteFooter() {
 
           <p
             aria-hidden="true"
-            className="font-display -mb-[0.22em] text-[clamp(4.5rem,20vw,15rem)] leading-none font-semibold tracking-tighter select-none"
+            className="font-display pb-6 text-[clamp(4.5rem,20vw,15rem)] leading-[1.1] font-semibold tracking-tighter select-none"
           >
             {WORDMARK_PREFIX}
             <span className="text-accent font-medium italic">{WORDMARK_HIGHLIGHT}</span>
