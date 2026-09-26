@@ -25,9 +25,15 @@ async function efsFetch<T>(
       signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: { accept: "application/json" },
     });
-    if (!response.ok) return null;
+    if (!response.ok) {
+      console.warn(`[efs] ${response.status} sur ${path.split("?")[0]}`);
+      return null;
+    }
     return (await response.json()) as T;
-  } catch {
+  } catch (error) {
+    // Journalisé côté serveur : sans ça, une panne de l'API (réseau, délai, URL de base
+    // invalide) se confond avec « aucune collecte » dans l'interface.
+    console.warn(`[efs] échec sur ${path.split("?")[0]} :`, error);
     return null;
   }
 }
