@@ -18,7 +18,7 @@
     "prepare": "lefthook install"
   },
   "dependencies": {
-    "@forthtilliath/react-kit": "0.3.0",
+    "@forthtilliath/react-kit": "0.4.0",
     "@vercel/analytics": "2.0.1",
     "clsx": "2.1.1",
     "maplibre-gl": "5.24.0",
