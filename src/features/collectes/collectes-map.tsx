@@ -226,6 +226,10 @@ export function CollectesMap({ collectes, activeId, origin, onSelect, onError }:
       maxWidth: "280px",
       className: "ofm-popup-shell",
       closeOnClick: false,
+      // Le focus est posé plus bas sur la bulle elle-même : laisser MapLibre focaliser
+      // son premier élément (le bouton de fermeture, en fin de contenu) ferait défiler
+      // la bulle jusqu'en bas et masquerait le nom de la collecte.
+      focusAfterOpen: false,
     })
       .setLngLat([collecte.lng, collecte.lat])
       .setDOMContent(popupContent(collecte, helpersRef.current))
