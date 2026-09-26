@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { inputClasses } from "@/components/ui/input";
 
 import { Field, Section, type TrackerApi } from "./tracker-ui";
-import { BLOOD_GROUPS, SEXES, type Sex } from "./types";
+import { BLOOD_GROUPS, type Sex, SEXES } from "./types";
 
 export function ProfileCard({ tracker }: { tracker: TrackerApi }) {
   const t = useTranslations("Tracker");

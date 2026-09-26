@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { FocusOnMount } from "@forthtilliath/react-kit/focus-on-mount";
+
 import { cardClasses } from "@/components/ui/card";
 import { ExternalLink } from "@/components/ui/external-link";
 
