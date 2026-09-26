@@ -3,8 +3,10 @@
  * Doc : https://oudonner.api.efs.sante.fr/carto-api/swagger/
  */
 
+// `||` et non `??` : `.env.example` documente `EFS_COLLECTES_URL=""`, et une chaîne
+// vide doit aussi retomber sur l'URL par défaut (sinon toute recherche échoue).
 export const EFS_API_BASE =
-  process.env.EFS_COLLECTES_URL ?? "https://oudonner.api.efs.sante.fr/carto-api/v3";
+  process.env.EFS_COLLECTES_URL || "https://oudonner.api.efs.sante.fr/carto-api/v3";
 
 export type EfsCity = {
   nom?: string | null;
