@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { FocusOnMount } from "@forthtilliath/react-kit/focus-on-mount";
+import { cardClasses } from "@/components/ui/card";
 import { ExternalLink } from "@/components/ui/external-link";
 
 import { CollectesExplorer } from "./collectes-explorer";
@@ -37,7 +38,9 @@ export async function CollectesResults({ query }: { query: string }) {
 
 function Fallback({ message, label }: { message: string; label: string }) {
   return (
-    <div className="border-border bg-surface flex max-w-2xl flex-col gap-2 rounded-2xl border p-5 text-sm">
+    <div
+      className={cardClasses({ variant: "soft", className: "flex max-w-2xl flex-col gap-2 p-5" })}
+    >
       <p>{message}</p>
       <ExternalLink href={EFS_URL}>{label}</ExternalLink>
     </div>

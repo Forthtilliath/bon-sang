@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 
+import { LABEL_RADIUS } from "@/components/ui/card";
 import { ExternalLink } from "@/components/ui/external-link";
 import { cn } from "@/lib/cn";
 
@@ -55,12 +56,15 @@ export function ExplorerCard({
     <div
       ref={ref}
       className={cn(
-        "flex flex-col gap-1.5 rounded-2xl border p-4 text-sm transition-colors",
-        active ? "border-primary bg-primary-subtle" : "border-border",
+        LABEL_RADIUS,
+        "flex flex-col gap-2 border-2 p-4 text-sm transition-[background-color,border-color,box-shadow]",
+        active
+          ? "border-ink bg-primary-subtle shadow-sticker"
+          : "border-border bg-bg hover:border-ink",
       )}
     >
       {full ? (
-        <span className="w-fit rounded-full border border-amber-600/30 bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
+        <span className="border-ink bg-warn-subtle text-fg w-fit rounded-full border-2 px-2 py-0.5 font-mono text-[11px] uppercase">
           {t("full")}
         </span>
       ) : null}
@@ -71,11 +75,13 @@ export function ExplorerCard({
         className="flex flex-col gap-1.5 text-left"
       >
         <span className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
-          <span className="font-medium">{collecte.nom || collecte.ville}</span>
+          <span className="font-display text-base font-semibold">
+            {collecte.nom || collecte.ville}
+          </span>
           {collecte.fixe ? (
-            <span className="text-primary text-xs font-medium">{t("permanent")}</span>
+            <span className="text-primary font-mono text-xs">{t("permanent")}</span>
           ) : collecte.date ? (
-            <span className="text-primary text-xs font-medium">
+            <span className="text-primary font-mono text-xs">
               {format.dateTime(new Date(`${collecte.date}T12:00:00`), { dateStyle: "medium" })}
               {collecte.heureDebut ? ` · ${collecte.heureDebut}` : ""}
             </span>
@@ -90,7 +96,7 @@ export function ExplorerCard({
         {collecte.typesDon.map((kind) => (
           <span
             key={kind}
-            className="border-border text-muted rounded-full border px-2 py-0.5 text-xs"
+            className="border-border text-muted rounded-full border-2 px-2 py-0.5 font-mono text-[11px] uppercase"
           >
             {t(`kinds.${kind}`)}
           </span>
@@ -102,7 +108,11 @@ export function ExplorerCard({
             {t("book")}
           </ExternalLink>
         ) : null}
-        <button type="button" onClick={share} className="text-primary text-xs hover:underline">
+        <button
+          type="button"
+          onClick={share}
+          className="text-primary text-xs font-medium underline-offset-2 hover:underline"
+        >
           {copied ? t("shareCopied") : t("share")}
         </button>
       </span>
