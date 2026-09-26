@@ -2,6 +2,9 @@ import { expect, type Page, test } from "@playwright/test";
 
 /** Répond à la question courante puis passe à la suivante (ou affiche le résultat). */
 async function step(page: Page, label: string, isLast = false) {
+  // Tant que le quiz n'est pas hydraté, seul un squelette est rendu : on attend la
+  // question (son `fieldset`) avant de regarder quel type de champ elle attend.
+  await page.getByRole("group").waitFor();
   const number = page.getByRole("spinbutton");
   if (await number.count()) {
     await number.fill(label);
