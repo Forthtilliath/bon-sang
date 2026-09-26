@@ -4,6 +4,8 @@ import { getTranslations } from "next-intl/server";
 
 import { JsonLd } from "@forthtilliath/react-kit/json-ld";
 import { PageHeader } from "@/components/page-header";
+import { SectionHeading } from "@/components/section-heading";
+import { cardClasses } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Quiz } from "@/features/eligibility";
 import { assertLocale } from "@/lib/locale";
@@ -54,21 +56,26 @@ export default function EligibilityPage({ params }: PageProps<"/[locale]/eligibi
         ])}
       />
 
-      <PageHeader title={t("title")} lead={t("lead")} />
+      <PageHeader eyebrow={t("eyebrow")} title={t("title")} lead={t("lead")} />
 
       <section>
-        <Container className="max-w-2xl py-12">
-          <Quiz />
+        <Container className="max-w-3xl py-12 sm:py-16">
+          <div className={cardClasses({ className: "shadow-sticker-lg p-6 sm:p-10" })}>
+            <Quiz />
+          </div>
         </Container>
       </section>
 
-      <section className="border-border border-t">
-        <Container className="max-w-2xl py-12">
-          <h2 className="text-xl font-semibold tracking-tight">{quiz("faq.title")}</h2>
-          <dl className="mt-6 flex flex-col gap-5">
+      <section>
+        <Container className="max-w-3xl pb-8">
+          <SectionHeading title={quiz("faq.title")} />
+          <dl className="mt-8 flex flex-col gap-4">
             {FAQ_KEYS.map((key) => (
-              <div key={key} className="flex flex-col gap-1">
-                <dt className="font-medium">{quiz(`faq.${key}.q`)}</dt>
+              <div
+                key={key}
+                className={cardClasses({ variant: "soft", className: "flex flex-col gap-2 p-5" })}
+              >
+                <dt className="font-display text-lg font-semibold">{quiz(`faq.${key}.q`)}</dt>
                 <dd className="text-muted text-sm">{quiz(`faq.${key}.a`)}</dd>
               </div>
             ))}

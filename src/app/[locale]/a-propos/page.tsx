@@ -42,10 +42,10 @@ export default function AboutPage({ params }: PageProps<"/[locale]/a-propos">) {
         ])}
       />
 
-      <PageHeader title={t("title")} lead={t("lead")} />
+      <PageHeader eyebrow={t("eyebrow")} title={t("title")} lead={t("lead")} />
 
       <section>
-        <Container className="flex max-w-2xl flex-col gap-10 py-14">
+        <Container className="flex max-w-4xl flex-col py-16">
           <Block title={t("independence.title")}>
             <p>{t("independence.body")}</p>
           </Block>
@@ -92,9 +92,9 @@ export default function AboutPage({ params }: PageProps<"/[locale]/a-propos">) {
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-2">
-      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
-      <div className="text-muted flex flex-col gap-2">{children}</div>
+    <div className="border-ink grid gap-3 border-t-2 border-dashed py-8 first:border-t-0 first:pt-0 md:grid-cols-[14rem_1fr] md:gap-10">
+      <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+      <div className="text-muted flex flex-col gap-3">{children}</div>
     </div>
   );
 }
