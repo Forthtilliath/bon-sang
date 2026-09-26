@@ -56,7 +56,7 @@ export function ThemeToggle() {
       onClick={cycle}
       aria-label={label}
       title={label}
-      className="text-muted hover:bg-surface hover:text-fg rounded-full p-2"
+      className="text-fg hover:border-ink hover:bg-surface rounded-full border-2 border-transparent p-1.5 transition-colors"
     >
       <ThemeIcon theme={theme} />
     </button>

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { BrandMark } from "@/components/brand-mark";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Drop } from "@/components/ui/drop";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 import { NAV_ITEMS } from "@/lib/site";
@@ -82,13 +83,13 @@ export function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="border-border bg-bg/80 sticky top-0 z-40 border-b backdrop-blur">
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <Link href="/" className="shrink-0 font-semibold tracking-tight">
+    <header className="border-ink bg-bg/90 sticky top-0 z-40 border-b-2 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <Link href="/" className="shrink-0 rounded-full">
           <BrandMark />
         </Link>
 
-        <nav aria-label={t("primary")} className="hidden md:block">
+        <nav aria-label={t("primary")} className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
@@ -96,10 +97,10 @@ export function SiteHeader() {
                   href={item.href}
                   aria-current={isActive(item.href) ? "page" : undefined}
                   className={cn(
-                    "rounded-full px-3 py-1.5 text-sm transition-colors",
+                    "block rounded-full border-2 px-3 py-1 text-sm font-medium transition-colors",
                     isActive(item.href)
-                      ? "bg-primary-subtle text-primary"
-                      : "text-muted hover:bg-surface hover:text-fg",
+                      ? "border-ink bg-accent text-accent-fg shadow-sticker-sm"
+                      : "text-muted hover:text-fg hover:bg-surface border-transparent",
                   )}
                 >
                   {t(item.key)}
@@ -109,13 +110,13 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <ThemeToggle />
           <LocaleSwitcher />
           <button
             ref={toggleRef}
             type="button"
-            className="text-muted hover:bg-surface hover:text-fg rounded-full p-2 md:hidden"
+            className="text-fg hover:border-ink hover:bg-surface rounded-full border-2 border-transparent p-1.5 lg:hidden"
             aria-expanded={open}
             aria-controls={menuId}
             aria-label={t(open ? "closeMenu" : "openMenu")}
@@ -126,9 +127,9 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div ref={menuRef} id={menuId} hidden={!open} className="border-border border-t md:hidden">
-        <nav aria-label={t("primary")} className="mx-auto max-w-5xl px-4 py-2 sm:px-6">
-          <ul className="flex flex-col">
+      <div ref={menuRef} id={menuId} hidden={!open} className="border-ink border-t-2 lg:hidden">
+        <nav aria-label={t("primary")} className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
+          <ul className="flex flex-col gap-1">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
                 <Link
@@ -136,12 +137,18 @@ export function SiteHeader() {
                   onClick={closeMenu}
                   aria-current={isActive(item.href) ? "page" : undefined}
                   className={cn(
-                    "block rounded-lg px-3 py-2.5 text-sm transition-colors",
+                    "font-display flex items-center gap-3 rounded-2xl border-2 px-4 py-2.5 text-xl font-medium transition-colors",
                     isActive(item.href)
-                      ? "bg-primary-subtle text-primary"
-                      : "text-muted hover:bg-surface hover:text-fg",
+                      ? "border-ink bg-accent text-accent-fg"
+                      : "hover:bg-surface border-transparent",
                   )}
                 >
+                  <Drop
+                    className={cn(
+                      "size-3.5",
+                      isActive(item.href) ? "text-accent-fg" : "text-primary",
+                    )}
+                  />
                   {t(item.key)}
                 </Link>
               </li>
@@ -160,16 +167,11 @@ function MenuIcon({ open }: { open: boolean }) {
         <path
           d="M5 5l10 10M15 5L5 15"
           stroke="currentColor"
-          strokeWidth="1.75"
+          strokeWidth="2"
           strokeLinecap="round"
         />
       ) : (
-        <path
-          d="M3 6h14M3 10h14M3 14h14"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-        />
+        <path d="M3 6.5h14M3 13.5h9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       )}
     </svg>
   );
