@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Bricolage_Grotesque, Fraunces, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -15,9 +15,25 @@ import { alternates, SITE_URL } from "@/lib/seo";
 
 import "../globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Titres : serif « molle » et expressive (axe SOFT), avec italiques d'accent.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["SOFT", "opsz"],
+});
+
+// Texte courant : grotesque à caractère, lisible en petit corps.
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+});
+
+// Étiquettes façon « poche de sang » (numéros, surtitres, codes).
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  weight: ["500"],
 });
 
 export function generateStaticParams() {
@@ -26,8 +42,8 @@ export function generateStaticParams() {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0d" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f1e8" },
+    { media: "(prefers-color-scheme: dark)", color: "#150b0e" },
   ],
 };
 
@@ -71,7 +87,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
     <html
       lang={locale}
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${bricolage.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <head>
         {/* Applique le thème choisi avant le premier rendu pour éviter un flash. */}
@@ -96,7 +112,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
         <NextIntlClientProvider>
           <a
             href="#main-content"
-            className="focus:bg-primary focus:text-primary-fg sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:px-4 focus:py-2"
+            className="focus:bg-accent focus:text-accent-fg focus:border-ink focus:shadow-sticker sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:border-2 focus:px-4 focus:py-2 focus:font-semibold"
           >
             {t("skipToContent")}
           </a>

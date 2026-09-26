@@ -1,57 +1,120 @@
 @import "tailwindcss";
 
 /* -------------------------------------------------------------------------- */
-/* Palette (valeurs brutes, bascule clair / sombre)                          */
+/* Thème « Plasma & Globule »                                                */
+/*                                                                            */
+/* Papier crème et encre bordeaux, rouge globule, jaune plasma (la couleur    */
+/* réelle d'une poche de plasma) et bleu veine. Palette brute ici, bascule    */
+/* clair / sombre, puis exposée en tokens Tailwind plus bas.                  */
 /* -------------------------------------------------------------------------- */
 
 :root {
-  --ds-bg: #ffffff;
-  --ds-surface: #f6f6f7;
-  --ds-surface-strong: #ececee;
-  --ds-fg: #17171a;
-  --ds-muted: #56565f;
-  --ds-border: #e3e3e7;
+  --ds-bg: #f7f1e8;
+  --ds-surface: #efe6d8;
+  --ds-surface-strong: #e4d6c3;
+  --ds-fg: #1f1216;
+  --ds-muted: #5f4c4f;
+  --ds-border: #dccab5;
+  /* Traits forts (bordures « sticker ») et ombres décalées. */
+  --ds-ink: #1f1216;
+  --ds-shadow: #1f1216;
 
-  /* Rouge « don du sang » — accent principal */
-  --ds-primary: #d21f2c;
-  --ds-primary-strong: #b3161f;
-  --ds-primary-fg: #ffffff;
-  --ds-primary-subtle: #fbeaeb;
+  /* Rouge globule — accent principal */
+  --ds-primary: #b8102b;
+  --ds-primary-strong: #930c22;
+  --ds-primary-fg: #fff8f0;
+  --ds-primary-subtle: #f7dcd6;
+
+  /* Jaune plasma — accent secondaire (toujours avec un texte encre) */
+  --ds-accent: #f4c24f;
+  --ds-accent-fg: #1f1216;
+  --ds-accent-subtle: #fbeccb;
+
+  /* États (verdicts du quiz, badges, marqueur de position) */
+  --ds-ok: #2c6a3c;
+  --ds-ok-subtle: #dcebd6;
+  --ds-warn: #7f5200;
+  --ds-warn-subtle: #fbeccb;
+  --ds-info: #2d4f88;
+  --ds-info-subtle: #dfe6f2;
+
+  /* Aplat bordeaux profond (pied de page, bandeaux) */
+  --ds-deep: #2a0f16;
+  --ds-deep-fg: #f7f1e8;
+  --ds-deep-muted: #cbb5ad;
+
+  --ds-grain-opacity: 0.35;
 }
 
-/* Palette sombre : par préférence système sauf choix « clair » explicite… */
+/* Palette « Nuit » : par préférence système sauf choix « clair » explicite… */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --ds-bg: #0b0b0d;
-    --ds-surface: #141417;
-    --ds-surface-strong: #1e1e22;
-    --ds-fg: #ececee;
-    --ds-muted: #a0a0ab;
-    --ds-border: #29292f;
+    --ds-bg: #150b0e;
+    --ds-surface: #201317;
+    --ds-surface-strong: #2d1b20;
+    --ds-fg: #f5ebdf;
+    --ds-muted: #bca8a3;
+    --ds-border: #3b262c;
+    --ds-ink: #cdb9ad;
+    --ds-shadow: #5c0d1d;
 
-    --ds-primary: #f0434f;
-    --ds-primary-strong: #d81f2a;
-    --ds-primary-fg: #1a0304;
-    --ds-primary-subtle: #2a1113;
+    --ds-primary: #ff6273;
+    --ds-primary-strong: #ff8a97;
+    --ds-primary-fg: #1a0508;
+    --ds-primary-subtle: #3b141b;
+
+    --ds-accent: #ffc94d;
+    --ds-accent-fg: #1a0f05;
+    --ds-accent-subtle: #3a2c10;
+
+    --ds-ok: #86d49a;
+    --ds-ok-subtle: #15301d;
+    --ds-warn: #ffc94d;
+    --ds-warn-subtle: #3a2c10;
+    --ds-info: #98b6ec;
+    --ds-info-subtle: #172440;
+
+    --ds-deep: #0b0507;
+    --ds-deep-fg: #f5ebdf;
+    --ds-deep-muted: #b8a59f;
+
+    --ds-grain-opacity: 0.12;
   }
 }
 
 /* …ou par choix « sombre » explicite (bascule de thème manuelle). */
 :root[data-theme="dark"] {
-  --ds-bg: #0b0b0d;
-  --ds-surface: #141417;
-  --ds-surface-strong: #1e1e22;
-  --ds-fg: #ececee;
-  --ds-muted: #a0a0ab;
-  --ds-border: #29292f;
+  --ds-bg: #150b0e;
+  --ds-surface: #201317;
+  --ds-surface-strong: #2d1b20;
+  --ds-fg: #f5ebdf;
+  --ds-muted: #bca8a3;
+  --ds-border: #3b262c;
+  --ds-ink: #cdb9ad;
+  --ds-shadow: #5c0d1d;
 
-  --ds-primary: #f0434f;
-  --ds-primary-strong: #d81f2a;
-  --ds-primary-fg: #1a0304;
-  --ds-primary-subtle: #2a1113;
-}
+  --ds-primary: #ff6273;
+  --ds-primary-strong: #ff8a97;
+  --ds-primary-fg: #1a0508;
+  --ds-primary-subtle: #3b141b;
 
-:root[data-theme="dark"] {
+  --ds-accent: #ffc94d;
+  --ds-accent-fg: #1a0f05;
+  --ds-accent-subtle: #3a2c10;
+
+  --ds-ok: #86d49a;
+  --ds-ok-subtle: #15301d;
+  --ds-warn: #ffc94d;
+  --ds-warn-subtle: #3a2c10;
+  --ds-info: #98b6ec;
+  --ds-info-subtle: #172440;
+
+  --ds-deep: #0b0507;
+  --ds-deep-fg: #f5ebdf;
+  --ds-deep-muted: #b8a59f;
+
+  --ds-grain-opacity: 0.12;
+
   color-scheme: dark;
 }
 
@@ -60,7 +123,7 @@
 }
 
 /* -------------------------------------------------------------------------- */
-/* Tokens de thème Tailwind (génèrent bg-bg, text-fg, border-border, …)      */
+/* Tokens de thème Tailwind (génèrent bg-bg, text-fg, shadow-sticker, …)     */
 /* -------------------------------------------------------------------------- */
 
 @theme inline {
@@ -70,13 +133,66 @@
   --color-fg: var(--ds-fg);
   --color-muted: var(--ds-muted);
   --color-border: var(--ds-border);
+  --color-ink: var(--ds-ink);
   --color-primary: var(--ds-primary);
   --color-primary-strong: var(--ds-primary-strong);
   --color-primary-fg: var(--ds-primary-fg);
   --color-primary-subtle: var(--ds-primary-subtle);
+  --color-accent: var(--ds-accent);
+  --color-accent-fg: var(--ds-accent-fg);
+  --color-accent-subtle: var(--ds-accent-subtle);
+  --color-ok: var(--ds-ok);
+  --color-ok-subtle: var(--ds-ok-subtle);
+  --color-warn: var(--ds-warn);
+  --color-warn-subtle: var(--ds-warn-subtle);
+  --color-info: var(--ds-info);
+  --color-info-subtle: var(--ds-info-subtle);
+  --color-deep: var(--ds-deep);
+  --color-deep-fg: var(--ds-deep-fg);
+  --color-deep-muted: var(--ds-deep-muted);
 
   --font-sans:
-    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    var(--font-bricolage), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* Ombres « sticker » : décalées, sans flou, couleur encre. */
+  --shadow-sticker-sm: 2px 2px 0 0 var(--ds-shadow);
+  --shadow-sticker: 4px 4px 0 0 var(--ds-shadow);
+  --shadow-sticker-lg: 7px 7px 0 0 var(--ds-shadow);
+
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-slosh: slosh 6s ease-in-out infinite;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes slosh {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(-24px);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -95,15 +211,32 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Grain « papier » : bruit SVG fixe, sous le contenu, au-dessus du fond. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--ds-grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .25 0 0 0 0 .22 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 50;
+  }
+
   :focus-visible {
-    outline: 2px solid var(--ds-primary);
-    outline-offset: 2px;
-    border-radius: 2px;
+    outline: 3px solid var(--ds-primary);
+    outline-offset: 3px;
   }
 
   ::selection {
-    background-color: var(--ds-primary);
-    color: var(--ds-primary-fg);
+    background-color: var(--ds-accent);
+    color: var(--ds-accent-fg);
   }
 }
 
@@ -124,35 +257,36 @@
 
 /* Marqueur de géolocalisation (les collectes sont des couches WebGL clusterisées). */
 .ofm-origin {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 9999px;
-  border: 2px solid #fff;
-  background: #2563eb;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
+  border: 3px solid var(--ds-bg);
+  background: var(--ds-info);
+  box-shadow: 0 0 0 2px var(--ds-info);
   cursor: default;
 }
 
 .ofm-popup-shell .maplibregl-popup:focus-visible .maplibregl-popup-content,
 .ofm-popup-shell .maplibregl-popup:focus .maplibregl-popup-content {
-  outline: 2px solid var(--ds-primary);
-  outline-offset: 2px;
+  outline: 3px solid var(--ds-primary);
+  outline-offset: 3px;
 }
 
 .ofm-popup-shell .maplibregl-popup-content {
   background: var(--ds-bg);
   color: var(--ds-fg);
-  border: 1px solid var(--ds-border);
-  border-radius: 12px;
+  border: 2px solid var(--ds-ink);
+  border-radius: 14px 14px 14px 4px;
   padding: 12px 14px;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  box-shadow: 4px 4px 0 0 var(--ds-shadow);
   max-height: 220px;
   overflow-y: auto;
+  font-family: var(--font-sans);
 }
 
 .ofm-popup-shell .maplibregl-popup-tip {
-  border-top-color: var(--ds-bg);
-  border-bottom-color: var(--ds-bg);
+  border-top-color: var(--ds-ink);
+  border-bottom-color: var(--ds-ink);
 }
 
 .ofm-popup-shell .maplibregl-popup-close-button {
@@ -171,7 +305,9 @@
 }
 
 .ofm-popup__title {
-  font-size: 14px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .ofm-popup__muted {
@@ -184,7 +320,7 @@
 
 .ofm-popup__accent {
   color: var(--ds-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .ofm-popup__tags {
@@ -195,17 +331,21 @@
 }
 
 .ofm-popup__tag {
-  border: 1px solid var(--ds-border);
+  border: 1px solid var(--ds-ink);
   border-radius: 9999px;
   padding: 1px 8px;
-  font-size: 11px;
-  color: var(--ds-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ds-fg);
 }
 
 .ofm-popup__link {
   margin-top: 4px;
   color: var(--ds-primary);
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration-style: wavy;
+  text-underline-offset: 3px;
 }
