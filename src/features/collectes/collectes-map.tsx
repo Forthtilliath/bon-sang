@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import type { Point as GeoPoint } from "geojson";
 import {
   type GeoJSONSource,
   LngLatBounds,
@@ -84,7 +85,7 @@ export function CollectesMap({ collectes, activeId, origin, onSelect, onError }:
     if (fc.features.length > 0 && !activeIdRef.current) {
       const bounds = new LngLatBounds();
       for (const feature of fc.features) {
-        bounds.extend((feature.geometry as GeoJSON.Point).coordinates as [number, number]);
+        bounds.extend((feature.geometry as GeoPoint).coordinates as [number, number]);
       }
       map.fitBounds(bounds, { padding: 48, maxZoom: 12, duration: motionDuration(400) });
     }
@@ -129,7 +130,7 @@ export function CollectesMap({ collectes, activeId, origin, onSelect, onError }:
       const source = map.getSource(SOURCE_ID) as GeoJSONSource;
       void source.getClusterExpansionZoom(clusterId).then((zoom) => {
         map.easeTo({
-          center: (feature!.geometry as GeoJSON.Point).coordinates as [number, number],
+          center: (feature!.geometry as GeoPoint).coordinates as [number, number],
           zoom,
           duration: motionDuration(400),
         });

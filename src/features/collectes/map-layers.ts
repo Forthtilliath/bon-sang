@@ -1,3 +1,4 @@
+import type { FeatureCollection } from "geojson";
 import type { Map as MlMap } from "maplibre-gl";
 
 import type { Collecte } from "./types";
@@ -14,7 +15,7 @@ export const SOURCE_ID = "collectes";
 const MARKER_LIGHT = { fill: "#b8102b", cluster: "#f4c24f", ink: "#1f1216", halo: "#f7f1e8" };
 const MARKER_DARK = { fill: "#ff6273", cluster: "#ffc94d", ink: "#1a0f05", halo: "#150b0e" };
 
-const EMPTY_FC: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
+const EMPTY_FC: FeatureCollection = { type: "FeatureCollection", features: [] };
 
 function prefersDark(): boolean {
   const explicit = document.documentElement.dataset.theme;
@@ -35,7 +36,7 @@ export function motionDuration(ms: number): number {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? 0 : ms;
 }
 
-export function toFeatureCollection(collectes: Collecte[]): GeoJSON.FeatureCollection {
+export function toFeatureCollection(collectes: Collecte[]): FeatureCollection {
   return {
     type: "FeatureCollection",
     features: collectes
