@@ -24,14 +24,18 @@ export function LocaleSwitcher() {
             href={pathname}
             locale={locale}
             hrefLang={locale}
-            aria-label={t(locale)}
             aria-current={isActive ? "true" : undefined}
             className={cn(
               "rounded-full px-2 py-0.5 uppercase transition-colors",
               isActive ? "bg-fg text-bg" : "text-muted hover:text-fg",
             )}
           >
+            {/* Le nom accessible commence par le code visible (WCAG 2.5.3, « Label in
+                Name ») : « fr Français », et non « Français » seul. */}
             {locale}
+            <span className="sr-only" lang={locale}>
+              {` ${t(locale)}`}
+            </span>
           </Link>
         );
       })}
