@@ -3,21 +3,17 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: weekly
+      interval: monthly
     open-pull-requests-limit: 10
     # Montées testées et bloquées car elles cassent le site ou l'outillage (retestées
     # le 2026-09-26). À lever quand l'écosystème suit :
     # - eslint 10 : `eslint-plugin-jsx-a11y` et `eslint-plugin-react` ne l'acceptent
     #   pas encore en peer → `npm ci` échoue (ERESOLVE).
-    # - maplibre-gl 6 : la carte s'affiche mais les tuiles vectorielles CARTO ne se
-    #   chargent plus (e2e `collectes.spec.ts`).
     # - typescript ≥ 6.1 (dont la 7, réécriture native) : hors de la plage supportée
     #   par `typescript-eslint` (`<6.1.0`).
     # - @types/node majeure : doit suivre la version de Node du projet (`.nvmrc` = 24).
     ignore:
       - dependency-name: eslint
-        update-types: ["version-update:semver-major"]
-      - dependency-name: maplibre-gl
         update-types: ["version-update:semver-major"]
       - dependency-name: typescript
         versions: [">= 6.1.0"]
@@ -32,8 +28,8 @@ updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: weekly
-    # Une seule PR hebdomadaire pour toutes les actions plutôt qu'une par action.
+      interval: monthly
+    # Une seule PR mensuelle pour toutes les actions plutôt qu'une par action.
     groups:
       github-actions:
         patterns: ["*"]
