@@ -4,6 +4,17 @@ Toutes les évolutions notables de **Bon Sang**. Le format s'inspire de
 [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le projet suit le
 [versionnage sémantique](https://semver.org/lang/fr/).
 
+## [Non publié]
+
+### Sécurité
+
+- Next.js 16.3.8 : correctifs de sécurité (SSRF de l'optimisation d'images, empoisonnement
+  de cache SSG/ISR…).
+- MapLibre GL 6 : corrige un contournement du nettoyeur HTML des attributions de carte
+  (XSS, GHSA-jrc7-96c5-q579). Le worker est désormais émis comme asset du build.
+- `@forthtilliath/react-kit` 0.5.0 : `JsonLd` échappe `<` dans les données sérialisées.
+- Dépendances transitives mises à jour (`npm audit fix`).
+
 ## [1.0.0] — 2026-09-27
 
 Première version stable : le projet est **terminé**.
