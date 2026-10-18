@@ -9,6 +9,7 @@ import {
   Marker,
   NavigationControl,
   Popup,
+  setWorkerUrl,
 } from "maplibre-gl";
 import { useFormatter, useTranslations } from "next-intl";
 
@@ -26,6 +27,10 @@ import type { Collecte } from "./types";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./collectes-map.css";
+
+// MapLibre 6 déduit l'URL de son worker de `import.meta.url`, qui pointe vers le
+// chunk du bundle où le worker n'existe pas : on le fait émettre comme asset.
+setWorkerUrl(new URL("maplibre-gl/dist/maplibre-gl-worker.mjs", import.meta.url).href);
 
 type Props = {
   collectes: Collecte[];
