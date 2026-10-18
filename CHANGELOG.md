@@ -8,12 +8,19 @@ Toutes les évolutions notables de **Bon Sang**. Le format s'inspire de
 
 ### Sécurité
 
+- Next.js 16.4.2 : correctifs de deux failles critiques d'exécution de code à distance
+  (`use cache`, optimisation d'images SVG) et d'un déni de service (Server Actions).
 - Next.js 16.3.8 : correctifs de sécurité (SSRF de l'optimisation d'images, empoisonnement
   de cache SSG/ISR…).
 - MapLibre GL 6 : corrige un contournement du nettoyeur HTML des attributions de carte
   (XSS, GHSA-jrc7-96c5-q579). Le worker est désormais émis comme asset du build.
 - `@forthtilliath/react-kit` 0.5.0 : `JsonLd` échappe `<` dans les données sérialisées.
 - Dépendances transitives mises à jour (`npm audit fix`).
+
+### Accessibilité
+
+- Sélecteur de langue : le nom accessible des liens commence par le code affiché
+  (« fr Français »), pour la commande vocale (WCAG 2.5.3).
 
 ## [1.0.0] — 2026-09-27
 
